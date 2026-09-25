@@ -111,15 +111,39 @@ def math_sprite(tex, size=64):
     return a[max(ys.min() - pad, 0):ys.max() + pad, max(xs.min() - pad, 0):xs.max() + pad]
 
 
-EQUATIONS = [
-    r"$i\hbar\,\frac{\partial}{\partial t}\Psi = \hat{H}\,\Psi$",
-    r"$\Delta x\,\Delta p \geq \frac{\hbar}{2}$",
-    r"$\partial_\mu j^\mu = 0$",                       # Noether: symmetry -> conservation
-    r"$N = R_* f_p n_e f_l f_i f_c L$",                 # Drake equation
-    r"$E = \hbar\omega$",
-    r"$\nabla^2\psi + k^2\psi = 0$",
-    r"$\frac{\Delta F}{F} \approx \left(\frac{R_p}{R_*}\right)^2$",  # transit depth
-]
+# On-theme equations (the song's argument written in light), grouped by where they appear.
+EQ = {
+    "schrodinger": r"$i\hbar\,\frac{\partial\psi}{\partial t} = \hat{H}\psi$",
+    "uncertainty": r"$\Delta x\,\Delta p \geq \frac{\hbar}{2}$",
+    "drake": r"$N = R_\star \cdot f_p \cdot n_e \cdot f_l \cdot f_i \cdot f_c \cdot L$",
+    "seager": r"$N = N_\star \cdot F_Q \cdot F_{HZ} \cdot F_O \cdot F_L \cdot F_S$",
+    "kardashev": r"$K = \frac{\log_{10} P - 6}{10}$",
+    "teq": r"$T_{eq} = T_\star \sqrt{\frac{R_\star}{2a}}\,(1 - A)^{1/4}$",
+    "transit": r"$\frac{\Delta F}{F} \approx \left(\frac{R_p}{R_\star}\right)^2$",
+    "doppler": r"$\frac{\Delta\lambda}{\lambda} = \frac{v}{c}$",
+    "kepler": r"$T^2 = \frac{4\pi^2 a^3}{GM}$",
+    "maxwell1": r"$\nabla\cdot\mathbf{E} = \frac{\rho}{\varepsilon_0}$",
+    "maxwell2": r"$\nabla\times\mathbf{B} = \mu_0\mathbf{J} + \mu_0\varepsilon_0\frac{\partial\mathbf{E}}{\partial t}$",
+    "shannon": r"$C = B\,\log_2\!\left(1 + \frac{S}{N}\right)$",
+    "inverse_square": r"$I \propto \frac{1}{r^2}$",
+    "rocket": r"$\Delta v = v_e \ln\frac{m_0}{m_f}$",
+    "lorentz": r"$\gamma = \frac{1}{\sqrt{1 - v^2/c^2}}$",
+    "einstein": r"$G_{\mu\nu} + \Lambda g_{\mu\nu} = \frac{8\pi G}{c^4} T_{\mu\nu}$",
+    "friedmann": r"$\left(\frac{\dot{a}}{a}\right)^2 = \frac{8\pi G\rho}{3} - \frac{kc^2}{a^2} + \frac{\Lambda c^2}{3}$",
+    "boltzmann": r"$S = k \log W$",
+    "noether": r"$\partial_\mu j^\mu = 0$",
+}
+SETS = {
+    "book": ["schrodinger", "uncertainty", "drake", "seager"],          # 12: peel off the physics book; Drake + Seager rhyme
+    "mind": ["boltzmann", "noether", "teq"],                            # 13: the brain-scan panel
+    "launch": ["rocket", "kardashev"],                                  # 16: "before they launch or self-destruct"
+    "search": ["transit", "doppler", "kepler"],                         # 18: "keep on looking"
+    "signal": ["maxwell1", "maxwell2", "shannon", "inverse_square"],    # 20: "waits for your transmission"
+    "cosmos": ["einstein", "friedmann", "boltzmann"],                   # 31b: fall back onto the pages
+    "orbit": ["drake", "kepler", "transit", "lorentz"],                 # 27: orbiting the band
+    "finale": ["drake", "seager", "teq", "shannon", "lorentz"],         # 40: gold and blue, past and present
+}
+EQUATIONS = [EQ[k] for k in SETS["book"]]   # legacy default
 
 
 def text_sprite(text, font, size, pad=10):

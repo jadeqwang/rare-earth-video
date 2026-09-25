@@ -11,7 +11,7 @@ import cv2
 from PIL import Image, ImageDraw, ImageFont, ImageOps
 
 import vfx
-from vfx import (W, H, Light, Motes, Staff, FloatingNote, Equation, EQUATIONS, BLUE, BLUE_CORE, BLUE_DEEP,
+from vfx import (W, H, Light, Motes, Staff, FloatingNote, Equation, EQUATIONS, EQ, SETS, BLUE, BLUE_CORE, BLUE_DEEP,
                  GOLD, GOLD_CORE, RED, ease, ease_out, ease_in, hash01, smooth_noise, glyph_sprite, SERIF)
 from shots import GRID, PRE, ROOT, REF, BAR, BEAT, B
 
@@ -732,17 +732,20 @@ def fx_11(ctx):
 
 
 def fx_12(ctx):
+    """Real equations peel off the physics book one per half-bar and swing out; Seager docks beside Drake."""
     bx, by = anchor(ctx, "book", (1400, 330))
-    s = kfs(ctx) if not ctx.clip else 1.0
-    for j, tex in enumerate(EQUATIONS[:4]):
+    s_ = kfs(ctx) if not ctx.clip else 1.0
+    dest = {"schrodinger": (-470, -330), "uncertainty": (-620, -90), "drake": (-80, -470), "seager": (-40, -385)}
+    for j, key in enumerate(SETS["book"]):
         tj = ctx.t - j * BAR / 2
         if tj < 0:
             continue
-        u = ease(tj / 1.6)
-        ang = -0.6 + j * 0.9 + tj * 0.35
-        x = bx + (1 - u) * (j - 1.5) * 40 * s + u * math.cos(ang) * (380 + 80 * j)
-        y = by - (1 - u) * 10 + u * (math.sin(ang) * 200 - 160)
-        Equation(tex, [(0, x, y, 0.55 + 0.25 * u, -8 + 16 * u)], seed=90 + j).draw(ctx.L, ctx.T, a=0.95, peel=min(1, tj / 0.5))
+        u = ease(tj / 1.5)
+        dx, dy = dest[key]
+        x = bx + (1 - u) * (j - 1.5) * 40 * s_ + u * dx + 12 * math.sin(ctx.t * 1.3 + j)
+        y = by - (1 - u) * 10 + u * dy + 8 * math.cos(ctx.t * 1.1 + j)
+        sc = 0.45 + 0.35 * u if key not in ("drake", "seager") else 0.4 + 0.28 * u
+        Equation(EQ[key], [(0, x, y, sc, -6 + 6 * u)], seed=90 + j).draw(ctx.L, ctx.T, a=0.95, peel=min(1, tj / 0.5))
     ambient(ctx, 24, seed=29, a=0.5)
 
 
@@ -797,7 +800,7 @@ def fx_13(ctx):
                           min(cw, ch) * 0.22, BLUE, 0.9 * on)
         lab = vfx.text_sprite("Subject: A.", "VT323-Regular.ttf", 30)
         ctx.L.sprite(lab, px0 + 80, py1 - 22, 1.0, 0, np.array([190, 215, 255]), 0.85 * lit)
-    for j, tex in enumerate(EQUATIONS[1:4]):
+    for j, tex in enumerate(EQ[k] for k in SETS["mind"]):
         x = -300 + (ctx.t / ctx.dur) * (W + 600) * (0.6 + 0.2 * j) + j * 400
         Equation(tex, [(0, x, 650 + 120 * j, 0.6, -4)], seed=100 + j).draw(ctx.L, ctx.T, a=0.8)
     ambient(ctx, 20, seed=30, a=0.5)
@@ -824,7 +827,7 @@ def recolor_lights(ctx, u, to_red=True):
         m = blue_mask(ctx.plate, 0.05)
     else:
         r, g, b = ctx.plate[..., 0], ctx.plate[..., 1], ctx.plate[..., 2]
-        m = cv2.GaussianBlur(np.clip((r - g - 0.14) * 5, 0, 1) * np.clip((r - b - 0.06) * 5, 0, 1) * np.clip((r - 0.42) * 4, 0, 1), (0, 0), 1.5)
+        m = cv2.GaussianBlur(np.clip((r - g - 0.14) * 5, 0, 1) * np.clip((r - b - 0.06) * 5, 0, 1) * np.clip((r - 0.42) * 4, 0, 1) * np.clip((0.1 - (g - b)) * 10, 0, 1), (0, 0), 1.5)
     lum = ctx.plate.max(axis=2, keepdims=True)
     swapped = ctx.plate[..., ::-1] * np.array([1.0, 0.55, 0.6], np.float32) if to_red else \
         lum * np.array([0.62, 0.8, 1.0], np.float32) * 1.05
@@ -839,7 +842,7 @@ def fx_16(ctx):
         recolor_lights(ctx, u, to_red=True)
     col = lerp_color(BLUE, RED, u)
     Motes(40, (0, 200, W, H), seed=33, color=col, rise=0, speed=4).draw(ctx.L, 60.0, a=0.7)
-    for j, tex in enumerate(EQUATIONS[:2]):
+    for j, tex in enumerate(EQ[k] for k in SETS["launch"]):
         Equation(tex, [(0, 1300 + 200 * j, 700 + 120 * j, 0.6, -5 + 10 * j)], seed=110 + j,
                  color=tuple(lerp_color((190, 222, 255), (255, 120, 100), u))).draw(ctx.L, 60.0, a=0.7)
     # two pale flashes on the horizon
@@ -893,8 +896,8 @@ def fx_18(ctx):
         recolor_lights(ctx, u, to_red=False)
     col = lerp_color(RED, BLUE, u)
     Motes(50, (0, 0, W, H), seed=34, color=col, rise=6 * u, speed=4 + 26 * u).draw(ctx.L, ctx.T, a=0.7)
-    for j, tex in enumerate(EQUATIONS[:3]):
-        Equation(tex, [(0, 300 + 600 * j, 200 + 90 * j, 0.55, -6 + 6 * j)], seed=120 + j,
+    for j, tex in enumerate(EQ[k] for k in SETS["search"]):
+        Equation(tex, [(0, (300, 1560, 1250)[j], (230, 390, 120)[j], 0.55, -6 + 6 * j)], seed=120 + j,
                  color=tuple(lerp_color((255, 120, 100), (190, 222, 255), u))).draw(ctx.L, 60.0 + u * (ctx.t), a=0.75)
 
 
@@ -905,6 +908,10 @@ def fx_19(ctx):
 def fx_20(ctx):
     fade = 1 - ease(ctx.t / 1.6)
     ambient(ctx, 30, seed=36, a=0.6 * fade)
+    for j, k in enumerate(SETS["signal"]):
+        x = 1150 + 330 * (j % 2) + 20 * math.sin(ctx.t + j)
+        y = 170 + 150 * j
+        Equation(EQ[k], [(0, x, y, 0.5, -3 + 2 * j)], seed=200 + j).draw(ctx.L, ctx.T, a=0.75 * (1 - ease((ctx.t - 0.3 * j) / 1.9)))
     # lamp signalling on the beat: off / on / off / on
     ph, n = beat_phase(ctx.T)
     k = (ctx.T - (B(10) + 4 * BEAT)) / BEAT
@@ -1048,6 +1055,10 @@ def fx_27(ctx):
         a = (1 - age / 0.6) * strength
         ctx.L.dot(x, y, 1.6, GOLD_CORE, a)
         ctx.L.polyline([(x, y), (x - math.cos(ang) * 18, y - (math.sin(ang) * v + 1000 * age) / v * 18)], GOLD, 1, 0.6 * a)
+    for j, k in enumerate(SETS["orbit"]):
+        ang = ctx.T * 0.9 + j * 1.57
+        Equation(EQ[k], [(0, W / 2 + math.cos(ang) * 760, 250 + math.sin(ang) * 150, 0.45 + 0.1 * (math.sin(ang) + 1) / 2, 0)],
+                 seed=210 + j).draw(ctx.L, ctx.T, a=0.45 + 0.35 * (math.sin(ang) + 1) / 2)
     for j in range(3):
         cfg = {"kind": "orbit", "center": (W / 2, 300), "radii": (700 + 80 * j, 140 + 30 * j), "a0": j * 2.1,
                "span": 2.0, "spin": 0.9, "amp": 40, "gap": 6}
@@ -1111,7 +1122,7 @@ def fx_31a(ctx):
 
 
 def fx_31b(ctx):
-    for j, tex in enumerate(EQUATIONS[:3]):
+    for j, tex in enumerate(EQ[k] for k in SETS["cosmos"]):
         u = ease((ctx.t + j * 0.25) / 1.7)
         x = 900 + 250 * j + 60 * math.sin(ctx.t * 3 + j)
         y = -80 + u * 620
@@ -1195,6 +1206,11 @@ def fx_40(ctx):
         Staff(cfg, seed=160 + j, n_notes=5).draw(ctx.L, ctx.T, a=0.5 if painted(ctx) else 0.9, color=col)
     ambient(ctx, 50, seed=45, a=0.7)
     Motes(40, (0, 0, W, H), seed=46, color=GOLD, rise=10, speed=30).draw(ctx.L, ctx.T, a=0.7)
+    for j, k in enumerate(SETS["finale"]):
+        ang = ctx.T * 0.7 + j * 2 * math.pi / 5
+        col = (255, 214, 150) if j % 2 else (190, 222, 255)
+        Equation(EQ[k], [(0, cx + math.cos(ang) * 820, cy - 120 + math.sin(ang) * 210, 0.42 + 0.12 * (math.sin(ang) + 1) / 2, 0)],
+                 seed=220 + j, color=col).draw(ctx.L, ctx.T, a=0.4 + 0.4 * (math.sin(ang) + 1) / 2)
     ctx.fin["exposure"] = 1.0 + 0.25 * burst
     ctx.fin["glow_amt"] = 1.2
 
