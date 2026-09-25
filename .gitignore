@@ -9,3 +9,4 @@ gen/*.tmp
 gen/ledger.jsonl
 gen/frames/
 gen/rejects/
+pipeline/relay/relay.key
