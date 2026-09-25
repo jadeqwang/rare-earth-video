@@ -10,3 +10,4 @@ gen/ledger.jsonl
 gen/frames/
 gen/rejects/
 pipeline/relay/relay.key
+pipeline/relay/relay_state.json

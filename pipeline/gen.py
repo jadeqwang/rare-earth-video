@@ -76,7 +76,7 @@ def gen_clip(shot, k, model="seedance", res="720p", frame=None, dur=None, last=N
             inp["last_frame_image"] = img_uri(last, 1920)
         if ref_audio:
             inp["reference_audios"] = [ref_audio]
-        r = cf.run("bytedance/seedance-2.5", inp, timeout=1200, tag=f"clip {shot.id}_{k}")
+        r = run_long("bytedance/seedance-2.5", inp, tag=f"clip {shot.id}_{k}")
     elif model == "h3":
         content = [{"type": "text", "text": prompt},
                    {"type": "image_url", "image_url": {"url": img_uri(frame, 1920)}, "role": "first_frame"}]
@@ -92,6 +92,18 @@ def gen_clip(shot, k, model="seedance", res="720p", frame=None, dur=None, last=N
         raise RuntimeError(f"no media in result: {json.dumps(r)[:500]}")
     cf.download(url, out)
     return out, "ok"
+
+
+def run_long(model, inp, tag=None):
+    """Long jobs go through the KV/cron relay (the session proxy cuts direct calls at ~30 s)."""
+    import relay
+    t0 = time.time()
+    jid = relay.submit(model, inp)
+    r = relay.wait(jid, timeout=2400)
+    cf._log(tag, model, inp, r.get("result"), r.get("error"), time.time() - t0)
+    if r["state"] != "done":
+        raise RuntimeError(f"relay error: {r.get('error')}")
+    return r["result"]
 
 
 def poll_h3(r):
