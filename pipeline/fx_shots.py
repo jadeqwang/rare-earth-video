@@ -1234,6 +1234,8 @@ def fx_38(ctx):
 
 def fx_39(ctx):
     ctx.fin["halate"] = 0.0
+    if is_clip(ctx):
+        return   # the clip carries its own REC light
     x, y = anchor(ctx, "rec", (1037, 637))
     ctx.L.dot(x, y, 3, RED, 1.0)
     ctx.L.dot(x, y, 55, RED * 0.45, 0.22)
