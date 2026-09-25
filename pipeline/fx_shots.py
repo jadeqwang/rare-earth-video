@@ -1182,7 +1182,7 @@ def fx_39(ctx):
     ctx.fin["halate"] = 0.0
     x, y = anchor(ctx, "rec", (1037, 637))
     ctx.L.dot(x, y, 3, RED, 1.0)
-    ctx.L.dot(x, y, 140, RED * 0.45, 0.4)
+    ctx.L.dot(x, y, 55, RED * 0.45, 0.22)
 
 
 def fx_40(ctx):
