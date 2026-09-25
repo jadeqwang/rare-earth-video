@@ -1,0 +1,7 @@
+__pycache__/
+gen/render/
+gen/test/
+gen/clips/
+gen/out/
+gen/soundtrack.wav
+gen/*.log
