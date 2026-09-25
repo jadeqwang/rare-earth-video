@@ -6,3 +6,5 @@ gen/out/
 gen/soundtrack.wav
 gen/*.log
 gen/*.tmp
+gen/ledger.jsonl
+gen/frames/
