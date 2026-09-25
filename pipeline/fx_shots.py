@@ -872,7 +872,16 @@ def fx_17(ctx):
     words = [("Weapons,", 61.76, 62.9), ("wars,", 63.26, 63.62), ("and", 63.82, 64.1), ("now", 64.12, 64.6),
              ("we're", 64.74, 65.25), ("f", 65.32, 65.4)]
     q = ANCHORS.get("17", {}) if ctx.clip else {}
-    if painted(ctx) and "pen" in q:
+    if is_clip(ctx) and "pen" in TRACKED.get("17", {}):
+        # the pen travels while writing: pin the line to the page where the pen starts, fit it to the pen's path
+        tr = np.array(TRACKED["17"]["pen"], np.float64)
+        x_start, x_end, y0 = tr[0, 1], tr[-1, 1], tr[0, 2]
+        f1 = ImageFont.truetype(os.path.join(FONTS, "Caveat[wght].ttf"), 96)
+        total1 = sum(f1.getlength(w + " ") for w, _, _ in words) + 130 + 40
+        pre = f1.getlength("Weapons, ")               # written just before the cut
+        scale = float(np.clip((x_end - x_start + 40) / max(total1 - pre, 1), 0.3, 0.7))
+        x, y = x_start - pre * scale, y0 + 8
+    elif painted(ctx) and "pen" in q:
         px, py = anchor(ctx, "pen", q["pen"])
         scale = 0.62
         f_ = ImageFont.truetype(os.path.join(FONTS, "Caveat[wght].ttf"), int(96 * scale))
