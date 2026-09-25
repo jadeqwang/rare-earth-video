@@ -192,7 +192,7 @@ SHOTS = [
              "tabby cat is no longer in her lap but sits on the windowsill in the background.",
       motion=MOTION_STYLE + "Everything holds perfectly still for three seconds; then every blue light starts moving at "
              "once and surges outward to the edges of the room. Static camera, then a slight push in as they surge.",
-      still=("KF-B", (90, 50, 1610), (0, 0, 1792)), freeze_until=3.0),
+      still=("KF-B", (90, 50, 1610), (0, 0, 1792))),
 
     # ------------------------------------------------------------------ ACT 2: THE ROOM WAKES
     S("12", B(6), 2 * BAR, "(instrumental)", refs=["KF-A"], gen_dur=5,

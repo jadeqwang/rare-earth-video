@@ -534,6 +534,9 @@ def overlay_lcd(ctx, sid, counter, title=None, date=None, stutter=0.0):
             quad = np.array([ctx.src.map_pt(x, y, ctx.t) for x, y in quad], np.float32)
     w, h = 480, 280
     lcd = lcd_image(w, h, counter, levels_at(ctx.T), title=title, date=date, stutter=stutter)
+    if is_clip(ctx):
+        c = quad.mean(axis=0)
+        quad = c + (quad - c) * 0.92      # sit just inside the bezel
     M = cv2.getPerspectiveTransform(np.float32([[0, 0], [w, 0], [w, h], [0, h]]), quad)
     warped = cv2.warpPerspective(lcd, M, (W, H), flags=cv2.INTER_LINEAR)
     m = cv2.warpPerspective(np.ones((h, w), np.float32), M, (W, H))
@@ -699,16 +702,17 @@ def fx_10(ctx):
 def fx_11(ctx):
     """Freeze (band drops out) then everything surges outward when the band returns at 40.5."""
     T_surge = 40.5
-    frozen = ctx.T < T_surge
+    clip = is_clip(ctx)
+    frozen = ctx.T < T_surge and not clip       # clips keep their own ribbons flowing throughout
     Tf = (B(5) + BAR + BAR / 3) + 0.2 if frozen else ctx.T
     L2 = Light()
     cx, cy = anchor(ctx, "her", (840, 470))
     s = kfs(ctx) if not ctx.clip else 1.0
-    for j in range(5):
+    for j in range(0 if clip else 5):
         cfg = {"kind": "orbit", "center": (cx, cy - 80 * s + j * 45 * s), "radii": ((300 + 90 * j) * s, (80 + 30 * j) * s),
                "a0": j * 1.3, "span": 2.0, "spin": 0.4, "amp": 40 * s, "gap": 6 * s}
         Staff(cfg, seed=70 + j, n_notes=4).draw(L2, Tf, a=0.85)
-    for j in range(7):
+    for j in range(0 if clip else 7):
         ang = j * 0.9
         FloatingNote([(0, cx + math.cos(ang) * (380 + 60 * j), cy - 200 + math.sin(ang) * 220, 0.5 + 0.05 * j)], seed=80 + j,
                      ch=vfx.NOTE_CHARS[j % 4], wobble=0 if frozen else 6).draw(L2, Tf, a=0.9, trail=False)
@@ -735,7 +739,9 @@ def fx_11(ctx):
             ctx.plate = bg * m[..., None] + ctx.plate * (1 - m[..., None])
             painted_surge = np.clip(acc / 8 * fade * 0.55, 0, 255).astype(np.uint8)
             cv2.add(ctx.L.buf, painted_surge, dst=ctx.L.buf)
-    if frozen:
+    if clip and ctx.T < T_surge:
+        buf = L2.buf
+    elif frozen:
         # held breath: everything hangs; the lights shimmer only very faintly
         buf = L2.buf if not painted(ctx) else (L2.buf * 0.35).astype(np.uint8)
         ctx.fin["exposure"] = 0.96
