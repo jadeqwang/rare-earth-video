@@ -5,3 +5,4 @@ gen/clips/
 gen/out/
 gen/soundtrack.wav
 gen/*.log
+gen/*.tmp
