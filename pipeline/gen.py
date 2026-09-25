@@ -147,7 +147,7 @@ def main():
     run_parallel(jobs, a.workers)
 
 
-if __name__ == "__main__" and sys.argv[1:2] != ["zoom"]:
+if __name__ == "__main__" and sys.argv[1:2] not in (["zoom"], ["depth"]):
     main()
 
 
@@ -190,3 +190,26 @@ def gen_zoom():
 
 if __name__ == "__main__" and len(sys.argv) > 1 and sys.argv[1] == "zoom":
     gen_zoom()
+
+
+# ----------------------------------------------------------------------------- depth maps (for 2.5D parallax fallback)
+DEPTH_PROMPT = ("Output a monocular depth estimation of this image, exactly like a MiDaS / Depth-Anything inverse-depth map "
+                "rendered in grayscale: each pixel's brightness encodes distance only (bright = close to the camera, dark = far "
+                "away). No shading, no lighting, no outlines, no surface detail: flat smooth tones per surface with continuous "
+                "gradients along floors and walls. Same framing.")
+
+
+def gen_depth(sid):
+    src = os.path.join(FR, f"{sid}.jpg")
+    out = os.path.join(FR, f"{sid}_depth.jpg")
+    if os.path.exists(out) or not os.path.exists(src):
+        return out, "exists"
+    r = cf.run("google/nano-banana-pro", {"prompt": DEPTH_PROMPT, "image_input": [img_uri(src, 1536)], "aspect_ratio": "16:9",
+                                           "image_size": "1K", "output_format": "jpg"}, timeout=120, tag=f"depth {sid}")
+    cf.download(cf.find_media(r), out)
+    return out, "ok"
+
+
+if __name__ == "__main__" and sys.argv[1:2] == ["depth"]:
+    ids = sys.argv[2:] or [s.id for s in SHOTS if os.path.exists(os.path.join(FR, f"{s.id}.jpg"))]
+    run_parallel([(f"depth {i}", gen_depth, (i,), {}) for i in ids], 6)

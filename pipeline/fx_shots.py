@@ -51,8 +51,10 @@ def kf(ctx, x, y):
 
 
 def kfs(ctx):
+    if ctx.clip and not hasattr(ctx.src, "map_pt"):
+        return 1.0
     c = ctx.src.crop_at(ctx.t)
-    return W / c[2]
+    return W / c[2] if not hasattr(ctx.src, "map_pt") else 1.0
 
 
 def anchor(ctx, name, default):
@@ -62,8 +64,12 @@ def anchor(ctx, name, default):
         if a is not None:
             if isinstance(a[0], (list, tuple)):   # keyframed [[t, x, y], ...]
                 arr = np.array(a, np.float64)
-                return float(np.interp(ctx.t, arr[:, 0], arr[:, 1])), float(np.interp(ctx.t, arr[:, 0], arr[:, 2]))
-            return tuple(a)
+                p = float(np.interp(ctx.t, arr[:, 0], arr[:, 1])), float(np.interp(ctx.t, arr[:, 0], arr[:, 2]))
+            else:
+                p = tuple(a)
+            if hasattr(ctx.src, "map_pt"):     # living painting: anchors ride the camera move
+                return ctx.src.map_pt(p[0], p[1], ctx.t)
+            return p
     return kf(ctx, *default) if ctx.src.__class__.__name__ == "StillSource" else default
 
 

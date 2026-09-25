@@ -116,10 +116,70 @@ class ClipSource:
         return f.astype(np.float32) / 255.0
 
 
+class FrameSource:
+    """A generated start frame animated as a 2.5D 'living painting': slow dolly with depth parallax.
+
+    shot.cam = dict(zoom=(z0, z1), pan=(dx, dy) px over the shot, par=parallax strength, focus=(fx, fy) 0..1)
+    """
+    FR = os.path.join(GEN, "frames")
+
+    def __init__(self, shot):
+        from PIL import Image
+        self.shot = shot
+        img = np.asarray(Image.open(os.path.join(self.FR, f"{shot.id}.jpg")).convert("RGB")).astype(np.float32) / 255
+        self.img = cv2.resize(img, (W, H), interpolation=cv2.INTER_AREA)
+        dp = os.path.join(self.FR, f"{shot.id}_depth.jpg")
+        if os.path.exists(dp):
+            d = np.asarray(Image.open(dp).convert("L")).astype(np.float32)
+            d = cv2.resize(d, (W, H), interpolation=cv2.INTER_AREA)
+            lo, hi = np.percentile(d, 2), np.percentile(d, 98)
+            d = np.clip((d - lo) / max(hi - lo, 1), 0, 1)
+            self.depth = cv2.GaussianBlur(d, (0, 0), 10)
+        else:
+            self.depth = np.full((H, W), 0.5, np.float32)
+        cam = getattr(shot, "cam", None) or {}
+        self.z0, self.z1 = cam.get("zoom", (1.02, 1.08))
+        self.pan = np.array(cam.get("pan", (-18, -6)), np.float32)
+        self.par = cam.get("par", 0.025)
+        fx, fy = cam.get("focus", (0.5, 0.5))
+        self.c = np.array([W * fx, H * fy], np.float32)
+        yy, xx = np.mgrid[0:H, 0:W].astype(np.float32)
+        self.xx, self.yy = xx, yy
+        self.dur = shot.dur
+
+    def _u(self, t):
+        u = t / max(self.dur, 1e-6)
+        return 0.15 * u + 0.85 * vfx.ease(u)
+
+    def params(self, t):
+        u = self._u(t)
+        return self.z0 + (self.z1 - self.z0) * u, self.pan * u, u
+
+    def map_pt(self, x, y, t):
+        z, pan, u = self.params(t)
+        return (x - self.c[0]) * z + self.c[0] + pan[0], (y - self.c[1]) * z + self.c[1] + pan[1]
+
+    def crop_at(self, t):
+        z, pan, u = self.params(t)
+        # equivalent crop (x, y, w) in 1920-wide frame coords, for kf()-style mapping
+        w = W / z
+        return np.array([self.c[0] - self.c[0] / z - pan[0] / z, self.c[1] - self.c[1] / z - pan[1] / z, w])
+
+    def get(self, t):
+        z, pan, u = self.params(t)
+        dz = 1 + self.par * u * (self.depth - 0.35) * 2      # near layers dolly faster than far ones
+        zz = z * dz
+        mx = (self.xx - pan[0] * (0.8 + 0.4 * self.depth) - self.c[0]) / zz + self.c[0]
+        my = (self.yy - pan[1] * (0.8 + 0.4 * self.depth) - self.c[1]) / zz + self.c[1]
+        return cv2.remap(self.img, mx.astype(np.float32), my.astype(np.float32), cv2.INTER_LINEAR, borderMode=cv2.BORDER_REFLECT)
+
+
 def make_source(shot):
     clip = os.path.join(CLIPS, f"{shot.id}.mp4")
     if os.path.exists(clip):
         return ClipSource(clip, shot)
+    if os.path.exists(os.path.join(FrameSource.FR, f"{shot.id}.jpg")) and shot.still[0] != "PROC":
+        return FrameSource(shot)
     if shot.still[0] == "PROC":
         return fx_shots.ProcSource(shot)
     return StillSource(shot)
@@ -139,7 +199,7 @@ def render_frame(shot, src, f, preview=False):
     ctx.plate = src.get(max(t, 0.0))
     ctx.L = vfx.Light()
     ctx.fin = dict(glow_amt=1.0, grain=0.016, halate=0.28, exposure=1.0, fade=1.0, lift=0.0, vignette=True)
-    ctx.clip = isinstance(src, ClipSource)
+    ctx.clip = isinstance(src, (ClipSource, FrameSource))
     ctx.src = src
     fx_shots.apply(ctx)
     ctx.plate = np.asarray(ctx.plate, np.float32)
