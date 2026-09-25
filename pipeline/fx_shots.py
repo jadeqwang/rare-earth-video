@@ -311,21 +311,63 @@ def proc_hands(src, t):
     return src.cache["bg"].copy()
 
 
+PRINTS = [  # (file, centre x, centre y, height px, rotation deg (+ccw), extra straightening of the image itself, drop time)
+    ("rna_band3.jpg", 540, 330, 420, 5.0, 0.0, 0.35),
+    ("rna_band2.jpg", 1340, 300, 400, -6.0, -27.0, 1.55),
+    ("rna_band.jpg", 700, 740, 420, -3.5, 0.0, 2.75),
+    ("rna_band_jade_solo.jpg", 1450, 720, 470, 4.0, 0.0, 3.95),
+]
+
+
+def _print_sprite(fname, h, straighten):
+    im = ImageOps.exif_transpose(Image.open(os.path.join(ROOT, fname))).convert("RGB")
+    if straighten:
+        w0, h0 = im.size
+        im = im.rotate(straighten, resample=Image.BICUBIC, expand=False)
+        k = 0.64   # crop the corners the straightening exposed
+        im = im.crop((int(w0 * (1 - k) / 2), int(h0 * (1 - k) / 2), int(w0 * (1 + k) / 2), int(h0 * (1 + k) / 2)))
+    a = np.asarray(im).astype(np.float32) / 255
+    w = int(a.shape[1] * h / a.shape[0])
+    a = cv2.resize(a, (w, h), interpolation=cv2.INTER_AREA)
+    b = int(h * 0.045)
+    card = np.ones((h + 2 * b, w + 2 * b, 3), np.float32) * np.array([0.93, 0.91, 0.86], np.float32)
+    card[b:b + h, b:b + w] = a
+    return card
+
+
 def proc_photo(src, t):
-    """Post-roll: the real 2011 photo, printed, on black, with a slow push."""
-    if "img" not in src.cache:
-        im = ImageOps.exif_transpose(Image.open(os.path.join(ROOT, REF["PHOTO"]))).convert("RGB")
-        a = np.asarray(im).astype(np.float32) / 255.0
-        src.cache["img"] = a
-    a = src.cache["img"]
-    h0, w0 = a.shape[:2]
-    s = (H * 0.70) / h0 * (1 + 0.03 * t / 3.2)
-    M = np.array([[s, 0, W / 2 - w0 * s / 2], [0, s, H * 0.44 - h0 * s / 2]], np.float32)
-    img = cv2.warpAffine(a, M, (W, H), flags=cv2.INTER_CUBIC, borderValue=(0, 0, 0))
-    # print border
-    x0, y0 = W / 2 - w0 * s / 2, H * 0.44 - h0 * s / 2
-    cv2.rectangle(img, (int(x0) - 3, int(y0) - 3), (int(x0 + w0 * s) + 3, int(y0 + h0 * s) + 3), (0.85, 0.83, 0.78), 5, cv2.LINE_AA)
+    """Outro: the real 2011 prints land one by one on the dark desk under warm lamplight."""
+    if "bg" not in src.cache:
+        yy, xx = np.mgrid[0:H, 0:W].astype(np.float32)
+        lamp = np.exp(-(((xx - W * 0.42) / 1300) ** 2 + ((yy - H * 0.2) / 900) ** 2))
+        wood = 0.05 + 0.02 * np.sin(yy / 7.0 + np.sin(xx / 90.0) * 2)
+        src.cache["bg"] = np.stack([wood * 1.25, wood * 0.9, wood * 0.62], -1) * (0.35 + 0.9 * lamp[..., None])
+        src.cache["lamp"] = lamp
+        src.cache["cards"] = [_print_sprite(f, h, st) for f, _, _, h, _, st, _ in PRINTS]
+    img = src.cache["bg"].copy()
+    push = 1.0 + 0.025 * t / 8.0
+    for (f, cx, cy, h, rot, st, t0), card in zip(PRINTS, src.cache["cards"]):
+        u = ease((t - t0) / 0.45)
+        if u <= 0:
+            continue
+        ch, cw = card.shape[:2]
+        sc = (1.10 - 0.10 * u) * push
+        ang = rot + (1 - u) * 6.0
+        X = W / 2 + (cx - W / 2) * push
+        Y = H / 2 + (cy - H / 2) * push - (1 - u) * 30
+        M = cv2.getRotationMatrix2D((cw / 2, ch / 2), ang, sc)
+        M[0, 2] += X - cw / 2
+        M[1, 2] += Y - ch / 2
+        warped = cv2.warpAffine(card, M, (W, H), flags=cv2.INTER_LINEAR)
+        mask = cv2.warpAffine(np.ones((ch, cw), np.float32), M, (W, H), flags=cv2.INTER_LINEAR)
+        # soft drop shadow, sharper as the print settles
+        sh = cv2.GaussianBlur(np.roll(np.roll(mask, 14, 0), 10, 1), (0, 0), 6 + 18 * (1 - u))
+        img = img * (1 - 0.55 * u * sh[..., None])
+        lit = warped * (0.55 + 0.6 * src.cache["lamp"][..., None])
+        m = (mask * u)[..., None]
+        img = img * (1 - m) + lit * m
     return img
+
 
 
 def proc_zoomout(src, t):
@@ -1334,10 +1376,10 @@ def title_card(ctx, a):
 
 
 def fx_post(ctx):
-    ctx.fin["halate"] = 0.0
-    ctx.fin["fade"] = ease(ctx.t / 0.6)
-    cap = vfx.text_sprite("RNA band, 2011", "CormorantGaramond-Italic[wght].ttf", 40)
-    ctx.L.sprite(cap, W / 2, H * 0.9, 1.0, 0, np.array([210, 204, 192]), ease((ctx.t - 0.4) / 0.6))
+    ctx.fin["halate"] = 0.12
+    ctx.fin["fade"] = ease(ctx.t / 0.4) * (1 - ease((ctx.t - (ctx.dur - 0.9)) / 0.9))
+    cap = vfx.text_sprite("RNA band, 2011", "CormorantGaramond-Italic[wght].ttf", 46)
+    ctx.L.sprite(cap, W / 2, H * 0.958, 1.0, 0, np.array([225, 214, 196]), 0.9 * ease((ctx.t - 4.9) / 0.8))
     ctx.fin["glow_amt"] = 0.15
 
 

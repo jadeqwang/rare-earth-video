@@ -15,7 +15,7 @@ BAR = GRID["bar"]
 BEAT = GRID["period"]
 PRE = 10.0
 SONG_END = 177.19
-POST = 3.2
+POST = 8.0
 
 
 def B(k, bars=0.0):

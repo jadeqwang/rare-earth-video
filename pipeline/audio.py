@@ -6,7 +6,7 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
 SR = 48000
 PRE = 10.0          # pre-roll length (s) before the song's 0:00
-POST = 3.2          # post-roll on the 2011 photo
+POST = 8.0          # post-roll on the 2011 photo
 import shots as _shots
 SONG = _shots.SONG_FILE
 rng = np.random.default_rng(11)
