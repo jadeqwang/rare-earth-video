@@ -8,3 +8,4 @@ gen/*.log
 gen/*.tmp
 gen/ledger.jsonl
 gen/frames/
+gen/rejects/
