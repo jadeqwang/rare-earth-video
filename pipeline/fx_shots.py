@@ -316,32 +316,83 @@ PROC = {"black": proc_black, "dust_beam": proc_dust_beam, "journal": proc_journa
 
 # ----------------------------------------------------------------------------- 44: powers-of-ten pull back
 
-ZOOM_PLATES = [f"zoom_{i}.jpg" for i in range(6)]   # generated nested plates (each contains the previous at centre, 1/ZF size)
+ZOOM_PLATES = [f"zoom_{i}.jpg" for i in range(6)]  # see ZOOM_NEST   # generated nested plates (each contains the previous at centre, 1/ZF size)
 ZF = 4.0
 
 
+# Nested plates: (file, anchor (u,v) of the previous plate inside this one, width of previous plate as a fraction of this one)
+ZOOM_NEST = [("zoom_0.jpg", None, None),
+             ("zoom_1.jpg", (0.495, 0.47), 0.20),
+             ("zoom_2.jpg", (0.50, 0.55), 0.30),
+             ("zoom_3.jpg", (0.49, 0.59), 0.05),
+             ("zoom_4.jpg", (0.50, 0.50), 0.09),
+             ("zoom_5.jpg", (0.50, 0.50), 0.022)]
+
+
+def _zoom_world(src):
+    """World = outermost plate's pixel space (W x H). Returns per-plate world rects (x0, y0, w)."""
+    if "rects" in src.cache:
+        return src.cache["rects"]
+    n = len(ZOOM_NEST)
+    rects = [None] * n
+    rects[-1] = (0.0, 0.0, float(W))
+    for k in range(n - 1, 0, -1):
+        x0, y0, w = rects[k]
+        (u, v), frac = ZOOM_NEST[k][1], ZOOM_NEST[k][2]
+        cw = w * frac
+        cx, cy = x0 + u * w, y0 + v * w * 9 / 16
+        rects[k - 1] = (cx - cw / 2, cy - cw * 9 / 32, cw)
+    src.cache["rects"] = rects
+    return rects
+
+
 def zoomout_plate(src, t):
-    """Infinite zoom: generated nested plates if present, else the room collapsing into the pale blue dot."""
+    """Powers-of-ten pull back through nested generated plates; fallback: the room shrinking into the dot."""
     dur = src.shot.dur
     gdir = os.path.join(ROOT, "gen", "frames")
-    plates = [os.path.join(gdir, p) for p in ZOOM_PLATES]
-    if all(os.path.exists(p) for p in plates):
+    if all(os.path.exists(os.path.join(gdir, p[0])) for p in ZOOM_NEST):
         if "plates" not in src.cache:
-            src.cache["plates"] = [cv2.resize(np.asarray(Image.open(p).convert("RGB")).astype(np.float32) / 255, (W, H), interpolation=cv2.INTER_AREA) for p in plates]
+            src.cache["plates"] = [np.asarray(Image.open(os.path.join(gdir, p[0])).convert("RGB")).astype(np.float32) / 255
+                                   for p in ZOOM_NEST]
         P = src.cache["plates"]
-        n = len(P)
-        z = (n - 1) * vfx.ease(t / dur * 1.1)          # zoom level in plate units
-        k = min(int(math.floor(z)), n - 2); f = z - k
-        scale_outer = ZF ** (1 - f)                     # outer plate (k+1) is shown zoomed-in by this
-        outer = zoom_layer(P[k + 1], W / 2, H / 2, scale_outer)
-        inner_s = scale_outer / ZF
-        inner = zoom_layer(P[k], W / 2, H / 2, inner_s)
-        m = np.zeros((H, W), np.float32)
-        iw, ih = W * inner_s, H * inner_s
-        cv2.rectangle(m, (int(W / 2 - iw / 2 + iw * 0.06), int(H / 2 - ih / 2 + ih * 0.06)),
-                      (int(W / 2 + iw / 2 - iw * 0.06), int(H / 2 + ih / 2 - ih * 0.06)), 1.0, -1)
-        m = cv2.GaussianBlur(m, (0, 0), max(2, iw * 0.03))[..., None]
-        return outer * (1 - m) + inner * m
+        rects = _zoom_world(src)
+        # camera keyframes: tight on her window in plate 0, then each plate's full rect
+        x0, y0, w = rects[0]
+        keys = [(x0 + 0.36 * w - 0.2 * w, y0 + 0.58 * w * 9 / 16 - 0.2 * w * 9 / 16, 0.4 * w)] + list(rects)
+        logs = np.log([k[2] for k in keys])
+        # time: ease in/out over the move, hold on the pale blue dot for the last 1.2 s
+        u = vfx.ease(np.clip(t / (dur - 1.2), 0, 1))
+        L = logs[0] + (logs[-1] - logs[0]) * u
+        i = int(np.clip(np.searchsorted(logs, L) - 1, 0, len(keys) - 2))
+        f = (L - logs[i]) / max(logs[i + 1] - logs[i], 1e-9)
+        cw = math.exp(L)
+        c0 = np.array([keys[i][0] + keys[i][2] / 2, keys[i][1] + keys[i][2] * 9 / 32])
+        c1 = np.array([keys[i + 1][0] + keys[i + 1][2] / 2, keys[i + 1][1] + keys[i + 1][2] * 9 / 32])
+        cc = c0 + (c1 - c0) * f
+        camx, camy = cc[0] - cw / 2, cc[1] - cw * 9 / 32
+        sc = W / cw
+        out = np.zeros((H, W, 3), np.float32)
+        for k in range(len(P) - 1, -1, -1):
+            rx, ry, rw = rects[k]
+            sw = rw * sc
+            if sw < 3 or sw > W * 80:
+                continue
+            ph, pw = P[k].shape[:2]
+            s = sw / pw
+            M = np.array([[s, 0, (rx - camx) * sc], [0, s, (ry - camy) * sc]], np.float32)
+            img = cv2.warpAffine(P[k], M, (W, H), flags=cv2.INTER_LINEAR if s > 0.5 else cv2.INTER_AREA,
+                                 borderMode=cv2.BORDER_CONSTANT)
+            if k == len(P) - 1:
+                out = img
+                continue
+            m = np.zeros((H, W), np.float32)
+            sx0, sy0 = (rx - camx) * sc, (ry - camy) * sc
+            sh = sw * 9 / 16
+            fe = 0.14 * sw
+            cv2.rectangle(m, (int(sx0 + fe), int(sy0 + fe * 9 / 16)), (int(sx0 + sw - fe), int(sy0 + sh - fe * 9 / 16)), 1.0, -1)
+            m = cv2.GaussianBlur(m, (0, 0), max(1.0, fe * 0.45))[..., None]
+            out = out * (1 - m) + img * m
+        return out
     # fallback: KF-A night room shrinks into a mote of light inside a band of scattered sunlight
     if "room" not in src.cache:
         src.cache["room"] = cv2.resize(np.asarray(Image.open(os.path.join(ROOT, REF["KF-A"])).convert("RGB")).astype(np.float32) / 255, (W, H), interpolation=cv2.INTER_AREA)
@@ -351,10 +402,9 @@ def zoomout_plate(src, t):
             cv2.circle(stars, (int(rng.uniform(0, W)), int(rng.uniform(0, H))), 1, float(rng.uniform(0.05, 0.5) ** 2), -1, cv2.LINE_AA)
         xx = np.arange(W, dtype=np.float32)
         band = np.exp(-((xx - W * 0.56) / 90) ** 2)[None, :] * np.linspace(0.6, 1.0, H, dtype=np.float32)[:, None]
-        space = np.stack([stars] * 3, -1) + band[..., None] * np.array([0.23, 0.17, 0.12], np.float32)
-        src.cache["space"] = space
+        src.cache["space"] = np.stack([stars] * 3, -1) + band[..., None] * np.array([0.23, 0.17, 0.12], np.float32)
     u = vfx.ease(t / dur)
-    s = math.exp(math.log(1.0) * (1 - u) + math.log(0.0025) * u)
+    s = math.exp(math.log(0.0025) * u)
     cx = W / 2 + (W * 0.56 - W / 2) * u
     room = zoom_layer(src.cache["room"], cx, H / 2, s)
     m = np.zeros((H, W), np.float32)
