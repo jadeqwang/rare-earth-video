@@ -110,6 +110,8 @@ class ClipSource:
         else:
             base = (t - (s.freeze_until or 0.0))
             src_t = s.clip_in + base * s.speed
+        if s.id in REVERSE:
+            src_t = self.sdur - 1.0 / self.sfps - src_t
         j = int(round(src_t * self.sfps))
         j = max(0, min(j, int(self.sdur * self.sfps) - 1))
         f = self._read_to(j)
@@ -176,6 +178,7 @@ class FrameSource:
 
 
 # Shots that stay as living paintings even when a clip exists (beat-locked blinks, the fresh-ink reveal)
+REVERSE = {"16"}          # clips generated with the colour change running the wrong way
 PREFER_PAINTING = {"8a", "8b", "35", "45", "17", "24"}
 
 

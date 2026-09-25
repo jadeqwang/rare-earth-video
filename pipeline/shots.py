@@ -487,3 +487,6 @@ CAM = {
 }
 for _s in SHOTS:
     _s.cam = CAM.get(_s.id)
+
+# clip retiming: fit the whole generated move into the shot
+BY_ID["30"].speed = 10.0 / BY_ID["30"].dur

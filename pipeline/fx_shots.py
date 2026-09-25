@@ -857,7 +857,7 @@ def recolor_lights(ctx, u, to_red=True):
 def fx_16(ctx):
     flick = 0.5 + 0.5 * math.sin(ctx.t * 30) * (hash01(int(ctx.t * 12), 4) > 0.3)
     u = ease(ctx.t / 1.5) * (0.6 + 0.4 * flick)
-    if painted(ctx):
+    if painted(ctx) and not is_clip(ctx):
         recolor_lights(ctx, u, to_red=True)
     col = lerp_color(BLUE, RED, u)
     Motes(40, (0, 200, W, H), seed=33, color=col, rise=0, speed=4).draw(ctx.L, 60.0, a=0.7)
@@ -1126,6 +1126,9 @@ def fx_29(ctx):
 
 def fx_30(ctx):
     """Light drains from the top down; the band, then her younger self, crumble into blue dust."""
+    if is_clip(ctx):
+        ctx.fin["halate"] = 0.2 * (1 - ease(ctx.t / 4))
+        return   # the clip performs the dissolve
     wipe = H * ease_in(np.clip(ctx.t / 6.2, 0, 1)) * 1.15 - 60
     yy = np.arange(H, dtype=np.float32)[:, None, None]
     above = np.clip((wipe - yy) / 120, 0, 1)
