@@ -45,7 +45,16 @@ def gen_frame(shot, k, model="nano", extra=""):
         inp = {"prompt": prompt, "aspect_ratio": "16:9", "image_size": "2K", "output_format": "jpg"}
         if refs:
             inp["image_input"] = [ref_uri(r) for r in refs[:3]]
-        res = cf.run("google/nano-banana-pro", inp, timeout=600, tag=f"frame {shot.id}_{k}")
+        try:
+            res = cf.run("google/nano-banana-pro", inp, timeout=600, tag=f"frame {shot.id}_{k}", retries=0)
+        except RuntimeError as e:
+            if "502" not in str(e):
+                raise
+            # the session proxy cuts calls at ~30 s: fall back to 1K output and fewer references
+            inp["image_size"] = "1K"
+            if refs:
+                inp["image_input"] = [ref_uri(r, 1024) for r in refs[:2]]
+            res = cf.run("google/nano-banana-pro", inp, timeout=600, tag=f"frame {shot.id}_{k} 1K", retries=1)
     elif model == "seedream":
         inp = {"prompt": prompt, "size": "2560x1440", "watermark": False}
         if refs:

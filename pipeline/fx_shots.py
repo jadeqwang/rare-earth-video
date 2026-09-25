@@ -50,6 +50,10 @@ def kf(ctx, x, y):
     return (x - c[0]) * s, (y - c[1]) * s
 
 
+def painted(ctx):
+    return hasattr(ctx.src, "map_pt")
+
+
 def kfs(ctx):
     if ctx.clip and not hasattr(ctx.src, "map_pt"):
         return 1.0
@@ -522,14 +526,19 @@ def overlay_lcd(ctx, sid, counter, title=None, date=None, stutter=0.0):
 def fx_2(ctx):
     gold_dust(ctx, 10, seed=4, a=0.25)
     # the first note of light rises out of the grille (below frame) and her eyes follow it
-    fn = FloatingNote([(0, 1480, 1150, 0.55), (1.2, 1380, 880, 0.62), (3.9, 1180, 330, 0.8)], seed=11)
+    gx, gy = anchor(ctx, "grille", (1480, 1150))
+    if painted(ctx):
+        fn = FloatingNote([(0, gx, gy, 0.3), (1.2, gx + 60, gy - 200, 0.5), (3.9, gx + 260, gy - 560, 0.7)], seed=11)
+    else:
+        fn = FloatingNote([(0, 1480, 1150, 0.55), (1.2, 1380, 880, 0.62), (3.9, 1180, 330, 0.8)], seed=11)
     a = ease(ctx.t / 0.6)
     fn.draw(ctx.L, ctx.t, a=a)
     ambient(ctx, 8, seed=21, a=0.4 * a, region=(1000, 300, 1900, 1080), size=(0.6, 1.6))
 
 
 def fx_3(ctx):
-    fn = FloatingNote([(0, 1700, 330, 0.75), (3.9, 350, 260, 0.8)], seed=12, ch="♫")
+    nx, ny = anchor(ctx, "note", (1700, 330))
+    fn = FloatingNote([(0, nx + 40, ny + 10, 0.55), (3.9, nx - 700, ny - 60, 0.7)], seed=12, ch="♫")
     fn.draw(ctx.L, ctx.t, a=1.0)
     ambient(ctx, 10, seed=22, a=0.35, size=(0.6, 1.6))
 
@@ -559,7 +568,7 @@ def fx_5(ctx):
     for j in range(3):
         cfg = {"kind": "orbit", "center": (cx, cy - 40 * s + j * 50 * s), "radii": ((360 + 60 * j) * s, (90 + 20 * j) * s),
                "a0": j * 2.1, "span": 2.2, "spin": 0.45 + 0.08 * j, "amp": 40 * s, "gap": 6 * s, "note_speed": 0.06}
-        Staff(cfg, seed=40 + j, n_notes=4).draw(ctx.L, ctx.T, a=0.85 * a, width=1.0)
+        Staff(cfg, seed=40 + j, n_notes=4).draw(ctx.L, ctx.T, a=(0.45 if painted(ctx) else 0.85) * a, width=1.0)
     ambient(ctx, 40, seed=24, a=0.6)
 
 
@@ -567,8 +576,12 @@ def fx_6(ctx):
     beam = ctx.src.cache.get("beam") if hasattr(ctx.src, "cache") else None
     Motes(140, (0, -200, W, H + 200), seed=6, color=GOLD, size=(0.6, 3.2), rise=-18, speed=20, twinkle=0.5).draw(ctx.L, ctx.T, a=0.8)
     # the pale blue dot: hangs, then drifts across the beam
-    x = 1240 - 420 * ease((ctx.t - 1.2) / 2.7)
-    y = 520 + 40 * math.sin(ctx.t * 0.9)
+    if painted(ctx):
+        sx, sy = anchor(ctx, "speck", (536, 790))
+        x = sx + 90 * ease((ctx.t - 1.2) / 2.7); y = sy - 35 * ease((ctx.t - 1.2) / 2.7) + 6 * math.sin(ctx.t * 0.9)
+    else:
+        x = 1240 - 420 * ease((ctx.t - 1.2) / 2.7)
+        y = 520 + 40 * math.sin(ctx.t * 0.9)
     ctx.L.dot(x, y, 3.2, BLUE_CORE, 1.0)
     ctx.L.dot(x, y, 12, BLUE, 0.35)
     ctx.fin["halate"] = 0.1
@@ -681,9 +694,31 @@ def fx_11(ctx):
         FloatingNote([(0, cx + math.cos(ang) * (380 + 60 * j), cy - 200 + math.sin(ang) * 220, 0.5 + 0.05 * j)], seed=80 + j,
                      ch=vfx.NOTE_CHARS[j % 4], wobble=0 if frozen else 6).draw(L2, Tf, a=0.9, trail=False)
     Motes(70, (200, 50, 1700, 1000), seed=28, rise=0 if frozen else 8).draw(L2, Tf, a=0.7)
+    if painted(ctx):
+        key = "_blue11"
+        if not hasattr(ctx.src, key):
+            base = ctx.src.get(0.0)
+            r_, g_, b_ = base[..., 0], base[..., 1], base[..., 2]
+            m = np.clip((b_ - r_ - 0.14) * 5, 0, 1) * np.clip((b_ - 0.55) * 4, 0, 1)
+            m = cv2.GaussianBlur(m.astype(np.float32), (0, 0), 1.5)
+            hole = (cv2.dilate((m > 0.12).astype(np.uint8), np.ones((7, 7), np.uint8)) * 255)
+            bg = cv2.inpaint((base * 255).astype(np.uint8), hole, 4, cv2.INPAINT_TELEA).astype(np.float32) / 255
+            setattr(ctx.src, key, (bg, m))
+        bg, m = getattr(ctx.src, key)
+        if not frozen:
+            u = ctx.T - T_surge
+            sc = 1 + 1.4 * ease_out(u / 1.3)
+            fade = 1 - ease(u / 1.9)
+            lights = (ctx.plate * m[..., None] * 255).astype(np.float32)
+            acc = np.zeros_like(lights)
+            for k in range(8):
+                acc += zoom_layer(lights, cx, cy, 1 + (sc - 1) * (0.65 + 0.05 * k))
+            ctx.plate = bg * m[..., None] + ctx.plate * (1 - m[..., None])
+            painted_surge = np.clip(acc / 8 * fade * 0.55, 0, 255).astype(np.uint8)
+            cv2.add(ctx.L.buf, painted_surge, dst=ctx.L.buf)
     if frozen:
         # held breath: everything hangs; the lights shimmer only very faintly
-        buf = L2.buf
+        buf = L2.buf if not painted(ctx) else (L2.buf * 0.35).astype(np.uint8)
         ctx.fin["exposure"] = 0.96
     else:
         u = ctx.T - T_surge
@@ -741,7 +776,7 @@ def brain_panel(w, h, T, lit):
 
 def fx_13(ctx):
     lit = ease((ctx.t - 0.3) / 0.25) * (0.85 + 0.15 * (hash01(int(ctx.t * 24), 7) > 0.2 if ctx.t < 0.9 else 1))
-    if not ctx.clip:
+    if not ctx.clip and not painted(ctx):
         px, py = kf(ctx, 1470, 40)
         w, h = int(560 * kfs(ctx) / 3.0), int(330 * kfs(ctx) / 3.0)
         panel = brain_panel(w, h, ctx.T, lit)
@@ -749,6 +784,19 @@ def fx_13(ctx):
         x1, y1 = min(W, x0 + w), min(H, y0 + h)
         ctx.plate[y0:y1, x0:x1] = panel[: y1 - y0, : x1 - x0]
         ctx.L.dot(px, y0 + h / 2, w * 0.12, BLUE_DEEP, 0.12 * lit)
+    if painted(ctx) and "panel" in ANCHORS.get("13", {}):
+        x0, y0, x1, y1 = ANCHORS["13"]["panel"]
+        (px0, py0), (px1, py1) = ctx.src.map_pt(x0, y0, ctx.t), ctx.src.map_pt(x1, y1, ctx.t)
+        cw, ch = (px1 - px0) / 4, (py1 - py0) / 3
+        ph, n = beat_phase(ctx.T)
+        for r in range(3):
+            for c in range(4):
+                idx = r * 4 + c
+                on = lit * math.exp(-((n - idx) % 12) * 0.8) * (0.55 + 0.45 * math.exp(-ph * BEAT / 0.2))
+                ctx.L.dot(px0 + (c + 0.5) * cw + 12 * math.cos(idx), py0 + (r + 0.5) * ch + 8 * math.sin(idx * 1.7),
+                          min(cw, ch) * 0.22, BLUE, 0.9 * on)
+        lab = vfx.text_sprite("Subject: A.", "VT323-Regular.ttf", 30)
+        ctx.L.sprite(lab, px0 + 80, py1 - 22, 1.0, 0, np.array([190, 215, 255]), 0.85 * lit)
     for j, tex in enumerate(EQUATIONS[1:4]):
         x = -300 + (ctx.t / ctx.dur) * (W + 600) * (0.6 + 0.2 * j) + j * 400
         Equation(tex, [(0, x, 650 + 120 * j, 0.6, -4)], seed=100 + j).draw(ctx.L, ctx.T, a=0.8)
@@ -770,9 +818,25 @@ def lerp_color(a, b, u):
     return np.asarray(a, np.float32) * (1 - u) + np.asarray(b, np.float32) * u
 
 
+def recolor_lights(ctx, u, to_red=True):
+    """Shift the plate's glowing figures between pale blue and red (u: 0..1 of the shift)."""
+    if to_red:
+        m = blue_mask(ctx.plate, 0.05)
+    else:
+        r, g, b = ctx.plate[..., 0], ctx.plate[..., 1], ctx.plate[..., 2]
+        m = cv2.GaussianBlur(np.clip((r - g - 0.14) * 5, 0, 1) * np.clip((r - b - 0.06) * 5, 0, 1) * np.clip((r - 0.42) * 4, 0, 1), (0, 0), 1.5)
+    lum = ctx.plate.max(axis=2, keepdims=True)
+    swapped = ctx.plate[..., ::-1] * np.array([1.0, 0.55, 0.6], np.float32) if to_red else \
+        lum * np.array([0.62, 0.8, 1.0], np.float32) * 1.05
+    k = (m * u)[..., None]
+    ctx.plate = ctx.plate * (1 - k) + np.clip(swapped, 0, 1) * k
+
+
 def fx_16(ctx):
     flick = 0.5 + 0.5 * math.sin(ctx.t * 30) * (hash01(int(ctx.t * 12), 4) > 0.3)
     u = ease(ctx.t / 1.5) * (0.6 + 0.4 * flick)
+    if painted(ctx):
+        recolor_lights(ctx, u, to_red=True)
     col = lerp_color(BLUE, RED, u)
     Motes(40, (0, 200, W, H), seed=33, color=col, rise=0, speed=4).draw(ctx.L, 60.0, a=0.7)
     for j, tex in enumerate(EQUATIONS[:2]):
@@ -792,8 +856,15 @@ def fx_17(ctx):
     words = [("Weapons,", 61.76, 62.9), ("wars,", 63.26, 63.62), ("and", 63.82, 64.1), ("now", 64.12, 64.6),
              ("we're", 64.74, 65.25), ("f", 65.32, 65.4)]
     q = ANCHORS.get("17", {}) if ctx.clip else {}
-    x, y = q.get("line", (300, 450)) if ctx.clip else (300, 450)
-    scale = q.get("scale", 1.0)
+    if painted(ctx) and "pen" in q:
+        px, py = ctx.src.map_pt(*q["pen"], ctx.t)
+        scale = 0.62
+        f_ = ImageFont.truetype(os.path.join(FONTS, "Caveat[wght].ttf"), int(96 * scale))
+        total = sum(f_.getlength(w + " ") for w, _, _ in words) + 130 * scale + 40 * scale
+        x, y = px - total - 18, py + 10
+    else:
+        x, y = q.get("line", (300, 450)) if ctx.clip else (300, 450)
+        scale = q.get("scale", 1.0)
     fsz = int(96 * scale)
     font = ImageFont.truetype(os.path.join(FONTS, "Caveat[wght].ttf"), fsz)
     cx = x
@@ -818,6 +889,8 @@ def fx_17(ctx):
 
 def fx_18(ctx):
     u = ease((ctx.t - 0.3) / 1.4)
+    if painted(ctx):
+        recolor_lights(ctx, u, to_red=False)
     col = lerp_color(RED, BLUE, u)
     Motes(50, (0, 0, W, H), seed=34, color=col, rise=6 * u, speed=4 + 26 * u).draw(ctx.L, ctx.T, a=0.7)
     for j, tex in enumerate(EQUATIONS[:3]):
@@ -858,19 +931,25 @@ def fx_22(ctx):
     """Blue motes stream in from the room and gather into her younger self."""
     m = blue_mask(ctx.plate)
     form = ease((ctx.t - 0.1) / 2.2)
-    if not ctx.clip:
+    if not ctx.clip or painted(ctx):
         # reveal the figure: hide unformed parts (noise dissolve from the core outward)
         key = "_fig"
         if not hasattr(ctx.src, key):
             base = (ctx.plate * 255).astype(np.uint8)
             hole = (m > 0.15).astype(np.uint8) * 255
             hole = cv2.dilate(hole, np.ones((9, 9), np.uint8))
-            bg = cv2.inpaint(base, hole, 5, cv2.INPAINT_TELEA).astype(np.float32) / 255
+            if painted(ctx):
+                bg = ctx.plate * (1 - 0.88 * cv2.GaussianBlur(m, (0, 0), 6)[..., None])
+            else:
+                bg = cv2.inpaint(base, hole, 5, cv2.INPAINT_TELEA).astype(np.float32) / 255
             noise = cv2.GaussianBlur(np.random.default_rng(3).random((H // 8, W // 8)).astype(np.float32), (0, 0), 1.2)
             noise = cv2.resize(noise, (W, H))
             setattr(ctx.src, key, (bg, noise, mask_points(m, 900, 5)))
         bg, noise, pts = getattr(ctx.src, key)
-        reveal = np.clip((form * 1.25 - noise) * 5, 0, 1)[..., None]
+        if painted(ctx):
+            reveal = np.clip(form * 1.1 - 0.05 + 0.15 * (noise - 0.5), 0, 1)[..., None] * (m[..., None] > -1)
+        else:
+            reveal = np.clip((form * 1.25 - noise) * 5, 0, 1)[..., None]
         ctx.plate = bg * (1 - reveal) + ctx.plate * reveal
     else:
         pts = mask_points(m, 900, 5)
@@ -939,10 +1018,10 @@ def fx_poster(ctx, fade=1.0):
 
 def fx_26(ctx):
     u = ease(ctx.t / 3.0)
-    if not ctx.clip:
+    if not ctx.clip or painted(ctx):
         # band fades up; the gig's green/magenta wash spreads over the walls
         m = blue_mask(ctx.plate)
-        band = m * (np.arange(W)[None, :] > kf(ctx, 1180, 0)[0])
+        band = m * (np.arange(W)[None, :] > (1180 if painted(ctx) else kf(ctx, 1180, 0)[0]))
         warm = ctx.plate.mean(axis=2, keepdims=True) * np.array([1.0, 0.8, 0.55], np.float32) * 0.8
         ctx.plate = warm * (1 - u) + ctx.plate * u
         ctx.plate = ctx.plate * (1 - band[..., None] * (1 - u))
@@ -999,7 +1078,7 @@ def fx_29(ctx):
                "r0": 120, "r1": 1100, "gap": 7, "squash": 0.85, "note_speed": 0.05}
         Staff(cfg, seed=140 + j, n_notes=6).draw(ctx.L, ctx.T, a=0.9 * b, width=1.1)
     ambient(ctx, 70, seed=43, a=0.7 * b)
-    if not ctx.clip:
+    if not ctx.clip or painted(ctx):
         ang = ctx.t * 2.0
         M = cv2.getRotationMatrix2D((W / 2, H / 2), ang, 1.0 + 0.02 * ctx.t)
         ctx.plate = cv2.warpAffine(ctx.plate, M, (W, H), borderMode=cv2.BORDER_REFLECT)
@@ -1042,7 +1121,7 @@ def fx_31b(ctx):
 
 def dark_led_glow(ctx, default=(1037, 637), r=90, a=0.35):
     x, y = anchor(ctx, "led", default)
-    ctx.L.dot(x, y, 2.5 * (kfs(ctx) if not ctx.clip else 1), RED, 0.9)
+    ctx.L.dot(x, y, 4 if painted(ctx) else 2.5 * (kfs(ctx) if not ctx.clip else 1), RED, 0.9)
     ctx.L.dot(x, y, r, RED * 0.5, a * (0.85 + 0.15 * math.sin(ctx.T * 2)))
 
 
@@ -1053,8 +1132,12 @@ def fx_dark(ctx):
 
 def fx_33(ctx):
     fx_dark(ctx)
-    x = 1250 - 700 * ease(ctx.t / 3.9)
-    y = 520 + 30 * math.sin(ctx.t)
+    if painted(ctx):
+        sx, sy = anchor(ctx, "speck", (1240, 680))
+        x = sx - 520 * ease(ctx.t / 3.9); y = sy - 60 * ease(ctx.t / 3.9) + 10 * math.sin(ctx.t)
+    else:
+        x = 1250 - 700 * ease(ctx.t / 3.9)
+        y = 520 + 30 * math.sin(ctx.t)
     ctx.L.dot(x, y, 2.6, BLUE_CORE, 0.9)
     ctx.L.dot(x, y, 12, BLUE, 0.3)
 
@@ -1109,7 +1192,7 @@ def fx_40(ctx):
         col = GOLD if j % 2 else BLUE
         cfg = {"kind": "orbit", "center": (cx, cy - 60 + 40 * j), "radii": (560 + 90 * j, 150 + 40 * j), "a0": j * 1.3,
                "span": 2.4, "spin": 0.8 + 0.1 * j, "amp": 50, "gap": 7}
-        Staff(cfg, seed=160 + j, n_notes=5).draw(ctx.L, ctx.T, a=0.9, color=col)
+        Staff(cfg, seed=160 + j, n_notes=5).draw(ctx.L, ctx.T, a=0.5 if painted(ctx) else 0.9, color=col)
     ambient(ctx, 50, seed=45, a=0.7)
     Motes(40, (0, 0, W, H), seed=46, color=GOLD, rise=10, speed=30).draw(ctx.L, ctx.T, a=0.7)
     ctx.fin["exposure"] = 1.0 + 0.25 * burst
@@ -1190,3 +1273,36 @@ def apply(ctx):
     fn = FX.get(ctx.shot.id)
     if fn:
         fn(ctx)
+
+
+# ----------------------------------------------------------------------------- pre-plate hooks (modify the source image)
+
+def pre_45(src, t):
+    """'new version' is written in fresh ink: lift the line off the tape, then wipe it back in left to right."""
+    if not hasattr(src, "img") or not hasattr(src, "_ink45"):
+        if not hasattr(src, "img"):
+            return
+        orig = src.img.copy()
+        x0, y0, x1, y1 = 790, 500, 1150, 690
+        reg = orig[y0:y1, x0:x1]
+        lum = reg.mean(axis=2)
+        ink = (lum < 0.33).astype(np.uint8) * 255
+        ink = cv2.dilate(ink, np.ones((5, 5), np.uint8))
+        clean = cv2.inpaint((reg * 255).astype(np.uint8), ink, 5, cv2.INPAINT_TELEA).astype(np.float32) / 255
+        blank = orig.copy(); blank[y0:y1, x0:x1] = clean
+        src._ink45 = (orig, blank, (x0, x1))
+    orig, blank, (x0, x1) = src._ink45
+    u = ease((t - 0.35) / 0.9)
+    edge = x0 + (x1 - x0) * u
+    xs = np.arange(W, dtype=np.float32)
+    m = np.clip((edge - xs) / 10, 0, 1)[None, :, None]
+    src.img = blank * (1 - m) + orig * m
+
+
+PRE = {"45": pre_45}
+
+
+def pre(shot, src, t):
+    fn = PRE.get(shot.id)
+    if fn:
+        fn(src, t)

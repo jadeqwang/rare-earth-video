@@ -464,3 +464,25 @@ if __name__ == "__main__":
     check()
     for s in SHOTS:
         print(f"{s.id:>5} {s.start + PRE:7.2f} {s.dur:5.2f}  {s.lyric}")
+
+
+# Camera moves for 'living painting' plates (FrameSource): zoom range, pan px, parallax, focus (0..1), static offset px
+CAM = {
+    "P1": dict(zoom=(1.0, 1.07), pan=(-20, -8)),
+    "2": dict(zoom=(1.0, 1.06), focus=(0.55, 0.4)),
+    "5": dict(zoom=(1.10, 1.01), pan=(0, 10), par=0.03),
+    "6": dict(zoom=(1.0, 1.04), pan=(-30, 12)),
+    "8a": dict(zoom=(1.25, 1.29), offset=(0, -117), par=0.0),
+    "8b": dict(zoom=(1.25, 1.29), offset=(-12, 132), par=0.0),
+    "11": dict(zoom=(1.02, 1.06), pan=(0, 0), par=0.02),
+    "24": dict(zoom=(1.04, 1.05), pan=(0, 0), par=0.01),
+    "29": dict(zoom=(1.0, 1.08), pan=(0, 0), par=0.0),
+    "30": dict(zoom=(1.0, 1.22), pan=(0, 0), focus=(0.45, 0.38)),
+    "34": dict(zoom=(1.02, 1.06), pan=(0, 0), focus=(0.46, 0.48)),
+    "39": dict(zoom=(1.0, 1.10), pan=(0, 0), focus=(0.48, 0.45)),
+    "41": dict(zoom=(1.0, 1.12), pan=(10, 0), focus=(0.2, 0.15)),
+    "42": dict(zoom=(1.0, 1.35), pan=(0, 0), focus=(0.62, 0.35), par=0.04),
+    "45": dict(zoom=(1.03, 1.05), pan=(-6, 0), par=0.01),
+}
+for _s in SHOTS:
+    _s.cam = CAM.get(_s.id)

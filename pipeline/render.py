@@ -141,6 +141,7 @@ class FrameSource:
         self.z0, self.z1 = cam.get("zoom", (1.02, 1.08))
         self.pan = np.array(cam.get("pan", (-18, -6)), np.float32)
         self.par = cam.get("par", 0.025)
+        self.off = np.array(cam.get("offset", (0, 0)), np.float32)
         fx, fy = cam.get("focus", (0.5, 0.5))
         self.c = np.array([W * fx, H * fy], np.float32)
         yy, xx = np.mgrid[0:H, 0:W].astype(np.float32)
@@ -153,7 +154,7 @@ class FrameSource:
 
     def params(self, t):
         u = self._u(t)
-        return self.z0 + (self.z1 - self.z0) * u, self.pan * u, u
+        return self.z0 + (self.z1 - self.z0) * u, self.pan * u + self.off, u
 
     def map_pt(self, x, y, t):
         z, pan, u = self.params(t)
@@ -178,7 +179,7 @@ def make_source(shot):
     clip = os.path.join(CLIPS, f"{shot.id}.mp4")
     if os.path.exists(clip):
         return ClipSource(clip, shot)
-    if os.path.exists(os.path.join(FrameSource.FR, f"{shot.id}.jpg")) and shot.still[0] != "PROC":
+    if os.path.exists(os.path.join(FrameSource.FR, f"{shot.id}.jpg")) and shot.still[1] not in ("lcd_sink", "zoomout", "black", "photo"):
         return FrameSource(shot)
     if shot.still[0] == "PROC":
         return fx_shots.ProcSource(shot)
@@ -196,6 +197,7 @@ def render_frame(shot, src, f, preview=False):
     ctx = Ctx()
     ctx.t, ctx.T, ctx.shot, ctx.f = t, shot.start + t, shot, f
     ctx.dur = shot.dur
+    fx_shots.pre(shot, src, max(t, 0.0))
     ctx.plate = src.get(max(t, 0.0))
     ctx.L = vfx.Light()
     ctx.fin = dict(glow_amt=1.0, grain=0.016, halate=0.28, exposure=1.0, fade=1.0, lift=0.0, vignette=True)
