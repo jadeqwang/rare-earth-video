@@ -179,8 +179,8 @@ class FrameSource:
 
 
 # Shots that stay as living paintings even when a clip exists (beat-locked blinks, the fresh-ink reveal)
-REVERSE = {"16"}          # clips generated with the colour change running the wrong way
-PREFER_PAINTING = {"8a", "8b", "35", "45", "17", "24"}
+REVERSE = set()          # clips generated with the colour change running the wrong way
+PREFER_PAINTING = {"8a", "8b", "35", "45", "17"}
 
 
 def make_source(shot):

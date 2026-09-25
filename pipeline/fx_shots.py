@@ -1100,8 +1100,7 @@ def fx_poster(ctx, fade=1.0):
     """The band's robot in the round frame on the gig wall (KF-D: circle at ~(719, 88), r~78)."""
     if ctx.clip and "poster" not in ANCHORS.get(ctx.shot.id, {}):
         return
-    if is_clip(ctx) and ctx.shot.id == "26":
-        return   # this clip reframes onto the guitarists; the frame's round poster is out of shot
+
     if ctx.clip:
         px, py, pr = ANCHORS[ctx.shot.id]["poster"]
     else:
