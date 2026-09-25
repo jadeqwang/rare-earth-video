@@ -497,7 +497,7 @@ def mask_points(mask, n, seed=0, thresh=0.3):
 
 def fx_pre(ctx):
     gold_dust(ctx, 22, seed=ctx.f // 1000 + 1, a=0.35)
-    if ctx.shot.id == "P3":
+    if ctx.shot.id == "P3" and not is_clip(ctx):
         # the little screen lights up after the card clicks in (at ~7.9 s film time -> P3 local 1.9)
         on = ease((ctx.t - 2.9) / 0.4)
         if on > 0:

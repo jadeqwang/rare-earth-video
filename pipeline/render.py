@@ -176,7 +176,7 @@ class FrameSource:
 
 
 # Shots that stay as living paintings even when a clip exists (beat-locked blinks, the fresh-ink reveal)
-PREFER_PAINTING = {"8a", "8b", "35", "45", "17"}
+PREFER_PAINTING = {"8a", "8b", "35", "45", "17", "24"}
 
 
 def make_source(shot):
