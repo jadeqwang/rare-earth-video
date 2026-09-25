@@ -109,13 +109,21 @@ def gen_clip(shot, k, model="seedance", res="720p", frame=None, dur=None, last=N
 def run_long(model, inp, tag=None):
     """Long jobs go through the KV/cron relay (the session proxy cuts direct calls at ~30 s)."""
     import relay
-    t0 = time.time()
-    jid = relay.submit(model, inp)
-    r = relay.wait(jid, timeout=2400)
-    cf._log(tag, model, inp, r.get("result"), r.get("error"), time.time() - t0)
-    if r["state"] != "done":
-        raise RuntimeError(f"relay error: {r.get('error')}")
-    return r["result"]
+    for attempt in range(3):
+        t0 = time.time()
+        jid = relay.submit(model, inp)
+        try:
+            r = relay.wait(jid, timeout=1500)
+        except TimeoutError:
+            r = {"state": "error", "error": "client timeout (job lost)"}
+        cf._log(tag, model, inp, r.get("result"), r.get("error"), time.time() - t0)
+        if r["state"] == "done":
+            return r["result"]
+        err = str(r.get("error"))
+        transient = any(x in err for x in ("Network connection lost", "2002", "timeout", "overloaded", "503"))
+        if not transient or attempt == 2:
+            raise RuntimeError(f"relay error: {err}")
+        print(f"[{time.strftime('%H:%M:%S')}] {tag}: transient relay error, resubmitting ({err[:60]})", flush=True)
 
 
 def poll_h3(r):
