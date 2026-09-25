@@ -7,7 +7,8 @@ ROOT = os.path.dirname(HERE)
 SR = 48000
 PRE = 10.0          # pre-roll length (s) before the song's 0:00
 POST = 3.2          # post-roll on the 2011 photo
-SONG = os.path.join(ROOT, "rare earth - jade late night solo (1).mp3")
+import shots as _shots
+SONG = _shots.SONG_FILE
 rng = np.random.default_rng(11)
 
 
@@ -158,9 +159,9 @@ def build(out_wav, grid):
     s0 = int(PRE * SR)
     full = song.copy()
     small = small_speaker(song)
-    B2, B2m = grid["blocks"]["B2"], grid["blocks"]["B2"] + 2 * grid["bar"]   # 11.5 -> 15.4 (shot 4)
+    B2, B2m = _shots.BY_ID["4"].start, _shots.BY_ID["5"].start          # the old recording blooms into the room across shot 4
     g_small = fade_curve(ns, B2, B2m, 1.0, 0.0) * 10 ** (5 / 20)
-    g_full = fade_curve(ns, 3.67, B2, 0.0, 0.28) * (np.arange(ns)[:, None] / SR < B2) + \
+    g_full = fade_curve(ns, _shots.BY_ID["2"].start, B2, 0.0, 0.28) * (np.arange(ns)[:, None] / SR < B2) + \
              fade_curve(ns, B2, B2m, 0.28, 1.0) * (np.arange(ns)[:, None] / SR >= B2)
     hiss = tape_hiss(ns) * 10 ** (-44 / 20) * fade_curve(ns, B2, B2m + 2, 1.0, 0.0)
     songmix = small * g_small + full * g_full + hiss
@@ -168,7 +169,7 @@ def build(out_wav, grid):
     # PLAY click as the song's 0:00 held tone starts
     place(mix, click("play"), PRE - 0.04, 10 ** (-20 / 20))
     # REC click in the hard stop at 2:26.5
-    place(mix, click("rec"), PRE + 146.52, 10 ** (-17 / 20))
+    place(mix, click("rec"), PRE + _shots.BY_ID["38"].start + 0.02, 10 ** (-17 / 20))
 
     # post-roll: room tone lifts slightly under the 2011 photo, then out
     mix *= fade_curve(N, total - 1.2, total, 1.0, 0.0)

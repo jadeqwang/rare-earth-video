@@ -11,6 +11,7 @@ import cv2
 
 import vfx
 from vfx import W, H
+import shots as shots_mod
 from shots import SHOTS, BY_ID, REF, ROOT, PRE, SONG_END, POST
 import fx_shots
 
@@ -202,7 +203,8 @@ class Ctx:
 def render_frame(shot, src, f, preview=False):
     t = f / FPS - (PRE + shot.start)   # local time
     ctx = Ctx()
-    ctx.t, ctx.T, ctx.shot, ctx.f = t, shot.start + t, shot, f
+    ctx.t, ctx.Tn, ctx.shot, ctx.f = t, shot.start + t, shot, f
+    ctx.T = shots_mod.to_old(ctx.Tn)   # effects are keyed to the original recording's timeline
     ctx.dur = shot.dur
     fx_shots.pre(shot, src, max(t, 0.0))
     ctx.plate = src.get(max(t, 0.0))

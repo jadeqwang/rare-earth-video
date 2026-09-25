@@ -4,6 +4,7 @@ Times: `start`/`dur` are song time (s, 0 = song 0:00). The film timeline is song
 Pre-roll shots have negative song times.
 """
 import json, os
+import numpy as np
 from dataclasses import dataclass, field
 from typing import Callable, Optional
 
@@ -490,3 +491,44 @@ for _s in SHOTS:
 
 # clip retiming: fit the whole generated move into the shot
 BY_ID["30"].speed = 10.0 / BY_ID["30"].dur
+
+
+# ----------------------------------------------------------------------------- song version
+# The film can be cut to a different recording of the same arrangement. retime_new.json holds each shot's
+# (start, dur) on the new recording (DTW-aligned to this one, beat-snapped, hand-verified at the hard stop).
+# Effects keep working in the ORIGINAL song's time: `to_old(t)` maps new song time back, piecewise-linearly
+# between shot boundaries, so every musical cue (beats, words, the surge) lands where it now is in the audio.
+SONG_VERSION = os.environ.get("RARE_EARTH_SONG", "new")
+_RT = os.path.join(HERE, "retime_new.json")
+SONG_FILE = os.path.join(ROOT, "rare earth - jade late night solo (1).mp3")
+_MAP = None
+if SONG_VERSION == "new" and os.path.exists(_RT):
+    _r = json.load(open(_RT))
+    SONG_FILE = os.path.join(ROOT, _r["song"])
+    _old, _new = [], []
+    for _s in SHOTS:
+        _s.old_start, _s.old_dur = _s.start, _s.dur
+        if _s.id in _r["shots"]:
+            _s.start, _s.dur = _r["shots"][_s.id]
+            _old.append(_s.old_start); _new.append(_s.start)
+    # extra musical anchors inside shots (old, new): band drop and the band's return (surge), verified by DTW
+    for _o, _n in [(37.5, 37.05), (40.5, 40.0)]:
+        _old.append(_o); _new.append(_n)
+    _old.append(SONG_END); _new.append(_r["end"])
+    _o_idx = np.argsort(_new); _old = list(np.array(_old)[_o_idx]); _new = list(np.array(_new)[_o_idx])
+    SONG_END = _r["end"]
+    for _s in SHOTS:
+        if _s.id == "POST":
+            _s.start = SONG_END
+    BY_ID["30"].speed = 10.0 / BY_ID["30"].dur
+    _MAP = (np.array(_new), np.array(_old))
+else:
+    for _s in SHOTS:
+        _s.old_start, _s.old_dur = _s.start, _s.dur
+
+
+def to_old(t):
+    """Song time on the active recording -> time on the original recording (what the effects are keyed to)."""
+    if _MAP is None or t < 0:
+        return t
+    return float(np.interp(t, _MAP[0], _MAP[1], right=t - _MAP[0][-1] + _MAP[1][-1]))

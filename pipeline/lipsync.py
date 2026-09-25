@@ -4,7 +4,8 @@ from concurrent.futures import ThreadPoolExecutor
 import cf, gen, relay
 from shots import BY_ID, ROOT, PRE
 
-SONG = os.path.join(ROOT, "rare earth - jade late night solo (1).mp3")
+import shots as _shots
+SONG = _shots.SONG_FILE
 CL = gen.CL
 
 

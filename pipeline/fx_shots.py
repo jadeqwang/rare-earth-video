@@ -881,8 +881,16 @@ def fx_16(ctx):
 
 def fx_17(ctx):
     """Handwriting in sync with the vocal: 'Weapons, wars, and now we're f' -- scribble -- 'd'."""
-    words = [("Weapons,", 61.76, 62.9), ("wars,", 63.26, 63.62), ("and", 63.82, 64.1), ("now", 64.12, 64.6),
-             ("we're", 64.74, 65.25), ("f", 65.32, 65.4)]
+    NEWREC = getattr(ctx, "Tn", None) is not None and ctx.Tn != ctx.T
+    if NEWREC:
+        # timings from the new vocal (Whisper): the censored word is now an aspirated "fff" before "Keep" at 64.46
+        words = [("Weapons,", 60.98, 62.3), ("wars,", 62.46, 62.9), ("and", 63.08, 63.28), ("now", 63.30, 63.8),
+                 ("we're", 63.92, 64.12), ("fff", 64.14, 64.46)]
+        Tw = ctx.Tn
+    else:
+        words = [("Weapons,", 61.76, 62.9), ("wars,", 63.26, 63.62), ("and", 63.82, 64.1), ("now", 64.12, 64.6),
+                 ("we're", 64.74, 65.25), ("f", 65.32, 65.4)]
+        Tw = ctx.T
     q = ANCHORS.get("17", {}) if ctx.clip else {}
     if is_clip(ctx) and "pen" in TRACKED.get("17", {}):
         # the pen travels while writing: pin the line to the page where the pen starts, fit it to the pen's path
@@ -906,13 +914,25 @@ def fx_17(ctx):
     font = ImageFont.truetype(os.path.join(FONTS, "Caveat[wght].ttf"), fsz)
     cx = x
     for w, a, b in words:
-        rv = np.clip((ctx.T - a) / max(b - a, 0.08), 0, 1)
+        rv = np.clip((Tw - a) / max(b - a, 0.08), 0, 1)
         wpx = font.getlength(w + " ")
         if rv > 0:
             m = handwriting_sprite(w, size=fsz, reveal=rv)
             ink_on(ctx.plate, m, cx - 20, y - fsz * 0.9, color=(0.06, 0.1, 0.32))
         cx += wpx
     # the muted middle: a hard scribble exactly where the voice cuts out
+    if NEWREC:
+        # the breath trails off the last f: a thin fading pen stroke, no scribble, no d
+        tr = np.clip((Tw - 64.3) / 0.35, 0, 1)
+        if tr > 0:
+            m = np.zeros((int(40 * scale) + 4, int(160 * scale) + 4), np.float32)
+            n = max(2, int(tr * 24))
+            pts = [(2 + k * 160 * scale / 24, 20 * scale + 2 + 3 * scale * math.sin(k * 0.9)) for k in range(n)]
+            cv2.polylines(m, [np.array(pts, np.int32).reshape(-1, 1, 2)], False, 1.0, max(1, int(3 * scale)), cv2.LINE_AA)
+            m *= np.linspace(1.0, 0.15, m.shape[1])[None, :]
+            ink_on(ctx.plate, m, cx - 22 * scale, y - fsz * 0.24, color=(0.06, 0.1, 0.32), opacity=0.85)
+        ctx.fin["halate"] = 0.0
+        return
     sc = np.clip((ctx.T - 65.40) / 0.2, 0, 1)
     if sc > 0:
         m = scribble_mask(int(150 * scale), int(80 * scale), sc, seed=3)
