@@ -18,10 +18,14 @@ from shots import GRID, PRE, ROOT, REF, BAR, BEAT, B
 HERE = os.path.dirname(os.path.abspath(__file__))
 ENV = json.load(open(os.path.join(HERE, "envelope.json")))
 FONTS = os.path.join(HERE, "fonts")
-ANCHORS = {}   # shot id -> dict of screen-space anchors for generated clips (filled after review)
+ANCHORS = {}   # shot id -> dict of screen-space anchors for generated imagery (frame-0 positions)
 _ap = os.path.join(HERE, "anchors.json")
 if os.path.exists(_ap):
     ANCHORS = json.load(open(_ap))
+TRACKED = {}   # shot id -> anchor -> [[t, x, y], ...] tracked through the generated clip
+_tp = os.path.join(HERE, "anchors_tracked.json")
+if os.path.exists(_tp):
+    TRACKED = json.load(open(_tp))
 
 
 # ----------------------------------------------------------------------------- helpers
@@ -50,8 +54,13 @@ def kf(ctx, x, y):
     return (x - c[0]) * s, (y - c[1]) * s
 
 
+def is_clip(ctx):
+    return ctx.src.__class__.__name__ == "ClipSource"
+
+
 def painted(ctx):
-    return hasattr(ctx.src, "map_pt")
+    """Generated imagery (a living-painting still or a generated clip), as opposed to the keyframe animatic."""
+    return hasattr(ctx.src, "map_pt") or is_clip(ctx)
 
 
 def kfs(ctx):
@@ -63,6 +72,9 @@ def kfs(ctx):
 
 def anchor(ctx, name, default):
     """Screen-space anchor: from anchors.json when a clip is in use, else the KF-mapped default."""
+    if is_clip(ctx) and name in TRACKED.get(ctx.shot.id, {}):
+        arr = np.array(TRACKED[ctx.shot.id][name], np.float64)
+        return float(np.interp(ctx.t, arr[:, 0], arr[:, 1])), float(np.interp(ctx.t, arr[:, 0], arr[:, 2]))
     if ctx.clip:
         a = ANCHORS.get(ctx.shot.id, {}).get(name)
         if a is not None:
@@ -694,7 +706,7 @@ def fx_11(ctx):
         FloatingNote([(0, cx + math.cos(ang) * (380 + 60 * j), cy - 200 + math.sin(ang) * 220, 0.5 + 0.05 * j)], seed=80 + j,
                      ch=vfx.NOTE_CHARS[j % 4], wobble=0 if frozen else 6).draw(L2, Tf, a=0.9, trail=False)
     Motes(70, (200, 50, 1700, 1000), seed=28, rise=0 if frozen else 8).draw(L2, Tf, a=0.7)
-    if painted(ctx):
+    if painted(ctx) and not is_clip(ctx):
         key = "_blue11"
         if not hasattr(ctx.src, key):
             base = ctx.src.get(0.0)
@@ -787,7 +799,7 @@ def fx_13(ctx):
         x1, y1 = min(W, x0 + w), min(H, y0 + h)
         ctx.plate[y0:y1, x0:x1] = panel[: y1 - y0, : x1 - x0]
         ctx.L.dot(px, y0 + h / 2, w * 0.12, BLUE_DEEP, 0.12 * lit)
-    if painted(ctx) and "panel" in ANCHORS.get("13", {}):
+    if painted(ctx) and not is_clip(ctx) and "panel" in ANCHORS.get("13", {}):
         x0, y0, x1, y1 = ANCHORS["13"]["panel"]
         (px0, py0), (px1, py1) = ctx.src.map_pt(x0, y0, ctx.t), ctx.src.map_pt(x1, y1, ctx.t)
         cw, ch = (px1 - px0) / 4, (py1 - py0) / 3
@@ -860,7 +872,7 @@ def fx_17(ctx):
              ("we're", 64.74, 65.25), ("f", 65.32, 65.4)]
     q = ANCHORS.get("17", {}) if ctx.clip else {}
     if painted(ctx) and "pen" in q:
-        px, py = ctx.src.map_pt(*q["pen"], ctx.t)
+        px, py = anchor(ctx, "pen", q["pen"])
         scale = 0.62
         f_ = ImageFont.truetype(os.path.join(FONTS, "Caveat[wght].ttf"), int(96 * scale))
         total = sum(f_.getlength(w + " ") for w, _, _ in words) + 130 * scale + 40 * scale
@@ -938,7 +950,7 @@ def fx_22(ctx):
     """Blue motes stream in from the room and gather into her younger self."""
     m = blue_mask(ctx.plate)
     form = ease((ctx.t - 0.1) / 2.2)
-    if not ctx.clip or painted(ctx):
+    if not ctx.clip or (painted(ctx) and not is_clip(ctx)):
         # reveal the figure: hide unformed parts (noise dissolve from the core outward)
         key = "_fig"
         if not hasattr(ctx.src, key):
@@ -1025,7 +1037,7 @@ def fx_poster(ctx, fade=1.0):
 
 def fx_26(ctx):
     u = ease(ctx.t / 3.0)
-    if not ctx.clip or painted(ctx):
+    if not ctx.clip or (painted(ctx) and not is_clip(ctx)):
         # band fades up; the gig's green/magenta wash spreads over the walls
         m = blue_mask(ctx.plate)
         band = m * (np.arange(W)[None, :] > (1180 if painted(ctx) else kf(ctx, 1180, 0)[0]))
@@ -1089,7 +1101,7 @@ def fx_29(ctx):
                "r0": 120, "r1": 1100, "gap": 7, "squash": 0.85, "note_speed": 0.05}
         Staff(cfg, seed=140 + j, n_notes=6).draw(ctx.L, ctx.T, a=0.9 * b, width=1.1)
     ambient(ctx, 70, seed=43, a=0.7 * b)
-    if not ctx.clip or painted(ctx):
+    if not ctx.clip or (painted(ctx) and not is_clip(ctx)):
         ang = ctx.t * 2.0
         M = cv2.getRotationMatrix2D((W / 2, H / 2), ang, 1.0 + 0.02 * ctx.t)
         ctx.plate = cv2.warpAffine(ctx.plate, M, (W, H), borderMode=cv2.BORDER_REFLECT)

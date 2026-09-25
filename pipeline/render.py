@@ -175,9 +175,13 @@ class FrameSource:
         return cv2.remap(self.img, mx.astype(np.float32), my.astype(np.float32), cv2.INTER_LINEAR, borderMode=cv2.BORDER_REFLECT)
 
 
+# Shots that stay as living paintings even when a clip exists (beat-locked blinks, the fresh-ink reveal)
+PREFER_PAINTING = {"8a", "8b", "35", "45"}
+
+
 def make_source(shot):
     clip = os.path.join(CLIPS, f"{shot.id}.mp4")
-    if os.path.exists(clip):
+    if os.path.exists(clip) and shot.id not in PREFER_PAINTING:
         return ClipSource(clip, shot)
     if os.path.exists(os.path.join(FrameSource.FR, f"{shot.id}.jpg")) and shot.still[1] not in ("lcd_sink", "zoomout", "black", "photo"):
         return FrameSource(shot)
