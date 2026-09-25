@@ -86,6 +86,9 @@ def gen_clip(shot, k, model="seedance", res="720p", frame=None, dur=None, last=N
         if ref_audio:
             inp["reference_audios"] = [ref_audio]
         r = run_long("bytedance/seedance-2.5", inp, tag=f"clip {shot.id}_{k}")
+        import relay
+        relay.fetch_media(r, out)
+        return out, "ok"
     elif model == "h3":
         content = [{"type": "text", "text": prompt},
                    {"type": "image_url", "image_url": {"url": img_uri(frame, 1920)}, "role": "first_frame"}]

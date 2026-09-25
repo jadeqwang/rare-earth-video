@@ -16,7 +16,24 @@ export default {
     ctx.waitUntil(Promise.all(claimed.map(async (id) => {
       const job = await env.JOBS.get("job:" + id, "json");
       try {
-        const r = await env.AI.run(job.model, job.input);
+        let r;
+        if (job.fetch_url) {
+          r = { video: job.fetch_url };
+        } else {
+          r = await env.AI.run(job.model, job.input);
+        }
+        // Mirror media into KV so the client can read it through the Cloudflare API (media hosts may be unreachable).
+        const url = r && (r.video || r.image || (r.result && (r.result.video || r.result.image)));
+        if (url && typeof url === "string" && url.startsWith("http")) {
+          const resp = await fetch(url);
+          if (resp.ok) {
+            const buf = await resp.arrayBuffer();
+            await env.JOBS.put("vid:" + id, buf, { expirationTtl: 604800 });
+            r = { ...r, kv_media: "vid:" + id, kv_bytes: buf.byteLength };
+          } else {
+            r = { ...r, kv_error: "fetch " + resp.status };
+          }
+        }
         await env.JOBS.put("res:" + id, JSON.stringify({ state: "done", result: r }), { expirationTtl: 604800 });
       } catch (e) {
         await env.JOBS.put("res:" + id, JSON.stringify({ state: "error", error: String((e && e.message) || e) }), { expirationTtl: 604800 });

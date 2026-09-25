@@ -43,17 +43,34 @@ def kv_put(key, value):
     r.raise_for_status()
 
 
-def kv_get(key):
-    r = requests.get(f"{BASE}/storage/kv/namespaces/{ns_id()}/values/{key}", timeout=60)
+def kv_get(key, binary=False):
+    r = requests.get(f"{BASE}/storage/kv/namespaces/{ns_id()}/values/{key}", timeout=300)
     if r.status_code == 404:
         return None
     r.raise_for_status()
-    return r.text
+    return r.content if binary else r.text
+
+
+def fetch_media(result, dest):
+    """Write a relay result's media to dest (from the KV mirror)."""
+    key = result.get("kv_media")
+    if not key:
+        raise RuntimeError(f"no kv media: {result.get('kv_error')}")
+    data = kv_get(key, binary=True)
+    with open(dest, "wb") as f:
+        f.write(data)
+    return dest
 
 
 def submit(model, inp, jid=None):
     jid = jid or uuid.uuid4().hex[:16]
     kv_put("job:" + jid, json.dumps({"model": model, "input": inp}))
+    return jid
+
+
+def submit_fetch(url, jid=None):
+    jid = jid or uuid.uuid4().hex[:16]
+    kv_put("job:" + jid, json.dumps({"fetch_url": url}))
     return jid
 
 
