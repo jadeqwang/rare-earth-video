@@ -405,11 +405,12 @@ SHOTS = [
              "sing.",
       motion=MOTION_STYLE + "She sings softly into the recorder, eyes closing. Very slow push in.",
       still=("KF-E", (600, 140, 540), (640, 160, 460)), notes="lip-sync 146.8-151.9"),
-    S("40", B(20), 2 * BAR, "(final lift)", refs=["KF-D", "S1"], gen_dur=5,
+    S("40", B(20), 2 * BAR, "(final lift)", refs=["KF-D", "S1", "S4"], gen_dur=5,
       prompt=STYLE + "The study at night, relit brighter than ever with warm gold and pale blue light mixed through the whole "
              "room: glowing notes and ribbons of light in both gold and blue swirl around the shelves, the piano and the "
              "training dummy. At the center, the young woman in her grey hoodie and a black brimmed hat sits on the rug, "
-             "holding the recorder and looking up in wonder, the tabby cat beside her; she is the only woman in the "
+             "holding the small silver handheld digital audio recorder from the third image (a gadget with a screen and "
+             "buttons, NOT a flute) in her lap and looking up in wonder, the tabby cat beside her; she is the only woman in the "
              "frame. Behind her, the two guitarists made of pale blue light are back with their guitars. No green or "
              "magenta. Wide shot.",
       motion=MOTION_STYLE + "The gold and blue lights swirl faster around the room. Slow pull back.",
