@@ -81,6 +81,20 @@ def blue_mask(img, thresh=0.08):
     return cv2.GaussianBlur(m, (0, 0), 1.5)
 
 
+def paste(dst, src, x0, y0, mask=None):
+    h, w = src.shape[:2]
+    X0, Y0, X1, Y1 = max(0, x0), max(0, y0), min(W, x0 + w), min(H, y0 + h)
+    if X1 <= X0 or Y1 <= Y0:
+        return
+    s = src[Y0 - y0:Y1 - y0, X0 - x0:X1 - x0]
+    if mask is None:
+        dst[Y0:Y1, X0:X1] = s
+    else:
+        m = mask[Y0 - y0:Y1 - y0, X0 - x0:X1 - x0]
+        m = m[..., None] if m.ndim == 2 else m
+        dst[Y0:Y1, X0:X1] = dst[Y0:Y1, X0:X1] * (1 - m) + s * m
+
+
 def red_light(ctx, x, y, r, a):
     ctx.L.dot(x, y, r, RED, a)
 
@@ -582,9 +596,8 @@ def fx_9(ctx):
     prog = np.clip(ctx.t / ctx.dur, 0, 0.999)
     spr, (px, py) = light_curve_sprite(gw, gh, prog, t0 / ctx.dur, t1 / ctx.dur, 0.45)
     if not ctx.clip or "graph" in ANCHORS.get("9", {}):
-        x0, y0 = int(gx - gw / 2), int(gy - gh / 2)
         lit = 0.55 * d + 0.1
-        ctx.plate[y0:y0 + gh, x0:x0 + gw] = spr * lit * np.array([1.0, 0.85, 0.62], np.float32)
+        paste(ctx.plate, spr * lit * np.array([1.0, 0.85, 0.62], np.float32), int(gx - gw / 2), int(gy - gh / 2))
     ambient(ctx, 12, seed=26, a=0.4)
 
 

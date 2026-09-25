@@ -147,6 +147,14 @@ def render_frame(shot, src, f, preview=False):
 
 
 def render_shot(sid, preview=False):
+    try:
+        return _render_shot(sid, preview)
+    except Exception:
+        import traceback; traceback.print_exc()
+        return sid, 0, -1.0
+
+
+def _render_shot(sid, preview=False):
     shot = BY_ID[sid]
     f0, f1 = frame_range(shot)
     out = os.path.join(RENDER, f"{sid}.mp4")

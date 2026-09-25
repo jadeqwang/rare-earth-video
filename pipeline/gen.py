@@ -156,24 +156,22 @@ ZOOM_LEVELS = [
     ("zoom_0", None, "Hand-painted anime film still, 16:9. Exterior of a small old two-storey house at night, seen from just "
      "outside: one study window glows warm gold with soft pale blue light inside, among dark low tiled rooftops, under a clear "
      "sky full of stars. Detailed painted background art, soft film grain. No text."),
-    ("zoom_1", "zoom_0", "Zoom out: this exact image must appear unchanged, small, at the exact centre of the new frame, "
-     "occupying the middle quarter of the width. Around it, extend the scene: a quiet sleeping neighbourhood of dark tiled "
-     "rooftops at night seen from above, scattered warm windows, the one glowing window at the centre, starry sky at the top. "
-     "Hand-painted anime film style, 16:9. No text."),
-    ("zoom_2", "zoom_1", "Zoom out: this exact image must appear unchanged, small, at the exact centre of the new frame, "
-     "occupying the middle quarter of the width. Around it, extend the scene: high above a sleeping hillside town at night, "
-     "looking down through thin moonlit clouds at the scattered warm lights; the town is at the centre. Hand-painted anime "
-     "film style, 16:9. No text."),
-    ("zoom_3", "zoom_2", "Zoom out: this exact image must appear unchanged, small, at the exact centre of the new frame, "
-     "occupying the middle quarter of the width. Around it, extend the scene: the night side of planet Earth seen from orbit, "
-     "swirls of cloud, a thin blue atmosphere glowing along the curved horizon, the lit town at the centre among dark "
-     "continents. Hand-painted anime film style, 16:9. No text."),
-    ("zoom_4", "zoom_3", "Zoom out: this exact image must appear unchanged, small, at the exact centre of the new frame, "
-     "occupying the middle quarter of the width. Around it: Earth as a whole blue marble in black space, partly lit, a few "
-     "stars. Hand-painted anime film style, 16:9. No text."),
-    ("zoom_5", "zoom_4", "Zoom out: this exact image must appear unchanged, tiny, at the exact centre of the new frame. "
-     "Deep space: Earth is now just a pale blue speck resting inside a faint vertical band of scattered golden sunlight, "
-     "like the Voyager 'pale blue dot' photograph, surrounded by darkness and a few stars. Hand-painted anime style, 16:9. No text."),
+    ("zoom_1", None, "Hand-painted anime film still, 16:9, Studio-Ghibli-like background art. High aerial view looking down "
+     "at a quiet sleeping neighbourhood of dark tiled rooftops at night, a few scattered warm windows; exactly at the centre of "
+     "the frame one small house has a single window glowing gold with a faint pale blue halo. Starry sky at the top edge. Soft "
+     "film grain. No text."),
+    ("zoom_2", None, "Hand-painted anime film still, 16:9. Very high above a sleeping hillside town at night, looking straight "
+     "down through thin moonlit clouds; the cluster of warm town lights sits exactly at the centre of the frame, framed by a gap "
+     "in the clouds. Deep blue night. Soft film grain. No text."),
+    ("zoom_3", None, "Hand-painted anime film still, 16:9. The night side of planet Earth seen from orbit, straight down: swirls "
+     "of moonlit cloud, dark continents, and exactly at the centre of the frame a small cluster of warm city lights. A thin blue "
+     "atmospheric glow along the curved horizon at the top. Soft film grain. No text."),
+    ("zoom_4", None, "Hand-painted anime film still, 16:9. Planet Earth as a small blue marble exactly at the centre of the "
+     "frame, occupying about one fifth of the frame height, half in sunlight, in deep black space with a few faint stars. "
+     "Soft film grain. No text."),
+    ("zoom_5", None, "Hand-painted anime film still, 16:9. Deep space, like the Voyager 'pale blue dot' photograph: Earth is a "
+     "single tiny pale blue speck exactly at the centre of the frame, resting inside a faint vertical band of scattered golden "
+     "sunlight, surrounded by darkness and a few stars. Soft film grain. No text."),
 ]
 
 
