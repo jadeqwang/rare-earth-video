@@ -521,11 +521,17 @@ def fx_1(ctx):
 
 def overlay_lcd(ctx, sid, counter, title=None, date=None, stutter=0.0):
     """Warp an LCD render into a tracked quad (anchors[sid]['lcd_quad'] = [[t, x0,y0, x1,y1, x2,y2, x3,y3],...])."""
-    q = ANCHORS.get(sid, {}).get("lcd_quad") if ctx.clip else None
-    if not q:
-        return
-    arr = np.array(q, np.float64)
-    quad = np.array([np.interp(ctx.t, arr[:, 0], arr[:, i]) for i in range(1, 9)], np.float32).reshape(4, 2)
+    tr = TRACKED.get(sid, {}) if is_clip(ctx) else {}
+    if all(f"c{i}" in tr for i in range(4)):
+        quad = np.array([anchor(ctx, f"c{i}", (0, 0)) for i in range(4)], np.float32)
+    else:
+        q = ANCHORS.get(sid, {}).get("lcd_quad") if ctx.clip else None
+        if not q:
+            return
+        arr = np.array(q, np.float64)
+        quad = np.array([np.interp(ctx.t, arr[:, 0], arr[:, i]) for i in range(1, 9)], np.float32).reshape(4, 2)
+        if hasattr(ctx.src, "map_pt"):
+            quad = np.array([ctx.src.map_pt(x, y, ctx.t) for x, y in quad], np.float32)
     w, h = 480, 280
     lcd = lcd_image(w, h, counter, levels_at(ctx.T), title=title, date=date, stutter=stutter)
     M = cv2.getPerspectiveTransform(np.float32([[0, 0], [w, 0], [w, h], [0, h]]), quad)
@@ -1153,6 +1159,8 @@ def fx_31b(ctx):
 
 
 def dark_led_glow(ctx, default=(1037, 637), r=90, a=0.35):
+    if is_clip(ctx):
+        return   # generated clips carry their own LED
     x, y = anchor(ctx, "led", default)
     ctx.L.dot(x, y, 4 if painted(ctx) else 2.5 * (kfs(ctx) if not ctx.clip else 1), RED, 0.9)
     ctx.L.dot(x, y, r, RED * 0.5, a * (0.85 + 0.15 * math.sin(ctx.T * 2)))
@@ -1189,6 +1197,8 @@ def fx_35(ctx):
 
 def fx_36(ctx):
     # the cat's tail sweeps across the LED: the second transit, quieter than the first
+    if is_clip(ctx):
+        return   # the clip's tail sweeps across the LED itself
     d = transit_depth(ctx.t, 1.2, 2.9, 0.4, 0.8)
     led_macro(ctx, blink_every=2, dim=0.8, extra_dip=d)
     if not ctx.clip:
