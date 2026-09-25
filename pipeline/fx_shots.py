@@ -594,8 +594,9 @@ def fx_6(ctx):
     else:
         x = 1240 - 420 * ease((ctx.t - 1.2) / 2.7)
         y = 520 + 40 * math.sin(ctx.t * 0.9)
-    ctx.L.dot(x, y, 3.2, BLUE_CORE, 1.0)
-    ctx.L.dot(x, y, 12, BLUE, 0.35)
+    if not is_clip(ctx):
+        ctx.L.dot(x, y, 3.2, BLUE_CORE, 1.0)
+        ctx.L.dot(x, y, 12, BLUE, 0.35)
     ctx.fin["halate"] = 0.1
 
 
@@ -603,7 +604,7 @@ def fx_7(ctx):
     x, y = anchor(ctx, "grille", (1215, 880))
     s = kfs(ctx) if not ctx.clip else 1.0
     vol = ease((ctx.t - 0.5) / 2.0)
-    n = 2 + int(5 * vol)
+    n = 0 if is_clip(ctx) else 2 + int(5 * vol)
     for j in range(n):
         cfg = {"from": (x + (j - n / 2) * 12 * s, y), "to": (x + (j - n / 2) * 140 - 200 + 80 * j, -100), "amp": 40 + 30 * j,
                "waves": 1.3, "gap": 3 + 3 * vol, "phase": j * 1.3, "note_speed": 0.1}
@@ -667,7 +668,7 @@ def fx_9(ctx):
     # the cat crosses the lamp: the light dips like a star during a transit
     lx, ly = anchor(ctx, "lamp", (525, 400))
     t0, t1 = 1.1, 2.9
-    d = transit_depth(ctx.t, t0, t1)
+    d = transit_depth(ctx.t, t0, t1) if not is_clip(ctx) else 1.0
     if not ctx.clip:
         ctx.plate = ctx.plate * (1 - (1 - d) * 0.75 * (radial_gain(lx, ly, 700, 0.0, 1.0) * -1 + 1))
         ctx.fin["halate"] = 0.28 * d

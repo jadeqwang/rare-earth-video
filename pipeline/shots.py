@@ -199,8 +199,8 @@ SHOTS = [
       prompt=STYLE + "The bookshelves of the study from the reference image at night, medium shot. A thick physics textbook "
              "lies open on a shelf edge in warm lamplight, and lines of handwritten mathematical symbols are lifting off "
              "its pages as pale blue light, still close to the paper. A few blue ribbons and notes drift in from the left.",
-      motion=MOTION_STYLE + "The lines of glowing symbols peel off the pages one line at a time and swing out to orbit the "
-             "room. Slow pan along the shelf.",
+      motion=MOTION_STYLE + "Soft ribbons of pale blue light and drifting sparks lift off the open pages one after another "
+             "and swing out to orbit the room. No letters, no symbols, no writing in the light. Slow pan along the shelf.",
       still=("KF-A", (1100, 60, 600), (1180, 80, 560))),
     S("13", B(6, 2), 2 * BAR, "(instrumental)", refs=["KF-A"], gen_dur=5,
       prompt=STYLE + "The upper bookshelves of the study from the reference image at night, with a framed light-box panel "
@@ -245,8 +245,9 @@ SHOTS = [
       prompt=STYLE + "The study at night, medium-wide. The young woman from the reference sits on the rug turning a page of "
              "her journal. Around her, small ninja figures of light stand frozen with a red tinge, and glowing "
              "equations hang still in the air. Warm gold lamplight on her.",
-      motion=MOTION_STYLE + "As she turns the page, the red drains out of the glowing figures and they start moving again; "
-             "the whole room returns to pale blue light. Slow push in.",
+      motion=MOTION_STYLE + "As she turns the page, the red glow drains out of the small glowing figures, they turn pale "
+             "blue and start moving again. The warm gold lamplight on her and the room stays exactly the same, warm and "
+             "unchanged; only the small figures change colour. Slow push in.",
       still=("KF-B", (300, 60, 1300), (380, 100, 1150))),
     S("19", B(9, 2), 2 * BAR, "Keep up funding, our planet", refs=["KF-A", "S1"], gen_dur=5,
       prompt=STYLE + "Close-up of a wooden bookshelf edge in warm gold lamplight. A glass jar half full of coins sits at the "
