@@ -6,6 +6,7 @@ writes
   out/rare-earth-1080p.mp4       H.264 High, 2-pass, sized to stay under GitHub's 100 MB limit
   out/rare-earth-1080p-sfx.mp4   same picture, song + the sound-design stem (work/audio/song_sfx.wav)
   out/rare-earth-teaser.mp4      0 - 42.63 s (hook through verse 2), picture and sound faded out
+  out/thumb-*.jpg                stills for the post (opening frame, the pinch, the drop)
 
 The master's picture is never re-rendered here; the song is muxed from the original mp3.
 """
@@ -71,6 +72,11 @@ def main():
     f0 = TEASER_END - TEASER_FADE
     x264_2pass(master, os.path.join(OUT, "rare-earth-teaser.mp4"), 12000, t=TEASER_END,
                vf=f"fade=t=out:st={f0}:d={TEASER_FADE}", af=f"afade=t=out:st={f0}:d={TEASER_FADE}")
+
+    # stills for the post: the opening frame (the feed thumbnail) and the signature pinch
+    for name, t in (("thumb-you-are-here.jpg", 0.3), ("thumb-pale-blue-dot.jpg", 22.62), ("thumb-0-conflicts.jpg", 147.6)):
+        run(["ffmpeg", "-loglevel", "error", "-y", "-ss", str(t), "-i", master, "-frames:v", "1", "-q:v", "2",
+             os.path.join(OUT, name)])
 
     for f in sorted(os.listdir(OUT)):
         p = os.path.join(OUT, f)
