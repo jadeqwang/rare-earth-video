@@ -28,3 +28,4 @@ work/*.mp4
 work/stills/
 renderer/assets/plates/*/cleanbg.jpg
 out/rare-earth-master.mp4
+out/x264_2pass*

@@ -28,16 +28,16 @@ recording, and a world 15.8 light-years away, which the broadcast reaches in 202
 Both conversations ask the same question — *are you still there?* — and both get the same
 answer at the drop.
 
-## Arc (keyed to the song — see `edl.json` for frame-exact times)
+## Arc (keyed to the song — `renderer/src/edl.js` has the frame-exact edit)
 
 | Time | Section | What happens |
 |---|---|---|
-| 0.0–3.8 | intro | The Pale Blue Dot. Zoom into Earth's night side → one light → match-cut to the recorder's LED. PLAY. |
+| 0.0–3.8 | intro | The Pale Blue Dot with a hero-sized YOU ARE HERE on frame 0. Zoom into Earth's night side → one light → match-cut to the recorder's LED. |
 | 3.8–19.5 | V1 (hook) | The band slams in with 2011 Jade on stage (LIGHT). 2026 Jade finds the recorder (INK). Title drop on *"rare earth"*. |
 | 19.5–41.2 | V2 | Pale blue dot pinched between two fingers (the signature gesture). The ATA dishes turn in unison; a *Wow!* printout. Pulsar ridgelines. Twin transits. *How could we be alone.* |
 | 41.2–57.8 | break | The broadcast leaves Earth: solar system flyby, then the radio bubble expanding across real neighbouring stars, each labelled with the year it's reached … GJ 1002, 2027. Cliffhanger. |
 | 57.8–80.4 | V3 | Launches and self-destruct; weapons, wars — and the song's own censored hole (64.5–65.5 s is near-silence) becomes a blackout. Then the turn: keep looking, the 2011 crowdfunding bar, headphones, JWST's mirror unfolding on *"our science has a vision"*. |
-| 80.4–94.8 | V4 | Split-screen duet: 2011 Jade (LIGHT) and 2026 Jade (INK) sing the hook together, look at each other, touch hands across the seam, then share one frame. |
+| 80.4–94.8 | V4 | Split-screen duet: 2011 Jade (LIGHT) and 2026 Jade (INK) sing the hook together; the seam pushes in to both faces, tilts, and `git merge legacy/2011` types above them; then they share one frame on the roof. |
 | 94.8–126.1 | bridge | The other world (kept zoomed-out): eyeball planet around a red dwarf, a ring of cities on the terminator, a vast array turning. The signal arrives; the whole terminator listens; they compose a pixel reply and send it. *Reply ETA 2043.* |
 | 126.1–147.0 | V5 | Intimate: 2026 Jade on a rooftop before dawn, headphones, singing along; her 2011 self fades in beside her. Cuts accelerate. Then silence: *how … could … we … be … alone* |
 | 147.0–162.2 | outro (drop) | Contact. Impact frame. Everything at once: both Jades, the band, both worlds' dishes in unison, the real 2011 RNA photos, **0 CONFLICTS**. |
@@ -47,8 +47,9 @@ Earth gets well over half the running time; the other world stays wide.
 
 ## Signature image ("killing part")
 
-A hand holding a pale blue dot of light between thumb and forefinger. First on *"pale blue
-dot"* in V2, again in V5, and by both Jades together at the drop. It is the thumbnail.
+A hand holding a pale blue dot of light between thumb and forefinger, on *"pale blue dot"*
+in V2 (22.4 s), and again as a flash-frame in the drop montage. `out/thumb-pale-blue-dot.jpg`
+is the alternate thumbnail; the default one is frame 0, the pale blue dot with YOU ARE HERE.
 
 ## Attention plan
 
