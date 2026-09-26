@@ -91,7 +91,7 @@ export function buildEDL(tim) {
     cues: [{ k: 'term', text: 'transmit --signal "rare earth" --origin earth --year 2011', t0: 40.8, x: 0.05, y: 0.1, px: 26, prompt: '$ ', cps: 70 }] });
   add('S20', 42.632, 46.457, 'flyby');
   add('S21', 46.457, 50.277, 'warp', { ly0: 0.0, ly1: 4.0 });
-  add('S22', 50.277, 57.916, 'bubble', { y0: 4.0, y1: 17.0, ease: false });
+  add('S22', 50.277, 57.916, 'bubble', { y0: 4.0, y1: 16.6, ease: false });
 
   // ================= V3 =================
   add('S23', 57.916, 59.55, 'plate', { plate: 'E03', mat: 'ink', palette: 'inkLaunch', pt0: 0.3,
