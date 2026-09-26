@@ -159,7 +159,7 @@ const A4 = {
       T.label(g, `T+${(t - 9.56).toFixed(2)}s`, W - 80, 92, { size: 16, color: '#8ecbff', align: 'right' });
     });
     layer2D(ctx, s.target, 'typeBack', (g) => {
-      T.text(g, 'SEARCHING', 960, 1060, { f: 'six', size: 1150, align: 'center', color: '#8ecbff', alpha: 0.09 });
+      T.text(g, 'SEARCHING', 960, 1060, { f: 'six', size: 1150, align: 'center', color: '#8ecbff', alpha: 0.055 });
     });
     layer2D(ctx, s.target, 'type', (g) => {
       const w = words(ctx, 2);

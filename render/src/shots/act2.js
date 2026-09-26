@@ -200,7 +200,7 @@ const B7 = {
     sky(ctx, s.target, { preset: 'night', yaw: 0.4, pitch: 0.75, fov: 50, beacon: beacon(ctx, t, 0.6), beaconDir: [-0.4, 0.8, -0.44] });
     const w = words(ctx, 9);
     layer2D(ctx, s.target, 'typeBack', (g) => {
-      const runs = T.layout(g, [[{ ...w[0], f: 'hero', size: 160, sx: 0.8 }], [{ ...w[1], f: 'hero', size: 160, sx: 0.8 }], [{ ...w[2], f: 'ital', size: 150, text: 'we' }], [{ ...w[3], f: 'hero', size: 160, sx: 0.8 }]], { x: 80, y: 60, lead: 0.86 });
+      const runs = T.layout(g, [[{ ...w[0], f: 'hero', size: 130, sx: 0.8 }], [{ ...w[1], f: 'hero', size: 130, sx: 0.8 }], [{ ...w[2], f: 'ital', size: 120, text: 'we' }], [{ ...w[3], f: 'hero', size: 130, sx: 0.8 }]], { x: 70, y: 70, lead: 0.9 });
       T.drawBlock(g, runs, t, { anim: 'slam' });
     });
     await plateLayer(ctx, s.target, { pid: 'P10_alone', pt: syncedPT('P10_alone', t), place: { cx: 1380, cy: 540, h: 1090 }, grade: 'night',
