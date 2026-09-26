@@ -101,8 +101,8 @@ export function buildEDL(tim) {
     cues: [{ k: 'single', line: ['V3', 0], from: 3, to: 5, x: 0.5, y: 0.6, px: 300, maxW: 0.92, fill: '#F2EFE8', flash: '#FF2A1F' }] });
   add('S25', 60.99, 63.31, 'brutal', { strobe: true, bands: ['WEAPONS', 'WARS', 'WEAPONS', 'WARS', 'ALERT', 'BREAKING'],
     cues: [{ k: 'single', line: ['V3', 1], from: 0, to: 2, x: 0.5, y: 0.62, px: 420, maxW: 0.94, fill: '#FF2A1F', flash: '#FFFFFF' }] });
-  add('S26', 63.31, 64.48, 'plate', { plate: 'A05', mat: 'ink', palette: 'inkPhone', pt0: 0.8,
-    cam: { z0: 1.05, z1: 1.12, x0: 0.44 },
+  add('S26', 63.31, 64.48, 'plate', { plate: 'A05', mat: 'ink', palette: 'inkPhone', pt0: 0.8, ink: { exposure: 1.45, gamma: 0.85 },
+    cam: { z0: 1.05, z1: 1.12, x0: 0.48 },
     cues: [{ k: 'stack', line: ['V3', 1], from: 2, to: 5, x: 0.56, y: 0.14, maxW: 0.38, px: 170 }] });
   add('S27', 64.48, 65.38, 'hole');
   add('S28', 65.38, 67.42, 'plate', { plate: 'E02', mat: 'ink', palette: 'inkDay', ink: { allSoft: 0.5 }, pt0: 0.0, sparkle: 0.6,
