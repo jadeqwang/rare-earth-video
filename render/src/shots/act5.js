@@ -134,7 +134,7 @@ const E6 = {
     layer2D(ctx, s.target, 'type', (g) => {
       const fA = 1 - smooth(93.4, 93.9, t);
       if (fA > 0) T.text(g, 'friend', 960, 300, { f: 'ital', size: 170, align: 'center', color: '#ffcf5a', alpha: fA, glow: 12 });
-      const a = smooth(93.3, 93.6, t);
+      const a = smooth(93.75, 94.0, t);   // after 'friend' has cleared
       const yr = Math.floor(lerp(826, 2026, u));
       T.label(g, 'THE LIGHT WE SEE TONIGHT LEFT LGM-2 IN 826 AD', 960, 250, { size: 20, color: '#f4f1e8', align: 'center', alpha: a });
       T.text(g, t > 97.1 ? '2026' : `${yr} AD`, 960, 520, { f: 'six', size: 300, align: 'center', color: t > 97.1 ? '#8ecbff' : '#ffcf5a', alpha: a });
