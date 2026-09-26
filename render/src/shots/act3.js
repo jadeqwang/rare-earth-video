@@ -275,7 +275,8 @@ const D4 = {
       T.text(g, 'CLASSIFIED', 0, 20, { f: 'monoB', size: 54, color: '#ff2d3d', align: 'center' });
       g.restore();
     });
-    return { bloom: 0.2, thresh: 0.95, grain: 0.07, vig: 0.15 };
+    const flip = t - 64.45 >= 0.62 && t - 64.45 < 0.62 + 2 / 24 ? 1 : 0;   // two inverted impact frames on the cooked -> so back flip
+    return { bloom: 0.2, thresh: 0.95, grain: 0.07, vig: 0.15, impact: flip };
   },
 };
 

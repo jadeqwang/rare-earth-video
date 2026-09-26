@@ -37,7 +37,7 @@ const G1 = {
       }
       for (let i = 0; i < 30; i++) glow(g, R() * W, R() * H, 30 + R() * 70, R() < 0.3 ? [255, 207, 90] : [142, 203, 255], 0.18 + 0.12 * R());
     });
-    await plateLayer(ctx, s.target, { pid: 'P21_v5cu', pt: syncedPT('P21_v5cu', t), place: 'cover', grade: 'screen', cam: { s: push(k, 1.02, 1.07), x: -24 * k },
+    await plateLayer(ctx, s.target, { pid: 'P21_v5cu', pt: syncedPT('P21_v5cu', t), place: 'cover', grade: 'night', cam: { s: push(k, 1.02, 1.07), x: -24 * k },
       rim: { dir: [-0.9, 0.2], col: [0.55, 0.8, 1.0], w: 7, amt: 0.9 + 0.5 * kick } });
     layer2D(ctx, s.target, 'type', (g) => {
       const w = words(ctx, 21);
@@ -47,7 +47,7 @@ const G1 = {
       T.drawBlock(g, runs, t, { anim: 'slam' });
       T.label(g, '2026  ·  CONTROL ROOM  ·  03:12', 110, 1010, { size: 16, color: PALE, alpha: 0.8 });
     });
-    return { bloom: 0.55, thresh: 0.86 };
+    return { bloom: 0.45, thresh: 0.9 };
   },
 };
 
