@@ -3,7 +3,7 @@
 import { clamp, lerp, ease, hex, invlerp, smooth, hash, COLORS } from '../util.js';
 import { Space } from '../space.js';
 import { drawCues } from './common.js';
-import { setFont, drawText, label, typeOn, heroWord, fitPx, slamEnv } from '../type.js';
+import { setFont, drawText, label, typeOn, heroWord, fitPx } from '../type.js';
 
 let SP;
 const D2R = Math.PI / 180;
@@ -54,7 +54,8 @@ export const spaceScenes = {
         o.restore();
       }
       // the hook: a hero-sized "YOU ARE HERE" pointing at the dot, gone as the zoom starts
-      const hk = slamEnv(t, 0.12, { dur: 0.2, from: 1.12 });
+      // (on screen from frame 0: the first frame is the feed thumbnail)
+      const hk = { a: 1, s: lerp(1.05, 1.0, ease.outCubic(clamp(lt / 0.35))) };
       const hA = hk.a * (1 - smooth(1.05, 1.4, lt));
       if (hA > 0) {
         const dx = dotP[0] * W, dy = (1 - dotP[1]) * H;

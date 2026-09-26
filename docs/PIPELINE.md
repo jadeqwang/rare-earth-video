@@ -61,8 +61,18 @@ correlated with the vocal envelope (150 Hz–4 kHz of the separated vocal) over 
 shift. The best shift becomes the plate's `slip` in the edit, so each plate is re-timed to
 the song by its measured offset rather than by eye.
 
-`f*.jpg` are not committed; `python3 pipeline/extract_frames.py` rebuilds them
-byte-identically from the committed plates.
+Two repairs run on top (both scripted, both in the repo):
+
+* **Mask repair** (`pipeline/maskfix.py`): the multiclass segmenter sometimes labels a face
+  in profile as background while keeping hair and clothes (P04, P05, A02). The tracked face
+  box is added into those masks, so the renderer treats the face as the character.
+* **Clean plate** (`pipeline/cleanplate.py`): Seedance gave the dawn rooftop plate (P05)
+  large cartoon breath-clouds. The camera is locked off, so the sky is rebuilt from the clip
+  itself (a low luminance percentile over the frames where each pixel is open sky) and
+  composited back only where the pixel is sky for the whole clip.
+
+`f*.jpg` are not committed; `python3 pipeline/extract_frames.py` rebuilds them from the
+committed plates (byte-identical to the originals; P05 then gets its clean plate).
 
 ## 5. Renderer (`renderer/`)
 
@@ -77,8 +87,9 @@ function of the song clock, so frames render in any order and in parallel.
     syllables and vowels and placed by the face track, replaces the generated mouth on
     frontal shots; its skin fill is sampled from the flattened plate around the mouth.
   * **LIGHT** (2011, stage, memory, the other world): emissive halftone dots sampled at
-    cell centres with highlight compression, neon XDoG contours with RGB split,
-    scanlines.
+    cell centres, with local contrast against a coarse mip so features inside a spot-lit
+    face stay readable; XDoG contours added as neon over dark areas but printed as dark ink
+    over bright ones; RGB split and scanlines for the 2011 footage.
 * `src/space.js` — stars, Earth (Natural Earth land + city lights), the eyeball planet,
   the red dwarf, the pale blue dot, all procedural.
 * `src/scenes/*` — plate shots (single, split-screen duet, triptych), space shots, and
@@ -101,8 +112,13 @@ node render.js film --jobs 3 --w 1920 --h 1080 --crf 14 --out ../out/rare-earth-
 node render.js film ... --audio ../work/audio/song_sfx.wav   # the sound-design variant
 ```
 
-A 1080p frame takes 2–8 s on CPU (SwiftShader), so a full render is a few hours on four
-cores; `--resume` skips finished segments.
+A 1080p frame takes 1.5–6 s on CPU (SwiftShader); plate analysis is cached while a drawing
+is held on twos. A full 1080p render is about 1.5–2 hours on four cores. Segments are 10 s
+each and `--resume` skips finished ones, so a fix only needs its segments deleted and
+re-rendered.
+
+Review tools: `python3 pipeline/review.py film.mp4 out/` writes time-stamped contact sheets
+(4 frames/s) and a photosensitivity check (large-area flashes per second, limit 3).
 
 ## 6. Sound (optional variant)
 

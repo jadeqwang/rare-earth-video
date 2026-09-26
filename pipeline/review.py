@@ -56,6 +56,7 @@ def main():
     ap.add_argument("--w", type=int, default=320)
     ap.add_argument("--cols", type=int, default=8)
     ap.add_argument("--no-flash", action="store_true")
+    ap.add_argument("--t0", type=float, default=0.0, help="song time of the file's first frame (for segments)")
     a = ap.parse_args()
     os.makedirs(a.out, exist_ok=True)
     per = int(a.fps * a.span)
@@ -75,10 +76,10 @@ def main():
         for i, f in enumerate(buf):
             x, y = (i % a.cols) * a.w, (i // a.cols) * h
             sheet.paste(Image.fromarray(f), (x, y))
-            t = (k * per + i) / a.fps
+            t = a.t0 + (k * per + i) / a.fps
             d.rectangle([x, y, x + 58, y + 16], fill=(0, 0, 0))
             d.text((x + 3, y + 1), f"{t:6.2f}", fill=(255, 220, 90), font=font)
-        sheet.save(os.path.join(a.out, f"sheet_{k * a.span:06.1f}.jpg"), quality=85)
+        sheet.save(os.path.join(a.out, f"sheet_{a.t0 + k * a.span:06.1f}.jpg"), quality=85)
 
     for f in frames(a.film, a.fps, a.w):
         buf.append(f)
