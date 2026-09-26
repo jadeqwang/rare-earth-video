@@ -1,0 +1,13 @@
+{
+ "model": "bytedance/seedance-2.5",
+ "input": {
+  "image": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAIBA...<377727 chars>",
+  "duration": 5,
+  "resolution": "720p",
+  "generate_audio": true,
+  "prompt": "The rocket climbs on a brilliant column of fire, the plume billowing and lighting the clouds; the reflection shimmers in the water. Camera tilts up slowly to follow. Anime style, keep every character exactly on-model with the reference sheets; clean line art; no text."
+ },
+ "options": {
+  "background": true
+ }
+}

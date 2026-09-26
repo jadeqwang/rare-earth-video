@@ -1,0 +1,109 @@
+{"t": "2026-09-26T06:55:21", "model": "bytedance/seedance-2.5", "tag": "lipsync_t1", "ok": false, "secs": 30.3, "duration": 6, "resolution": "480p", "files": [], "err": [{"message": "upstream request failed", "code": 502}], "meta": null}
+{"t": "2026-09-26T06:57:08", "model": "bytedance/seedance-2.5", "tag": "lipsync_t1", "ok": false, "secs": 30.5, "duration": 6, "resolution": "480p", "files": [], "err": [{"message": "upstream request failed", "code": 502}], "meta": null}
+{"t": "2026-09-26T06:57:46", "model": "bytedance/seedance-2.5", "tag": "textonly_t1", "ok": false, "secs": 30.4, "duration": 4, "resolution": "480p", "files": [], "err": [{"message": "upstream request failed", "code": 502}], "meta": null}
+{"t": "2026-09-26T07:00:43", "model": "bytedance/seedance-2.5", "tag": "ls-t1-070042", "submitted": true, "ok": true, "duration": 6, "resolution": "480p", "err": null, "meta": {"test": "lipsync v1a"}}
+{"t": "2026-09-26T07:03:35", "tag": "ls-t1-070042", "done": true, "state": "done", "secs": 172.5, "files": ["out/ls-t1-070042.mp4"], "err": null}
+{"t": "2026-09-26T07:30:12", "model": "google/nano-banana-pro", "tag": "j11-nbpro-073010", "submitted": true, "ok": true, "duration": null, "resolution": null, "err": null, "meta": null}
+{"t": "2026-09-26T07:30:12", "model": "openai/gpt-image-2", "tag": "j11-gpt2-073010", "submitted": true, "ok": true, "duration": null, "resolution": null, "err": null, "meta": null}
+{"t": "2026-09-26T07:30:13", "model": "xai/grok-imagine-image-2.0", "tag": "j11-grok2-073010", "submitted": true, "ok": true, "duration": null, "resolution": "2k", "err": null, "meta": null}
+{"t": "2026-09-26T07:30:13", "model": "bytedance/seedream-4.5", "tag": "j11-sd45-073010", "submitted": true, "ok": true, "duration": null, "resolution": null, "err": null, "meta": null}
+{"t": "2026-09-26T07:30:14", "model": "black-forest-labs/flux-2-max", "tag": "j11-flux-073010", "submitted": true, "ok": true, "duration": null, "resolution": null, "err": null, "meta": null}
+{"t": "2026-09-26T07:30:14", "tag": "j11-grok2-073010", "done": true, "state": "error", "secs": 0.6, "files": [], "err": "Model execution failed (User Input Error): {\"code\":\"invalid-argument\",\"error\":\"Zero Data Retention teams do not have access to URL format as it requires storing the generated images. Please use response_format=\\\"b64_json\\\" instead. See https://docs.x.ai/developers/model-capabilities/images/generation#base64-output\"}"}
+{"t": "2026-09-26T07:31:03", "tag": "j11-sd45-073010", "done": true, "state": "done", "secs": 48.9, "files": ["./j11-sd45-073010.jpg"], "err": null}
+{"t": "2026-09-26T07:31:04", "tag": "j11-nbpro-073010", "done": true, "state": "done", "secs": 50.7, "files": ["./j11-nbpro-073010.png"], "err": null}
+{"t": "2026-09-26T07:31:53", "tag": "j11-flux-073010", "done": true, "state": "done", "secs": 98.8, "files": ["./j11-flux-073010.png"], "err": null}
+{"t": "2026-09-26T07:32:19", "tag": "j11-gpt2-073010", "done": true, "state": "done", "secs": 124.8, "files": ["./j11-gpt2-073010.png"], "err": null}
+{"t": "2026-09-26T07:33:03", "model": "openai/gpt-image-2", "tag": "jade26-073302", "submitted": true, "ok": true, "duration": null, "resolution": null, "err": null, "meta": null}
+{"t": "2026-09-26T07:33:04", "model": "openai/gpt-image-2", "tag": "charlie-073302", "submitted": true, "ok": true, "duration": null, "resolution": null, "err": null, "meta": null}
+{"t": "2026-09-26T07:33:04", "model": "openai/gpt-image-2", "tag": "ricky-073302", "submitted": true, "ok": true, "duration": null, "resolution": null, "err": null, "meta": null}
+{"t": "2026-09-26T07:33:04", "model": "openai/gpt-image-2", "tag": "props-073302", "submitted": true, "ok": true, "duration": null, "resolution": null, "err": null, "meta": null}
+{"t": "2026-09-26T07:34:36", "tag": "jade26-073302", "done": true, "state": "done", "secs": 91.4, "files": ["./jade26-073302.png"], "err": null}
+{"t": "2026-09-26T07:34:44", "tag": "props-073302", "done": true, "state": "done", "secs": 99.4, "files": ["./props-073302.png"], "err": null}
+{"t": "2026-09-26T07:34:44", "tag": "ricky-073302", "done": true, "state": "done", "secs": 99.5, "files": ["./ricky-073302.png"], "err": null}
+{"t": "2026-09-26T07:34:44", "tag": "charlie-073302", "done": true, "state": "done", "secs": 99.6, "files": ["./charlie-073302.png"], "err": null}
+{"t": "2026-09-26T07:35:43", "model": "openai/gpt-image-2", "tag": "k_stage11_v1-073542", "submitted": true, "ok": true, "duration": null, "resolution": null, "err": null, "meta": null}
+{"t": "2026-09-26T07:35:44", "model": "openai/gpt-image-2", "tag": "k_stage11_v4-073542", "submitted": true, "ok": true, "duration": null, "resolution": null, "err": null, "meta": null}
+{"t": "2026-09-26T07:35:44", "model": "openai/gpt-image-2", "tag": "k_roof26_v4-073542", "submitted": true, "ok": true, "duration": null, "resolution": null, "err": null, "meta": null}
+{"t": "2026-09-26T07:35:44", "model": "openai/gpt-image-2", "tag": "k_roof26_v2-073542", "submitted": true, "ok": true, "duration": null, "resolution": null, "err": null, "meta": null}
+{"t": "2026-09-26T07:35:45", "model": "openai/gpt-image-2", "tag": "k_roof26_v5-073542", "submitted": true, "ok": true, "duration": null, "resolution": null, "err": null, "meta": null}
+{"t": "2026-09-26T07:35:45", "model": "openai/gpt-image-2", "tag": "k_room26_box-073542", "submitted": true, "ok": true, "duration": null, "resolution": null, "err": null, "meta": null}
+{"t": "2026-09-26T07:35:46", "model": "openai/gpt-image-2", "tag": "k_room26_window-073542", "submitted": true, "ok": true, "duration": null, "resolution": null, "err": null, "meta": null}
+{"t": "2026-09-26T07:35:46", "model": "openai/gpt-image-2", "tag": "k_ata_night-073542", "submitted": true, "ok": true, "duration": null, "resolution": null, "err": null, "meta": null}
+{"t": "2026-09-26T07:37:09", "tag": "k_stage11_v4-073542", "done": true, "state": "done", "secs": 83.0, "files": ["./k_stage11_v4-073542.png"], "err": null}
+{"t": "2026-09-26T07:37:09", "tag": "k_roof26_v5-073542", "done": true, "state": "done", "secs": 83.3, "files": ["./k_roof26_v5-073542.png"], "err": null}
+{"t": "2026-09-26T07:37:09", "tag": "k_roof26_v4-073542", "done": true, "state": "done", "secs": 83.4, "files": ["./k_roof26_v4-073542.png"], "err": null}
+{"t": "2026-09-26T07:37:17", "tag": "k_room26_window-073542", "done": true, "state": "done", "secs": 91.1, "files": ["./k_room26_window-073542.png"], "err": null}
+{"t": "2026-09-26T07:37:17", "tag": "k_stage11_v1-073542", "done": true, "state": "done", "secs": 91.5, "files": ["./k_stage11_v1-073542.png"], "err": null}
+{"t": "2026-09-26T07:37:50", "tag": "k_room26_box-073542", "done": true, "state": "done", "secs": 124.1, "files": ["./k_room26_box-073542.png"], "err": null}
+{"t": "2026-09-26T07:37:50", "tag": "k_ata_night-073542", "done": true, "state": "done", "secs": 124.2, "files": ["./k_ata_night-073542.png"], "err": null}
+{"t": "2026-09-26T07:37:51", "tag": "k_roof26_v2-073542", "done": true, "state": "done", "secs": 124.7, "files": ["./k_roof26_v2-073542.png"], "err": null}
+{"t": "2026-09-26T07:38:20", "model": "bytedance/seedance-2.5", "tag": "i2va-t1-073819", "submitted": true, "ok": true, "duration": 6, "resolution": "480p", "err": null, "meta": null}
+{"t": "2026-09-26T07:38:21", "model": "bytedance/seedance-2.5", "tag": "i2va-t2-073819", "submitted": true, "ok": true, "duration": 6, "resolution": "480p", "err": null, "meta": null}
+{"t": "2026-09-26T07:41:29", "tag": "i2va-t1-073819", "done": true, "state": "done", "secs": 188.2, "files": ["out/i2va-t1-073819.mp4"], "err": null}
+{"t": "2026-09-26T07:42:52", "tag": "i2va-t2-073819", "done": true, "state": "done", "secs": 271.6, "files": ["out/i2va-t2-073819.mp4"], "err": null}
+{"t": "2026-09-26T07:44:05", "model": "openai/gpt-image-2", "tag": "k_stage11_v1-074403", "submitted": true, "ok": true, "duration": null, "resolution": null, "err": null, "meta": null}
+{"t": "2026-09-26T07:44:05", "model": "openai/gpt-image-2", "tag": "k_stage11_v4-074403", "submitted": true, "ok": true, "duration": null, "resolution": null, "err": null, "meta": null}
+{"t": "2026-09-26T07:44:05", "model": "openai/gpt-image-2", "tag": "k_roof26_v4-074403", "submitted": true, "ok": true, "duration": null, "resolution": null, "err": null, "meta": null}
+{"t": "2026-09-26T07:44:06", "model": "openai/gpt-image-2", "tag": "k_room26_cu-074403", "submitted": true, "ok": true, "duration": null, "resolution": null, "err": null, "meta": null}
+{"t": "2026-09-26T07:44:06", "model": "openai/gpt-image-2", "tag": "k_room26_headphones-074403", "submitted": true, "ok": true, "duration": null, "resolution": null, "err": null, "meta": null}
+{"t": "2026-09-26T07:44:07", "model": "openai/gpt-image-2", "tag": "k_room26_phone-074403", "submitted": true, "ok": true, "duration": null, "resolution": null, "err": null, "meta": null}
+{"t": "2026-09-26T07:44:07", "model": "openai/gpt-image-2", "tag": "k_roof_duo-074403", "submitted": true, "ok": true, "duration": null, "resolution": null, "err": null, "meta": null}
+{"t": "2026-09-26T07:44:08", "model": "openai/gpt-image-2", "tag": "k_roof_finale-074403", "submitted": true, "ok": true, "duration": null, "resolution": null, "err": null, "meta": null}
+{"t": "2026-09-26T07:44:09", "model": "openai/gpt-image-2", "tag": "k_charlie_cu-074403", "submitted": true, "ok": true, "duration": null, "resolution": null, "err": null, "meta": null}
+{"t": "2026-09-26T07:44:09", "model": "openai/gpt-image-2", "tag": "k_ricky_cu-074403", "submitted": true, "ok": true, "duration": null, "resolution": null, "err": null, "meta": null}
+{"t": "2026-09-26T07:44:10", "model": "openai/gpt-image-2", "tag": "k_band_wide-074403", "submitted": true, "ok": true, "duration": null, "resolution": null, "err": null, "meta": null}
+{"t": "2026-09-26T07:44:10", "model": "openai/gpt-image-2", "tag": "k_ata_dawn-074403", "submitted": true, "ok": true, "duration": null, "resolution": null, "err": null, "meta": null}
+{"t": "2026-09-26T07:44:11", "model": "openai/gpt-image-2", "tag": "k_launch-074403", "submitted": true, "ok": true, "duration": null, "resolution": null, "err": null, "meta": null}
+{"t": "2026-09-26T07:44:11", "model": "openai/gpt-image-2", "tag": "k_alien_array-074403", "submitted": true, "ok": true, "duration": null, "resolution": null, "err": null, "meta": null}
+{"t": "2026-09-26T07:45:26", "tag": "k_ricky_cu-074403", "done": true, "state": "done", "secs": 75.4, "files": ["./k_ricky_cu-074403.png"], "err": null}
+{"t": "2026-09-26T07:45:27", "tag": "k_room26_phone-074403", "done": true, "state": "done", "secs": 75.8, "files": ["./k_room26_phone-074403.png"], "err": null}
+{"t": "2026-09-26T07:45:34", "tag": "k_roof26_v4-074403", "done": true, "state": "done", "secs": 83.2, "files": ["./k_roof26_v4-074403.png"], "err": null}
+{"t": "2026-09-26T07:45:34", "tag": "k_ata_dawn-074403", "done": true, "state": "done", "secs": 83.4, "files": ["./k_ata_dawn-074403.png"], "err": null}
+{"t": "2026-09-26T07:45:34", "tag": "k_stage11_v1-074403", "done": true, "state": "done", "secs": 83.6, "files": ["./k_stage11_v1-074403.png"], "err": null}
+{"t": "2026-09-26T07:45:35", "tag": "k_roof_duo-074403", "done": true, "state": "done", "secs": 83.7, "files": ["./k_roof_duo-074403.png"], "err": null}
+{"t": "2026-09-26T07:45:35", "tag": "k_launch-074403", "done": true, "state": "done", "secs": 84.0, "files": ["./k_launch-074403.png"], "err": null}
+{"t": "2026-09-26T07:45:42", "tag": "k_room26_headphones-074403", "done": true, "state": "done", "secs": 91.3, "files": ["./k_room26_headphones-074403.png"], "err": null}
+{"t": "2026-09-26T07:45:42", "tag": "k_band_wide-074403", "done": true, "state": "done", "secs": 91.6, "files": ["./k_band_wide-074403.png"], "err": null}
+{"t": "2026-09-26T07:45:43", "tag": "k_charlie_cu-074403", "done": true, "state": "done", "secs": 92.2, "files": ["./k_charlie_cu-074403.png"], "err": null}
+{"t": "2026-09-26T07:45:51", "tag": "k_stage11_v4-074403", "done": true, "state": "done", "secs": 99.8, "files": ["./k_stage11_v4-074403.png"], "err": null}
+{"t": "2026-09-26T07:45:51", "tag": "k_roof_finale-074403", "done": true, "state": "done", "secs": 100.0, "files": ["./k_roof_finale-074403.png"], "err": null}
+{"t": "2026-09-26T07:46:15", "tag": "k_room26_cu-074403", "done": true, "state": "done", "secs": 124.0, "files": ["./k_room26_cu-074403.png"], "err": null}
+{"t": "2026-09-26T07:46:15", "tag": "k_alien_array-074403", "done": true, "state": "done", "secs": 124.3, "files": ["./k_alien_array-074403.png"], "err": null}
+{"t": "2026-09-26T07:47:24", "model": "bytedance/seedance-2.5", "tag": "P01_stage11_v1-074720", "submitted": true, "ok": true, "duration": 14, "resolution": "720p", "err": null, "meta": {"plate": "P01_stage11_v1", "audio": [3.4, 17.4]}}
+{"t": "2026-09-26T07:47:24", "model": "bytedance/seedance-2.5", "tag": "P02_stage11_v4-074720", "submitted": true, "ok": true, "duration": 14, "resolution": "720p", "err": null, "meta": {"plate": "P02_stage11_v4", "audio": [80.0, 94.0]}}
+{"t": "2026-09-26T07:47:25", "model": "bytedance/seedance-2.5", "tag": "P03_roof26_v4-074720", "submitted": true, "ok": true, "duration": 14, "resolution": "720p", "err": null, "meta": {"plate": "P03_roof26_v4", "audio": [80.0, 94.0]}}
+{"t": "2026-09-26T07:47:25", "model": "bytedance/seedance-2.5", "tag": "P04_roof26_v2-074720", "submitted": true, "ok": true, "duration": 5, "resolution": "720p", "err": null, "meta": {"plate": "P04_roof26_v2", "audio": [19.2, 24.2]}}
+{"t": "2026-09-26T07:47:25", "model": "bytedance/seedance-2.5", "tag": "P05_roof26_v5-074720", "submitted": true, "ok": true, "duration": 8, "resolution": "720p", "err": null, "meta": {"plate": "P05_roof26_v5", "audio": [125.8, 133.8]}}
+{"t": "2026-09-26T07:47:26", "model": "bytedance/seedance-2.5", "tag": "P06_band_outro-074720", "submitted": true, "ok": true, "duration": 16, "resolution": "720p", "err": null, "meta": {"plate": "P06_band_outro", "audio": [146.8, 162.8]}}
+{"t": "2026-09-26T07:47:27", "model": "bytedance/seedance-2.5", "tag": "A01_room26_box-074720", "submitted": true, "ok": true, "duration": 5, "resolution": "720p", "err": null, "meta": {"plate": "A01_room26_box", "audio": null}}
+{"t": "2026-09-26T07:47:27", "model": "bytedance/seedance-2.5", "tag": "A02_room26_window-074720", "submitted": true, "ok": true, "duration": 5, "resolution": "720p", "err": null, "meta": {"plate": "A02_room26_window", "audio": null}}
+{"t": "2026-09-26T07:47:28", "model": "bytedance/seedance-2.5", "tag": "A03_room26_cu-074720", "submitted": true, "ok": true, "duration": 4, "resolution": "720p", "err": null, "meta": {"plate": "A03_room26_cu", "audio": null}}
+{"t": "2026-09-26T07:47:28", "model": "bytedance/seedance-2.5", "tag": "A04_room26_headphones-074720", "submitted": true, "ok": true, "duration": 6, "resolution": "720p", "err": null, "meta": {"plate": "A04_room26_headphones", "audio": null}}
+{"t": "2026-09-26T07:47:29", "model": "bytedance/seedance-2.5", "tag": "A05_room26_phone-074720", "submitted": true, "ok": true, "duration": 4, "resolution": "720p", "err": null, "meta": {"plate": "A05_room26_phone", "audio": null}}
+{"t": "2026-09-26T07:47:29", "model": "bytedance/seedance-2.5", "tag": "A06_roof_duo-074720", "submitted": true, "ok": true, "duration": 5, "resolution": "720p", "err": null, "meta": {"plate": "A06_roof_duo", "audio": null}}
+{"t": "2026-09-26T07:47:30", "model": "bytedance/seedance-2.5", "tag": "A07_roof_finale-074720", "submitted": true, "ok": true, "duration": 6, "resolution": "720p", "err": null, "meta": {"plate": "A07_roof_finale", "audio": null}}
+{"t": "2026-09-26T07:47:31", "model": "bytedance/seedance-2.5", "tag": "A08_charlie_cu-074720", "submitted": true, "ok": true, "duration": 4, "resolution": "720p", "err": null, "meta": {"plate": "A08_charlie_cu", "audio": [42.6, 46.6]}}
+{"t": "2026-09-26T07:47:31", "model": "bytedance/seedance-2.5", "tag": "A09_ricky_cu-074720", "submitted": true, "ok": true, "duration": 4, "resolution": "720p", "err": null, "meta": {"plate": "A09_ricky_cu", "audio": [46.5, 50.5]}}
+{"t": "2026-09-26T07:47:31", "model": "bytedance/seedance-2.5", "tag": "E01_ata_night-074720", "submitted": true, "ok": true, "duration": 5, "resolution": "720p", "err": null, "meta": {"plate": "E01_ata_night", "audio": null}}
+{"t": "2026-09-26T07:47:32", "model": "bytedance/seedance-2.5", "tag": "E02_ata_dawn-074720", "submitted": true, "ok": true, "duration": 4, "resolution": "720p", "err": null, "meta": {"plate": "E02_ata_dawn", "audio": null}}
+{"t": "2026-09-26T07:47:32", "model": "bytedance/seedance-2.5", "tag": "E03_launch-074720", "submitted": true, "ok": true, "duration": 5, "resolution": "720p", "err": null, "meta": {"plate": "E03_launch", "audio": null}}
+{"t": "2026-09-26T07:47:32", "model": "bytedance/seedance-2.5", "tag": "E04_alien_array-074720", "submitted": true, "ok": true, "duration": 6, "resolution": "720p", "err": null, "meta": {"plate": "E04_alien_array", "audio": null}}
+{"t": "2026-09-26T07:50:55", "tag": "E01_ata_night-074720", "done": true, "state": "done", "secs": 202.3, "files": ["/home/user/rare-earth-video/work/gen/plates/E01_ata_night-074720.mp4"], "err": null}
+{"t": "2026-09-26T07:51:26", "tag": "P05_roof26_v5-074720", "done": true, "state": "done", "secs": 233.3, "files": ["/home/user/rare-earth-video/work/gen/plates/P05_roof26_v5-074720.mp4"], "err": null}
+{"t": "2026-09-26T07:51:26", "tag": "A03_room26_cu-074720", "done": true, "state": "done", "secs": 233.5, "files": ["/home/user/rare-earth-video/work/gen/plates/A03_room26_cu-074720.mp4"], "err": null}
+{"t": "2026-09-26T07:51:26", "tag": "P03_roof26_v4-074720", "done": true, "state": "done", "secs": 234.0, "files": ["/home/user/rare-earth-video/work/gen/plates/P03_roof26_v4-074720.mp4"], "err": null}
+{"t": "2026-09-26T07:51:27", "tag": "E02_ata_dawn-074720", "done": true, "state": "done", "secs": 32.6, "files": ["/home/user/rare-earth-video/work/gen/plates/E02_ata_dawn-074720.mp4"], "err": null}
+{"t": "2026-09-26T07:51:57", "tag": "P01_stage11_v1-074720", "done": true, "state": "done", "secs": 264.4, "files": ["/home/user/rare-earth-video/work/gen/plates/P01_stage11_v1-074720.mp4"], "err": null}
+{"t": "2026-09-26T07:51:58", "tag": "E04_alien_array-074720", "done": true, "state": "done", "secs": 32.1, "files": ["/home/user/rare-earth-video/work/gen/plates/E04_alien_array-074720.mp4"], "err": null}
+{"t": "2026-09-26T07:51:58", "tag": "E03_launch-074720", "done": true, "state": "done", "secs": 32.6, "files": ["/home/user/rare-earth-video/work/gen/plates/E03_launch-074720.mp4"], "err": null}
+{"t": "2026-09-26T07:52:58", "tag": "A02_room26_window-074720", "done": true, "state": "done", "secs": 325.8, "files": ["/home/user/rare-earth-video/work/gen/plates/A02_room26_window-074720.mp4"], "err": null}
+{"t": "2026-09-26T07:52:58", "tag": "A01_room26_box-074720", "done": true, "state": "done", "secs": 326.0, "files": ["/home/user/rare-earth-video/work/gen/plates/A01_room26_box-074720.mp4"], "err": null}
+{"t": "2026-09-26T07:53:44", "tag": "A09_ricky_cu-074720", "done": true, "state": "done", "secs": 372.0, "files": ["/home/user/rare-earth-video/work/gen/plates/A09_ricky_cu-074720.mp4"], "err": null}
+{"t": "2026-09-26T07:54:00", "tag": "P04_roof26_v2-074720", "done": true, "state": "done", "secs": 387.7, "files": ["/home/user/rare-earth-video/work/gen/plates/P04_roof26_v2-074720.mp4"], "err": null}
+{"t": "2026-09-26T07:54:15", "tag": "A08_charlie_cu-074720", "done": true, "state": "done", "secs": 402.8, "files": ["/home/user/rare-earth-video/work/gen/plates/A08_charlie_cu-074720.mp4"], "err": null}
+{"t": "2026-09-26T07:54:15", "tag": "A07_roof_finale-074720", "done": true, "state": "done", "secs": 402.9, "files": ["/home/user/rare-earth-video/work/gen/plates/A07_roof_finale-074720.mp4"], "err": null}
+{"t": "2026-09-26T07:55:02", "tag": "A04_room26_headphones-074720", "done": true, "state": "done", "secs": 449.3, "files": ["/home/user/rare-earth-video/work/gen/plates/A04_room26_headphones-074720.mp4"], "err": null}
+{"t": "2026-09-26T07:55:02", "tag": "A06_roof_duo-074720", "done": true, "state": "done", "secs": 449.6, "files": ["/home/user/rare-earth-video/work/gen/plates/A06_roof_duo-074720.mp4"], "err": null}
+{"t": "2026-09-26T07:55:17", "tag": "A05_room26_phone-074720", "done": true, "state": "done", "secs": 465.0, "files": ["/home/user/rare-earth-video/work/gen/plates/A05_room26_phone-074720.mp4"], "err": null}
+{"t": "2026-09-26T08:00:17", "model": "bytedance/seedance-2.5", "tag": "P02_stage11_v4-080015", "submitted": true, "ok": true, "duration": 14, "resolution": "720p", "err": null, "meta": {"plate": "P02_stage11_v4", "audio": [80.0, 94.0]}}
+{"t": "2026-09-26T08:05:30", "tag": "P02_stage11_v4-080015", "done": true, "state": "done", "secs": 312.8, "files": ["/home/user/rare-earth-video/work/gen/plates/P02_stage11_v4-080015.mp4"], "err": null}

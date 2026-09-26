@@ -1,0 +1,23 @@
+{
+ "state": "done",
+ "via": "webhook",
+ "payload": {
+  "id": "f4a8d8b2f8063669550ce91b77fbf146e5e5a893670517708469f8f0abb2b6cf",
+  "state": "Completed",
+  "result": {
+   "video": "https://ark-acg-ap-southeast-1.tos-ap-southeast-1.volces.com/dreamina-seedance-2-5/3003289189/Video/cfxfn-45745162906202-tgc_f34f3e58d58a0cffff00000000000000000000921299804097120/cgt-20260926154754-nfxfc.mp4?<signed-query-removed>"
+  },
+  "error": null,
+  "keySource": "Unified",
+  "provider": "bytedance",
+  "model": "bytedance/seedance-2.5",
+  "usage": {
+   "total_tokens": 108900,
+   "output_video_seconds": 5,
+   "output_video_resolution": "720p",
+   "output_video_audio": true,
+   "input_image_count": 3
+  }
+ },
+ "t1": 1790409143234
+}

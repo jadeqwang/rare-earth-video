@@ -1,0 +1,13 @@
+{
+ "model": "bytedance/seedance-2.5",
+ "input": {
+  "image": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAIBA...<514191 chars>",
+  "duration": 6,
+  "resolution": "720p",
+  "generate_audio": true,
+  "prompt": "The colossal spiral array of alien dishes pivots in unison toward the dark sky; faint lights blink along their rims; the red sun glows on the horizon. Slow dolly forward across the plain. Anime style, keep every character exactly on-model with the reference sheets; clean line art; no text."
+ },
+ "options": {
+  "background": true
+ }
+}

@@ -1,0 +1,15 @@
+{
+ "state": "error",
+ "via": "webhook",
+ "payload": {
+  "id": "2edb9132bef3cf8c724cb993d33b6f641d6949a13361ddcb21c6432c0be9ebe0",
+  "state": "Failed",
+  "result": null,
+  "error": "Model execution failed (User Input Error): {\"code\":\"invalid-argument\",\"error\":\"Zero Data Retention teams do not have access to URL format as it requires storing the generated images. Please use response_format=\\\"b64_json\\\" instead. See https://docs.x.ai/developers/model-capabilities/images/generation#base64-output\"}",
+  "keySource": null,
+  "provider": "xai",
+  "model": "xai/grok-imagine-image-2.0",
+  "usage": null
+ },
+ "t1": 1790407813468
+}

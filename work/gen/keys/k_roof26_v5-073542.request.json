@@ -1,0 +1,15 @@
+{
+ "model": "openai/gpt-image-2",
+ "input": {
+  "quality": "high",
+  "size": "1536x1024",
+  "output_format": "png",
+  "images": [
+   "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABgAAAAQACAIAAA...<2929854 chars>"
+  ],
+  "prompt": "Anime key visual, cinematic 16:9 film frame (keep all important content inside the central 16:9 band, top and bottom 8% can be empty). Modern anime style matching the character sheet: crisp clean line art, flat cel shading, strong rim light, bold simple silhouettes, low background clutter, no text, no logos. Jade in 2026 (grey hoodie, loose messy bun, black over-ear headphones on) sits on the edge of a rooftop before dawn, medium close-up from the chest up in the RIGHT third, profile three-quarter facing left toward the horizon, singing quietly with eyes half closed. Blue-hour sky with a thin warm peach glow on the horizon, a few remaining stars; LEFT half is open sky."
+ },
+ "options": {
+  "background": true
+ }
+}

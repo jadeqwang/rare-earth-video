@@ -1,0 +1,31 @@
+{
+ "state": "done",
+ "via": "webhook",
+ "payload": {
+  "id": "e0522fe4ac4f061af38020544eb15cb298b190957802c24ba275e1d77c1102ed",
+  "state": "Completed",
+  "result": {
+   "image": "https://ai-gateway-outputs.0d37909e38d3e99c29fa2cd343ac421a.r2.cloudflarestorage.com/provider-outputs/e0522fe4ac4f061af38020544eb15cb298b190957802c24ba275e1d77c1102ed/8ed9385c-71f7-4d36-89b6-b7b62ec0c512?<signed-query-removed>"
+  },
+  "error": null,
+  "keySource": "Unified",
+  "provider": "openai",
+  "model": "openai/gpt-image-2",
+  "usage": {
+   "input_tokens": 171,
+   "input_image_tokens": 3072,
+   "output_tokens": 0,
+   "output_image_tokens": 5488,
+   "total_tokens": 8731
+  }
+ },
+ "t1": 1790408737855,
+ "media": [
+  {
+   "url": "https://ai-gateway-outputs.0d37909e38d3e99c29fa2cd343ac421a.r2.cloudflarestorage.com/provider-outputs/e0522fe4ac4f061af38020544eb15cb298b190957802c24ba275e1d77c1102ed/8ed9385c-71f7-4d36-89b6-b7b62ec0c512?<signed-query-removed>",
+   "key": "media:k_room26_headphones-074403:0",
+   "bytes": 2037347,
+   "type": "image/png"
+  }
+ ]
+}

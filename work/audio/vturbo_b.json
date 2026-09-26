@@ -1,0 +1,228 @@
+{
+ "result": {
+  "transcription_info": {
+   "language": "en",
+   "language_probability": 1,
+   "duration": 45,
+   "duration_after_vad": 45
+  },
+  "text": "Keep up funding, our planet's transit is not that far from my own. Our science has a vision. As a vision, do you still care. You're yearning to see the life out there.",
+  "word_count": 33,
+  "segments": [
+   {
+    "start": 2.060000000000001,
+    "end": 7.78,
+    "text": " Keep up funding, our planet's transit is not that far from my own.",
+    "temperature": 0,
+    "avg_logprob": -0.6914062738418579,
+    "compression_ratio": 0.9705882352941176,
+    "no_speech_prob": 0,
+    "words": [
+     {
+      "word": " Keep",
+      "start": 2.060000000000001,
+      "end": 2.56
+     },
+     {
+      "word": " up",
+      "start": 2.56,
+      "end": 2.58
+     },
+     {
+      "word": " funding,",
+      "start": 2.58,
+      "end": 2.6
+     },
+     {
+      "word": " our",
+      "start": 3.5,
+      "end": 3.52
+     },
+     {
+      "word": " planet's",
+      "start": 3.52,
+      "end": 3.52
+     },
+     {
+      "word": " transit",
+      "start": 3.52,
+      "end": 7.02
+     },
+     {
+      "word": " is",
+      "start": 7.02,
+      "end": 7.02
+     },
+     {
+      "word": " not",
+      "start": 7.02,
+      "end": 7.48
+     },
+     {
+      "word": " that",
+      "start": 7.48,
+      "end": 7.66
+     },
+     {
+      "word": " far",
+      "start": 7.66,
+      "end": 7.66
+     },
+     {
+      "word": " from",
+      "start": 7.66,
+      "end": 7.78
+     },
+     {
+      "word": " my",
+      "start": 7.78,
+      "end": 7.78
+     },
+     {
+      "word": " own.",
+      "start": 7.78,
+      "end": 7.78
+     }
+    ],
+    "word_count": 13
+   },
+   {
+    "start": 34.620000000000005,
+    "end": 37.76,
+    "text": " Our science has a vision.",
+    "temperature": 0,
+    "avg_logprob": -0.4778645833333333,
+    "compression_ratio": 0.7575757575757576,
+    "no_speech_prob": 0,
+    "words": [
+     {
+      "word": " Our",
+      "start": 34.620000000000005,
+      "end": 36.02
+     },
+     {
+      "word": " science",
+      "start": 36.02,
+      "end": 37.42
+     },
+     {
+      "word": " has",
+      "start": 37.42,
+      "end": 37.76
+     },
+     {
+      "word": " a",
+      "start": 37.76,
+      "end": 37.76
+     },
+     {
+      "word": " vision.",
+      "start": 37.76,
+      "end": 37.76
+     }
+    ],
+    "word_count": 5
+   },
+   {
+    "start": 37.78,
+    "end": 44.96,
+    "text": " As a vision, do you still care. You're yearning to see the life out there.",
+    "temperature": 0,
+    "avg_logprob": -0.17527174301769421,
+    "compression_ratio": 1,
+    "no_speech_prob": 0,
+    "words": [
+     {
+      "word": " As",
+      "start": 37.78,
+      "end": 38.28
+     },
+     {
+      "word": " a",
+      "start": 38.28,
+      "end": 38.56
+     },
+     {
+      "word": " vision,",
+      "start": 38.56,
+      "end": 39.84
+     },
+     {
+      "word": " do",
+      "start": 39.84,
+      "end": 40.6
+     },
+     {
+      "word": " you",
+      "start": 40.6,
+      "end": 40.86
+     },
+     {
+      "word": " still",
+      "start": 40.86,
+      "end": 41.38
+     },
+     {
+      "word": " care.",
+      "start": 41.38,
+      "end": 41.96
+     },
+     {
+      "word": " You're",
+      "start": 42.4,
+      "end": 42.52
+     },
+     {
+      "word": " yearning",
+      "start": 42.52,
+      "end": 42.98
+     },
+     {
+      "word": " to",
+      "start": 42.98,
+      "end": 43.24
+     },
+     {
+      "word": " see",
+      "start": 43.24,
+      "end": 43.74
+     },
+     {
+      "word": " the",
+      "start": 43.74,
+      "end": 44.16
+     },
+     {
+      "word": " life",
+      "start": 44.16,
+      "end": 44.6
+     },
+     {
+      "word": " out",
+      "start": 44.6,
+      "end": 44.92
+     },
+     {
+      "word": " there.",
+      "start": 44.92,
+      "end": 44.96
+     }
+    ],
+    "word_count": 15
+   }
+  ],
+  "vtt": "WEBVTT\n\n00:02.060 --> 00:02.560\n Keep\n\n00:02.560 --> 00:02.580\n up\n\n00:02.580 --> 00:02.600\n funding,\n\n00:03.500 --> 00:03.520\n our\n\n00:03.520 --> 00:03.520\n planet's\n\n00:03.520 --> 00:07.020\n transit\n\n00:07.020 --> 00:07.020\n is\n\n00:07.020 --> 00:07.480\n not\n\n00:07.480 --> 00:07.660\n that\n\n00:07.660 --> 00:07.660\n far\n\n00:07.660 --> 00:07.780\n from\n\n00:07.780 --> 00:07.780\n my\n\n00:07.780 --> 00:07.780\n own.\n\n00:34.620 --> 00:36.020\n Our\n\n00:36.020 --> 00:37.420\n science\n\n00:37.420 --> 00:37.760\n has\n\n00:37.760 --> 00:37.760\n a\n\n00:37.760 --> 00:37.760\n vision.\n\n00:37.780 --> 00:38.280\n As\n\n00:38.280 --> 00:38.560\n a\n\n00:38.560 --> 00:39.840\n vision,\n\n00:39.840 --> 00:40.600\n do\n\n00:40.600 --> 00:40.860\n you\n\n00:40.860 --> 00:41.380\n still\n\n00:41.380 --> 00:41.960\n care.\n\n00:42.400 --> 00:42.520\n You're\n\n00:42.520 --> 00:42.980\n yearning\n\n00:42.980 --> 00:43.240\n to\n\n00:43.240 --> 00:43.740\n see\n\n00:43.740 --> 00:44.160\n the\n\n00:44.160 --> 00:44.600\n life\n\n00:44.600 --> 00:44.920\n out\n\n00:44.920 --> 00:44.960\n there.\n\n",
+  "usage": {
+   "prompt_tokens": 0,
+   "completion_tokens": 0,
+   "total_tokens": 0,
+   "prompt_tokens_details": {
+    "cached_tokens": 0
+   },
+   "neurons": 34.972678278
+  }
+ },
+ "success": true,
+ "errors": [],
+ "messages": []
+}

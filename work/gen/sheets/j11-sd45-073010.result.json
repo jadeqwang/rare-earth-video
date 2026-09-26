@@ -1,0 +1,32 @@
+{
+ "state": "done",
+ "via": "webhook",
+ "payload": {
+  "id": "6b28618347b25689c2e130c079bbd9da75d9ca8571167f79ba0b725066eebc44",
+  "state": "Completed",
+  "result": {
+   "images": [
+    "https://ark-content-generation-v2-ap-southeast-1.tos-ap-southeast-1.volces.com/seedream-4-5/021790407814458e0fa5d59a7b50e9f748f37815b909e2817ccb5_0.jpeg?<signed-query-removed>"
+   ]
+  },
+  "error": null,
+  "keySource": "Unified",
+  "provider": "bytedance",
+  "model": "bytedance/seedream-4.5",
+  "usage": {
+   "output_image_count": 1,
+   "input_image_count": 3,
+   "output_tokens": 17800,
+   "total_tokens": 17800
+  }
+ },
+ "t1": 1790407825840,
+ "media": [
+  {
+   "url": "https://ark-content-generation-v2-ap-southeast-1.tos-ap-southeast-1.volces.com/seedream-4-5/021790407814458e0fa5d59a7b50e9f748f37815b909e2817ccb5_0.jpeg?<signed-query-removed>",
+   "key": "media:j11-sd45-073010:0",
+   "bytes": 679878,
+   "type": "image/jpeg"
+  }
+ ]
+}

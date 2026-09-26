@@ -1,0 +1,373 @@
+{
+ "result": {
+  "transcription_info": {
+   "language": "en",
+   "language_probability": 1,
+   "duration": 37.36,
+   "duration_after_vad": 37.36
+  },
+  "text": "The beating of a star. A planet's transit is not that far from my own. How could we be alone. The beat of the star. A planet's transit is not that far from my own. How could we be alone. Is that a propre city? The classic city is near that city, of what we're a king about. A world of dolphins.",
+  "word_count": 62,
+  "segments": [
+   {
+    "start": 0,
+    "end": 12,
+    "text": " The beating of a star. A planet's transit is not that far from my own. How could we be alone.",
+    "temperature": 0,
+    "avg_logprob": -0.14561632606718275,
+    "compression_ratio": 1.0813953488372092,
+    "no_speech_prob": 0,
+    "words": [
+     {
+      "word": " The",
+      "start": 0,
+      "end": 0.4
+     },
+     {
+      "word": " beating",
+      "start": 0.4,
+      "end": 0.4
+     },
+     {
+      "word": " of",
+      "start": 0.4,
+      "end": 0.9
+     },
+     {
+      "word": " a",
+      "start": 0.9,
+      "end": 1.16
+     },
+     {
+      "word": " star.",
+      "start": 1.16,
+      "end": 1.82
+     },
+     {
+      "word": " A",
+      "start": 2.1,
+      "end": 2.42
+     },
+     {
+      "word": " planet's",
+      "start": 2.42,
+      "end": 3.2
+     },
+     {
+      "word": " transit",
+      "start": 3.2,
+      "end": 3.74
+     },
+     {
+      "word": " is",
+      "start": 3.74,
+      "end": 4.24
+     },
+     {
+      "word": " not",
+      "start": 4.24,
+      "end": 4.88
+     },
+     {
+      "word": " that",
+      "start": 4.88,
+      "end": 5.64
+     },
+     {
+      "word": " far",
+      "start": 5.64,
+      "end": 6.64
+     },
+     {
+      "word": " from",
+      "start": 6.64,
+      "end": 7.3
+     },
+     {
+      "word": " my",
+      "start": 7.3,
+      "end": 7.98
+     },
+     {
+      "word": " own.",
+      "start": 7.98,
+      "end": 8.64
+     },
+     {
+      "word": " How",
+      "start": 9.68,
+      "end": 10.02
+     },
+     {
+      "word": " could",
+      "start": 10.02,
+      "end": 10.48
+     },
+     {
+      "word": " we",
+      "start": 10.48,
+      "end": 10.84
+     },
+     {
+      "word": " be",
+      "start": 10.84,
+      "end": 11.24
+     },
+     {
+      "word": " alone.",
+      "start": 11.24,
+      "end": 12
+     }
+    ],
+    "word_count": 20
+   },
+   {
+    "start": 30.32,
+    "end": 37.16,
+    "text": " The beat of the star. A planet's transit is not that far from my own. How could we be alone. Is that a propre city?",
+    "temperature": 1,
+    "avg_logprob": -2.438415025409899,
+    "compression_ratio": 1.36986301369863,
+    "no_speech_prob": 0,
+    "words": [
+     {
+      "word": " The",
+      "start": 30.32,
+      "end": 31.12
+     },
+     {
+      "word": " beat",
+      "start": 31.12,
+      "end": 31.12
+     },
+     {
+      "word": " of",
+      "start": 31.12,
+      "end": 31.24
+     },
+     {
+      "word": " the",
+      "start": 31.24,
+      "end": 31.24
+     },
+     {
+      "word": " star.",
+      "start": 31.24,
+      "end": 31.24
+     },
+     {
+      "word": " A",
+      "start": 34.38,
+      "end": 35.18
+     },
+     {
+      "word": " planet's",
+      "start": 35.18,
+      "end": 35.66
+     },
+     {
+      "word": " transit",
+      "start": 35.66,
+      "end": 35.66
+     },
+     {
+      "word": " is",
+      "start": 35.66,
+      "end": 35.68
+     },
+     {
+      "word": " not",
+      "start": 35.68,
+      "end": 35.68
+     },
+     {
+      "word": " that",
+      "start": 35.68,
+      "end": 35.68
+     },
+     {
+      "word": " far",
+      "start": 35.68,
+      "end": 35.68
+     },
+     {
+      "word": " from",
+      "start": 35.68,
+      "end": 35.68
+     },
+     {
+      "word": " my",
+      "start": 35.68,
+      "end": 35.68
+     },
+     {
+      "word": " own.",
+      "start": 35.68,
+      "end": 35.68
+     },
+     {
+      "word": " How",
+      "start": 35.92,
+      "end": 36.72
+     },
+     {
+      "word": " could",
+      "start": 36.72,
+      "end": 36.72
+     },
+     {
+      "word": " we",
+      "start": 36.72,
+      "end": 36.72
+     },
+     {
+      "word": " be",
+      "start": 36.72,
+      "end": 36.72
+     },
+     {
+      "word": " alone.",
+      "start": 36.72,
+      "end": 36.72
+     },
+     {
+      "word": " Is",
+      "start": 36.72,
+      "end": 36.76
+     },
+     {
+      "word": " that",
+      "start": 36.76,
+      "end": 36.76
+     },
+     {
+      "word": " a",
+      "start": 36.76,
+      "end": 37.16
+     },
+     {
+      "word": " propre",
+      "start": 37.16,
+      "end": 37.16
+     },
+     {
+      "word": " city?",
+      "start": 37.16,
+      "end": 37.16
+     }
+    ],
+    "word_count": 25
+   },
+   {
+    "start": 37.16,
+    "end": 37.34,
+    "text": " The classic city is near that city, of what we're a king about. A world of dolphins.",
+    "temperature": 1,
+    "avg_logprob": -2.438415025409899,
+    "compression_ratio": 1.36986301369863,
+    "no_speech_prob": 0,
+    "words": [
+     {
+      "word": " The",
+      "start": 37.16,
+      "end": 37.34
+     },
+     {
+      "word": " classic",
+      "start": 37.34,
+      "end": 37.34
+     },
+     {
+      "word": " city",
+      "start": 37.34,
+      "end": 37.34
+     },
+     {
+      "word": " is",
+      "start": 37.34,
+      "end": 37.34
+     },
+     {
+      "word": " near",
+      "start": 37.34,
+      "end": 37.34
+     },
+     {
+      "word": " that",
+      "start": 37.34,
+      "end": 37.34
+     },
+     {
+      "word": " city,",
+      "start": 37.34,
+      "end": 37.34
+     },
+     {
+      "word": " of",
+      "start": 37.34,
+      "end": 37.34
+     },
+     {
+      "word": " what",
+      "start": 37.34,
+      "end": 37.34
+     },
+     {
+      "word": " we're",
+      "start": 37.34,
+      "end": 37.34
+     },
+     {
+      "word": " a",
+      "start": 37.34,
+      "end": 37.34
+     },
+     {
+      "word": " king",
+      "start": 37.34,
+      "end": 37.34
+     },
+     {
+      "word": " about.",
+      "start": 37.34,
+      "end": 37.34
+     },
+     {
+      "word": " A",
+      "start": 37.34,
+      "end": 37.34
+     },
+     {
+      "word": " world",
+      "start": 37.34,
+      "end": 37.34
+     },
+     {
+      "word": " of",
+      "start": 37.34,
+      "end": 37.34
+     },
+     {
+      "word": " dolphins.",
+      "start": 37.34,
+      "end": 37.34
+     }
+    ],
+    "word_count": 17
+   }
+  ],
+  "vtt": "WEBVTT\n\n00:00.000 --> 00:00.400\n The\n\n00:00.400 --> 00:00.400\n beating\n\n00:00.400 --> 00:00.900\n of\n\n00:00.900 --> 00:01.160\n a\n\n00:01.160 --> 00:01.820\n star.\n\n00:02.100 --> 00:02.420\n A\n\n00:02.420 --> 00:03.200\n planet's\n\n00:03.200 --> 00:03.740\n transit\n\n00:03.740 --> 00:04.240\n is\n\n00:04.240 --> 00:04.880\n not\n\n00:04.880 --> 00:05.640\n that\n\n00:05.640 --> 00:06.640\n far\n\n00:06.640 --> 00:07.300\n from\n\n00:07.300 --> 00:07.980\n my\n\n00:07.980 --> 00:08.640\n own.\n\n00:09.680 --> 00:10.020\n How\n\n00:10.020 --> 00:10.480\n could\n\n00:10.480 --> 00:10.840\n we\n\n00:10.840 --> 00:11.240\n be\n\n00:11.240 --> 00:12.000\n alone.\n\n00:30.320 --> 00:31.120\n The\n\n00:31.120 --> 00:31.120\n beat\n\n00:31.120 --> 00:31.240\n of\n\n00:31.240 --> 00:31.240\n the\n\n00:31.240 --> 00:31.240\n star.\n\n00:34.380 --> 00:35.180\n A\n\n00:35.180 --> 00:35.660\n planet's\n\n00:35.660 --> 00:35.660\n transit\n\n00:35.660 --> 00:35.680\n is\n\n00:35.680 --> 00:35.680\n not\n\n00:35.680 --> 00:35.680\n that\n\n00:35.680 --> 00:35.680\n far\n\n00:35.680 --> 00:35.680\n from\n\n00:35.680 --> 00:35.680\n my\n\n00:35.680 --> 00:35.680\n own.\n\n00:35.920 --> 00:36.720\n How\n\n00:36.720 --> 00:36.720\n could\n\n00:36.720 --> 00:36.720\n we\n\n00:36.720 --> 00:36.720\n be\n\n00:36.720 --> 00:36.720\n alone.\n\n00:36.720 --> 00:36.760\n Is\n\n00:36.760 --> 00:36.760\n that\n\n00:36.760 --> 00:37.160\n a\n\n00:37.160 --> 00:37.160\n propre\n\n00:37.160 --> 00:37.160\n city?\n\n00:37.160 --> 00:37.340\n The\n\n00:37.340 --> 00:37.340\n classic\n\n00:37.340 --> 00:37.340\n city\n\n00:37.340 --> 00:37.340\n is\n\n00:37.340 --> 00:37.340\n near\n\n00:37.340 --> 00:37.340\n that\n\n00:37.340 --> 00:37.340\n city,\n\n00:37.340 --> 00:37.340\n of\n\n00:37.340 --> 00:37.340\n what\n\n00:37.340 --> 00:37.340\n we're\n\n00:37.340 --> 00:37.340\n a\n\n00:37.340 --> 00:37.340\n king\n\n00:37.340 --> 00:37.340\n about.\n\n00:37.340 --> 00:37.340\n A\n\n00:37.340 --> 00:37.340\n world\n\n00:37.340 --> 00:37.340\n of\n\n00:37.340 --> 00:37.340\n dolphins.\n\n",
+  "usage": {
+   "prompt_tokens": 0,
+   "completion_tokens": 0,
+   "total_tokens": 0,
+   "prompt_tokens_details": {
+    "cached_tokens": 0
+   },
+   "neurons": 29.035094677024
+  }
+ },
+ "success": true,
+ "errors": [],
+ "messages": []
+}

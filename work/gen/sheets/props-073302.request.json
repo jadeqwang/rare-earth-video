@@ -1,0 +1,17 @@
+{
+ "model": "openai/gpt-image-2",
+ "input": {
+  "quality": "high",
+  "size": "1536x1024",
+  "output_format": "png",
+  "images": [
+   "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABgAAAAQACAIAAA...<2835490 chars>",
+   "data:image/jpeg;base64,/9j/4QfsRXhpZgAASUkqAAgAAAADAA4BAgDMA...<622447 chars>",
+   "data:image/jpeg;base64,/9j/4QfsRXhpZgAASUkqAAgAAAADAA4BAgDMA...<320563 chars>"
+  ],
+  "prompt": "Same art style as the first reference sheet: modern anime key-visual, crisp clean line art, flat cel shading, warm rim light, plain light grey background, no text or labels. Prop and pet design sheet. Left half: a fluffy brown tabby cat with green eyes \u2014 sitting front view, side view, loaf pose sleeping, and a head close-up with ears perked up in surprise. Right half: a handheld digital field recorder with crossed X/Y microphones on top, small backlit LCD showing a waveform, red REC LED, play/stop buttons \u2014 front, back, side, three-quarter, and held in a hand with the thumb on PLAY."
+ },
+ "options": {
+  "background": true
+ }
+}

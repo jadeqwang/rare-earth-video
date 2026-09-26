@@ -1,0 +1,15 @@
+{
+ "model": "openai/gpt-image-2",
+ "input": {
+  "quality": "high",
+  "size": "1536x1024",
+  "output_format": "png",
+  "images": [
+   "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABgAAAAQACAIAAA...<2929854 chars>"
+  ],
+  "prompt": "Anime key visual, cinematic widescreen film frame. IMPORTANT framing: the final image will be cropped to 16:9, so keep the top 12% and bottom 12% free of anything important, and leave generous headroom above every head. Modern anime style matching the character sheets: crisp clean line art, flat cel shading, strong rim light, bold simple silhouettes, low background clutter, no text, no logos. Jade in 2026 (grey oversized hoodie, loose messy bun, NO microphone) stands on a flat rooftop at night singing softly with her hands relaxed at her sides. Medium close-up from the chest up, centered in the RIGHT HALF of the frame, facing the viewer, eyes open, space above her head. Deep navy night sky full of stars; distant warm city lights blurred far below. The left half is starry sky."
+ },
+ "options": {
+  "background": true
+ }
+}

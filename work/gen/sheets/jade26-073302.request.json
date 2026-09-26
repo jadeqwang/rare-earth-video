@@ -1,0 +1,17 @@
+{
+ "model": "openai/gpt-image-2",
+ "input": {
+  "quality": "high",
+  "size": "1536x1024",
+  "output_format": "png",
+  "images": [
+   "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABgAAAAQACAIAAA...<2835490 chars>",
+   "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAICA...<212915 chars>",
+   "data:image/jpeg;base64,/9j/4QfsRXhpZgAASUkqAAgAAAADAA4BAgDMA...<622447 chars>"
+  ],
+  "prompt": "Same art style as the first reference sheet: modern anime key-visual, crisp clean line art, flat cel shading, warm rim light, plain light grey background, no text or labels. Character turnaround sheet: JADE in 2026, the SAME woman as in the first sheet, now 43 \u2014 same face, a little older and calmer, faint smile lines, no hat, long black hair tied up in a loose messy bun with loose strands, oversized heather-grey hoodie, dark charcoal joggers, white socks. Full body front, three-quarter, side profile, back view; row of three head close-ups: quiet singing with eyes half closed; wide-eyed wonder looking up; gentle smile wearing black over-ear headphones."
+ },
+ "options": {
+  "background": true
+ }
+}

@@ -1,0 +1,403 @@
+{
+ "result": {
+  "transcription_info": {
+   "language": "en",
+   "language_probability": 1,
+   "duration": 60,
+   "duration_after_vad": 60
+  },
+  "text": "Do you still care. You're yearning to see the life out there. Searching for me. Are you still there. A rare earth looking for a friend. Lived my life on a pale blue dot. Your signal here I think I've caught. The beating blinking of a star. A planet's transit is not that far from my own. How could we be alone. Before they launch or self-destruct.",
+  "word_count": 67,
+  "segments": [
+   {
+    "start": 3.1199999999999983,
+    "end": 22.84,
+    "text": " Do you still care. You're yearning to see the life out there. Searching for me. Are you still there. A rare earth looking for a friend. Lived my life on a pale blue dot.",
+    "temperature": 0,
+    "avg_logprob": -0.13221806482128476,
+    "compression_ratio": 1.3739837398373984,
+    "no_speech_prob": 0,
+    "words": [
+     {
+      "word": " Do",
+      "start": 3.1199999999999983,
+      "end": 3.96
+     },
+     {
+      "word": " you",
+      "start": 3.96,
+      "end": 4.28
+     },
+     {
+      "word": " still",
+      "start": 4.28,
+      "end": 4.78
+     },
+     {
+      "word": " care.",
+      "start": 4.78,
+      "end": 5.42
+     },
+     {
+      "word": " You're",
+      "start": 5.92,
+      "end": 6
+     },
+     {
+      "word": " yearning",
+      "start": 6,
+      "end": 6.42
+     },
+     {
+      "word": " to",
+      "start": 6.42,
+      "end": 6.7
+     },
+     {
+      "word": " see",
+      "start": 6.7,
+      "end": 7.2
+     },
+     {
+      "word": " the",
+      "start": 7.2,
+      "end": 7.66
+     },
+     {
+      "word": " life",
+      "start": 7.66,
+      "end": 8.18
+     },
+     {
+      "word": " out",
+      "start": 8.18,
+      "end": 8.58
+     },
+     {
+      "word": " there.",
+      "start": 8.58,
+      "end": 9.16
+     },
+     {
+      "word": " Searching",
+      "start": 9.54,
+      "end": 10.34
+     },
+     {
+      "word": " for",
+      "start": 10.34,
+      "end": 10.52
+     },
+     {
+      "word": " me.",
+      "start": 10.52,
+      "end": 11.14
+     },
+     {
+      "word": " Are",
+      "start": 11.72,
+      "end": 11.82
+     },
+     {
+      "word": " you",
+      "start": 11.82,
+      "end": 12.06
+     },
+     {
+      "word": " still",
+      "start": 12.06,
+      "end": 12.62
+     },
+     {
+      "word": " there.",
+      "start": 12.62,
+      "end": 13.22
+     },
+     {
+      "word": " A",
+      "start": 13.48,
+      "end": 13.78
+     },
+     {
+      "word": " rare",
+      "start": 13.78,
+      "end": 14.14
+     },
+     {
+      "word": " earth",
+      "start": 14.14,
+      "end": 14.7
+     },
+     {
+      "word": " looking",
+      "start": 14.7,
+      "end": 15.06
+     },
+     {
+      "word": " for",
+      "start": 15.06,
+      "end": 15.44
+     },
+     {
+      "word": " a",
+      "start": 15.44,
+      "end": 15.68
+     },
+     {
+      "word": " friend.",
+      "start": 15.68,
+      "end": 16.2
+     },
+     {
+      "word": " Lived",
+      "start": 19.3,
+      "end": 19.96
+     },
+     {
+      "word": " my",
+      "start": 19.96,
+      "end": 20.38
+     },
+     {
+      "word": " life",
+      "start": 20.38,
+      "end": 20.98
+     },
+     {
+      "word": " on",
+      "start": 20.98,
+      "end": 21.28
+     },
+     {
+      "word": " a",
+      "start": 21.28,
+      "end": 21.44
+     },
+     {
+      "word": " pale",
+      "start": 21.44,
+      "end": 21.86
+     },
+     {
+      "word": " blue",
+      "start": 21.86,
+      "end": 22.28
+     },
+     {
+      "word": " dot.",
+      "start": 22.28,
+      "end": 22.84
+     }
+    ],
+    "word_count": 34
+   },
+   {
+    "start": 22.84,
+    "end": 41.12,
+    "text": " Your signal here I think I've caught. The beating blinking of a star. A planet's transit is not that far from my own. How could we be alone.",
+    "temperature": 0,
+    "avg_logprob": -0.13703547941671834,
+    "compression_ratio": 1.206896551724138,
+    "no_speech_prob": 0,
+    "words": [
+     {
+      "word": " Your",
+      "start": 22.84,
+      "end": 23.38
+     },
+     {
+      "word": " signal",
+      "start": 23.38,
+      "end": 23.84
+     },
+     {
+      "word": " here",
+      "start": 23.84,
+      "end": 24.48
+     },
+     {
+      "word": " I",
+      "start": 24.48,
+      "end": 24.9
+     },
+     {
+      "word": " think",
+      "start": 24.9,
+      "end": 25.64
+     },
+     {
+      "word": " I've",
+      "start": 25.64,
+      "end": 26.2
+     },
+     {
+      "word": " caught.",
+      "start": 26.2,
+      "end": 26.62
+     },
+     {
+      "word": " The",
+      "start": 26.9,
+      "end": 27.22
+     },
+     {
+      "word": " beating",
+      "start": 27.22,
+      "end": 27.72
+     },
+     {
+      "word": " blinking",
+      "start": 27.72,
+      "end": 28.5
+     },
+     {
+      "word": " of",
+      "start": 28.5,
+      "end": 29.46
+     },
+     {
+      "word": " a",
+      "start": 29.46,
+      "end": 29.7
+     },
+     {
+      "word": " star.",
+      "start": 29.7,
+      "end": 30.44
+     },
+     {
+      "word": " A",
+      "start": 30.74,
+      "end": 30.98
+     },
+     {
+      "word": " planet's",
+      "start": 30.98,
+      "end": 31.74
+     },
+     {
+      "word": " transit",
+      "start": 31.74,
+      "end": 32.34
+     },
+     {
+      "word": " is",
+      "start": 32.34,
+      "end": 32.84
+     },
+     {
+      "word": " not",
+      "start": 32.84,
+      "end": 33.54
+     },
+     {
+      "word": " that",
+      "start": 33.54,
+      "end": 34.24
+     },
+     {
+      "word": " far",
+      "start": 34.24,
+      "end": 35.32
+     },
+     {
+      "word": " from",
+      "start": 35.32,
+      "end": 35.92
+     },
+     {
+      "word": " my",
+      "start": 35.92,
+      "end": 36.6
+     },
+     {
+      "word": " own.",
+      "start": 36.6,
+      "end": 37.18
+     },
+     {
+      "word": " How",
+      "start": 38.02,
+      "end": 38.66
+     },
+     {
+      "word": " could",
+      "start": 38.66,
+      "end": 39.1
+     },
+     {
+      "word": " we",
+      "start": 39.1,
+      "end": 39.48
+     },
+     {
+      "word": " be",
+      "start": 39.48,
+      "end": 39.9
+     },
+     {
+      "word": " alone.",
+      "start": 39.9,
+      "end": 41.12
+     }
+    ],
+    "word_count": 28
+   },
+   {
+    "start": 57.34,
+    "end": 59.98,
+    "text": " Before they launch or self-destruct.",
+    "temperature": 0,
+    "avg_logprob": -0.2700195213158925,
+    "compression_ratio": 0.8181818181818182,
+    "no_speech_prob": 0,
+    "words": [
+     {
+      "word": " Before",
+      "start": 57.34,
+      "end": 58.18
+     },
+     {
+      "word": " they",
+      "start": 58.18,
+      "end": 58.66
+     },
+     {
+      "word": " launch",
+      "start": 58.66,
+      "end": 59.26
+     },
+     {
+      "word": " or",
+      "start": 59.26,
+      "end": 59.54
+     },
+     {
+      "word": " self",
+      "start": 59.54,
+      "end": 59.9
+     },
+     {
+      "word": "-destruct.",
+      "start": 59.9,
+      "end": 59.98
+     }
+    ],
+    "word_count": 5
+   }
+  ],
+  "vtt": "WEBVTT\n\n00:03.120 --> 00:03.960\n Do\n\n00:03.960 --> 00:04.280\n you\n\n00:04.280 --> 00:04.780\n still\n\n00:04.780 --> 00:05.420\n care.\n\n00:05.920 --> 00:06.000\n You're\n\n00:06.000 --> 00:06.420\n yearning\n\n00:06.420 --> 00:06.700\n to\n\n00:06.700 --> 00:07.200\n see\n\n00:07.200 --> 00:07.660\n the\n\n00:07.660 --> 00:08.180\n life\n\n00:08.180 --> 00:08.580\n out\n\n00:08.580 --> 00:09.160\n there.\n\n00:09.540 --> 00:10.340\n Searching\n\n00:10.340 --> 00:10.520\n for\n\n00:10.520 --> 00:11.140\n me.\n\n00:11.720 --> 00:11.820\n Are\n\n00:11.820 --> 00:12.060\n you\n\n00:12.060 --> 00:12.620\n still\n\n00:12.620 --> 00:13.220\n there.\n\n00:13.480 --> 00:13.780\n A\n\n00:13.780 --> 00:14.140\n rare\n\n00:14.140 --> 00:14.700\n earth\n\n00:14.700 --> 00:15.060\n looking\n\n00:15.060 --> 00:15.440\n for\n\n00:15.440 --> 00:15.680\n a\n\n00:15.680 --> 00:16.200\n friend.\n\n00:19.300 --> 00:19.960\n Lived\n\n00:19.960 --> 00:20.380\n my\n\n00:20.380 --> 00:20.980\n life\n\n00:20.980 --> 00:21.280\n on\n\n00:21.280 --> 00:21.440\n a\n\n00:21.440 --> 00:21.860\n pale\n\n00:21.860 --> 00:22.280\n blue\n\n00:22.280 --> 00:22.840\n dot.\n\n00:22.840 --> 00:23.380\n Your\n\n00:23.380 --> 00:23.840\n signal\n\n00:23.840 --> 00:24.480\n here\n\n00:24.480 --> 00:24.900\n I\n\n00:24.900 --> 00:25.640\n think\n\n00:25.640 --> 00:26.200\n I've\n\n00:26.200 --> 00:26.620\n caught.\n\n00:26.900 --> 00:27.220\n The\n\n00:27.220 --> 00:27.720\n beating\n\n00:27.720 --> 00:28.500\n blinking\n\n00:28.500 --> 00:29.460\n of\n\n00:29.460 --> 00:29.700\n a\n\n00:29.700 --> 00:30.440\n star.\n\n00:30.740 --> 00:30.980\n A\n\n00:30.980 --> 00:31.740\n planet's\n\n00:31.740 --> 00:32.340\n transit\n\n00:32.340 --> 00:32.840\n is\n\n00:32.840 --> 00:33.540\n not\n\n00:33.540 --> 00:34.240\n that\n\n00:34.240 --> 00:35.320\n far\n\n00:35.320 --> 00:35.920\n from\n\n00:35.920 --> 00:36.600\n my\n\n00:36.600 --> 00:37.180\n own.\n\n00:38.020 --> 00:38.660\n How\n\n00:38.660 --> 00:39.100\n could\n\n00:39.100 --> 00:39.480\n we\n\n00:39.480 --> 00:39.900\n be\n\n00:39.900 --> 00:41.120\n alone.\n\n00:57.340 --> 00:58.180\n Before\n\n00:58.180 --> 00:58.660\n they\n\n00:58.660 --> 00:59.260\n launch\n\n00:59.260 --> 00:59.540\n or\n\n00:59.540 --> 00:59.900\n self\n\n00:59.900 --> 00:59.980\n-destruct.\n\n",
+  "usage": {
+   "prompt_tokens": 0,
+   "completion_tokens": 0,
+   "total_tokens": 0,
+   "prompt_tokens_details": {
+    "cached_tokens": 0
+   },
+   "neurons": 46.630237703999995
+  }
+ },
+ "success": true,
+ "errors": [],
+ "messages": []
+}

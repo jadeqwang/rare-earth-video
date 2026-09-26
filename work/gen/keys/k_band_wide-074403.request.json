@@ -1,0 +1,17 @@
+{
+ "model": "openai/gpt-image-2",
+ "input": {
+  "quality": "high",
+  "size": "1536x1024",
+  "output_format": "png",
+  "images": [
+   "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABgAAAAQACAIAAA...<2835490 chars>",
+   "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABgAAAAQACAIAAA...<2960974 chars>",
+   "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABgAAAAQACAIAAA...<2894278 chars>"
+  ],
+  "prompt": "Anime key visual, cinematic widescreen film frame. IMPORTANT framing: the final image will be cropped to 16:9, so keep the top 12% and bottom 12% free of anything important, and leave generous headroom above every head. Modern anime style matching the character sheets: crisp clean line art, flat cel shading, strong rim light, bold simple silhouettes, low background clutter, no text, no logos. The whole indie band performs on a small club stage at night, wide shot: Jade in 2011 center singing into a handheld mic (bucket hat, white shirt, red skirt), Charlie on the left with acoustic guitar (flat cap), Ricky on the right with electric guitar (striped shirt). Magenta, violet and mint-green spotlights, thick haze, the upper third is empty haze with light beams. Energetic, mid-song."
+ },
+ "options": {
+  "background": true
+ }
+}

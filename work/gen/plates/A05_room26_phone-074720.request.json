@@ -1,0 +1,16 @@
+{
+ "model": "bytedance/seedance-2.5",
+ "input": {
+  "image": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAIBA...<270351 chars>",
+  "duration": 4,
+  "resolution": "720p",
+  "generate_audio": true,
+  "reference_images": [
+   "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABgAAAAQACAIAAA...<2929854 chars>"
+  ],
+  "prompt": "@Image1 is the first frame; the other images are character reference sheets. She scrolls her phone; its cold light flickers across her face as bad news scrolls by; she lowers her eyes and exhales. Static camera. Anime style, keep every character exactly on-model with the reference sheets; clean line art; no text."
+ },
+ "options": {
+  "background": true
+ }
+}

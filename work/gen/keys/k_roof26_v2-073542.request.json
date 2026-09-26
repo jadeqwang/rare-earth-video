@@ -1,0 +1,15 @@
+{
+ "model": "openai/gpt-image-2",
+ "input": {
+  "quality": "high",
+  "size": "1536x1024",
+  "output_format": "png",
+  "images": [
+   "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABgAAAAQACAIAAA...<2929854 chars>"
+  ],
+  "prompt": "Anime key visual, cinematic 16:9 film frame (keep all important content inside the central 16:9 band, top and bottom 8% can be empty). Modern anime style matching the character sheet: crisp clean line art, flat cel shading, strong rim light, bold simple silhouettes, low background clutter, no text, no logos. Jade in 2026 (grey oversized hoodie, loose messy bun) on a flat city rooftop at night, medium shot from the waist up, standing in the RIGHT third, looking up at the sky, singing softly, one hand raised near her face with thumb and index finger almost touching as if holding a tiny star. Vast starry night sky fills the LEFT two thirds, city glow far below."
+ },
+ "options": {
+  "background": true
+ }
+}

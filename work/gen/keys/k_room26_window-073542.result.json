@@ -1,0 +1,31 @@
+{
+ "state": "done",
+ "via": "webhook",
+ "payload": {
+  "id": "8b0760b16c2034695d25d1bce916cdffdbb846860d099787f23517550d2c97ad",
+  "state": "Completed",
+  "result": {
+   "image": "https://ai-gateway-outputs.0d37909e38d3e99c29fa2cd343ac421a.r2.cloudflarestorage.com/provider-outputs/8b0760b16c2034695d25d1bce916cdffdbb846860d099787f23517550d2c97ad/5b66652e-9634-453d-b4c5-8d92f8c7f37d?<signed-query-removed>"
+  },
+  "error": null,
+  "keySource": "Unified",
+  "provider": "openai",
+  "model": "openai/gpt-image-2",
+  "usage": {
+   "input_tokens": 180,
+   "input_image_tokens": 3072,
+   "output_tokens": 0,
+   "output_image_tokens": 5488,
+   "total_tokens": 8740
+  }
+ },
+ "t1": 1790408228879,
+ "media": [
+  {
+   "url": "https://ai-gateway-outputs.0d37909e38d3e99c29fa2cd343ac421a.r2.cloudflarestorage.com/provider-outputs/8b0760b16c2034695d25d1bce916cdffdbb846860d099787f23517550d2c97ad/5b66652e-9634-453d-b4c5-8d92f8c7f37d?<signed-query-removed>",
+   "key": "media:k_room26_window-073542:0",
+   "bytes": 2526017,
+   "type": "image/png"
+  }
+ ]
+}

@@ -1,0 +1,12 @@
+{
+  "name": "rare-earth-renderer",
+  "private": true,
+  "description": "Deterministic WebGL2 renderer for the Rare Earth music video (headless capture via Playwright).",
+  "scripts": {
+    "stills": "node render.js stills --shots",
+    "film": "node render.js film --jobs 3 --w 1920 --h 1080 --crf 14 --out ../out/rare-earth-master.mp4"
+  },
+  "dependencies": {
+    "playwright": "^1.56.1"
+  }
+}

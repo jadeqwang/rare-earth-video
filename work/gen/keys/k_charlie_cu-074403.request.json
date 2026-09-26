@@ -1,0 +1,15 @@
+{
+ "model": "openai/gpt-image-2",
+ "input": {
+  "quality": "high",
+  "size": "1536x1024",
+  "output_format": "png",
+  "images": [
+   "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABgAAAAQACAIAAA...<2960974 chars>"
+  ],
+  "prompt": "Anime key visual, cinematic widescreen film frame. IMPORTANT framing: the final image will be cropped to 16:9, so keep the top 12% and bottom 12% free of anything important, and leave generous headroom above every head. Modern anime style matching the character sheets: crisp clean line art, flat cel shading, strong rim light, bold simple silhouettes, low background clutter, no text, no logos. Charlie (grey flat cap, dark curly hair, charcoal tee) playing his acoustic guitar on a small club stage at night, medium close-up from the chest up in the LEFT third, head tilted down focused, strumming; magenta and green spotlights with haze; right side dark haze."
+ },
+ "options": {
+  "background": true
+ }
+}

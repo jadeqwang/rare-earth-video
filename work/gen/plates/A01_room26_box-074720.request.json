@@ -1,0 +1,17 @@
+{
+ "model": "bytedance/seedance-2.5",
+ "input": {
+  "image": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAIBA...<379439 chars>",
+  "duration": 5,
+  "resolution": "720p",
+  "generate_audio": true,
+  "reference_images": [
+   "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABgAAAAQACAIAAA...<2929854 chars>",
+   "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABgAAAAQACAIAAA...<3311846 chars>"
+  ],
+  "prompt": "@Image1 is the first frame; the other images are character reference sheets. She lifts the old recorder out of the box, turns it over in her hands and brushes dust off the screen, eyes widening in recognition. Warm lamp light, dust motes. Static camera. Anime style, keep every character exactly on-model with the reference sheets; clean line art; no text."
+ },
+ "options": {
+  "background": true
+ }
+}

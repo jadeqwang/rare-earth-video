@@ -1,0 +1,31 @@
+{
+ "state": "done",
+ "via": "webhook",
+ "payload": {
+  "id": "dbced133bd4b5f5b0c27894f6ccf2c45764af942d87a1abab53e65d9e14c7602",
+  "state": "Completed",
+  "result": {
+   "image": "https://ai-gateway-outputs.0d37909e38d3e99c29fa2cd343ac421a.r2.cloudflarestorage.com/provider-outputs/dbced133bd4b5f5b0c27894f6ccf2c45764af942d87a1abab53e65d9e14c7602/1a33d90c-5d9e-4ccd-a3bc-ac5bd02ca8e8?<signed-query-removed>"
+  },
+  "error": null,
+  "keySource": "Unified",
+  "provider": "openai",
+  "model": "openai/gpt-image-2",
+  "usage": {
+   "input_tokens": 158,
+   "input_image_tokens": 1536,
+   "output_tokens": 0,
+   "output_image_tokens": 5488,
+   "total_tokens": 7182
+  }
+ },
+ "t1": 1790408226654,
+ "media": [
+  {
+   "url": "https://ai-gateway-outputs.0d37909e38d3e99c29fa2cd343ac421a.r2.cloudflarestorage.com/provider-outputs/dbced133bd4b5f5b0c27894f6ccf2c45764af942d87a1abab53e65d9e14c7602/1a33d90c-5d9e-4ccd-a3bc-ac5bd02ca8e8?<signed-query-removed>",
+   "key": "media:k_roof26_v4-073542:0",
+   "bytes": 2233484,
+   "type": "image/png"
+  }
+ ]
+}

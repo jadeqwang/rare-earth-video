@@ -1,0 +1,18 @@
+{
+ "model": "openai/gpt-image-2",
+ "input": {
+  "quality": "high",
+  "size": "1536x1024",
+  "output_format": "png",
+  "images": [
+   "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABgAAAAQACAIAAA...<2835490 chars>",
+   "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAICA...<156863 chars>",
+   "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAICA...<126087 chars>",
+   "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAIBA...<285779 chars>"
+  ],
+  "prompt": "Same art style as the first reference sheet: modern anime key-visual, crisp clean line art, flat cel shading, warm rim light, plain light grey background, no text or labels. Character turnaround sheet: CHARLIE, guitarist of the same indie band in 2011, a lean man around 30 matching the man with the flat cap in the photos: grey wool flat cap, dark curly hair, short stubble, charcoal t-shirt, faded jeans, brown boots, playing a worn acoustic guitar with a leather strap. Front, three-quarter, side, back; row of three head close-ups: focused playing, laughing, looking up."
+ },
+ "options": {
+  "background": true
+ }
+}

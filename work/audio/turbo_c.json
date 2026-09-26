@@ -1,0 +1,206 @@
+{
+ "result": {
+  "transcription_info": {
+   "language": "en",
+   "language_probability": 1,
+   "duration": 45,
+   "duration_after_vad": 45
+  },
+  "text": "Live my life on a pale blue dot. Your signal here I think I've caught. The beating blinking of a star. A planet's transit is not that far from my own.",
+  "word_count": 31,
+  "segments": [
+   {
+    "start": 25.639999999999997,
+    "end": 29.36,
+    "text": " Live my life on a pale blue dot.",
+    "temperature": 0,
+    "avg_logprob": -0.2895132119839008,
+    "compression_ratio": 0.8,
+    "no_speech_prob": 0,
+    "words": [
+     {
+      "word": " Live",
+      "start": 25.639999999999997,
+      "end": 26.48
+     },
+     {
+      "word": " my",
+      "start": 26.48,
+      "end": 26.94
+     },
+     {
+      "word": " life",
+      "start": 26.94,
+      "end": 27.56
+     },
+     {
+      "word": " on",
+      "start": 27.56,
+      "end": 27.84
+     },
+     {
+      "word": " a",
+      "start": 27.84,
+      "end": 28
+     },
+     {
+      "word": " pale",
+      "start": 28,
+      "end": 28.42
+     },
+     {
+      "word": " blue",
+      "start": 28.42,
+      "end": 28.84
+     },
+     {
+      "word": " dot.",
+      "start": 28.84,
+      "end": 29.36
+     }
+    ],
+    "word_count": 8
+   },
+   {
+    "start": 29.36,
+    "end": 43.98,
+    "text": " Your signal here I think I've caught. The beating blinking of a star. A planet's transit is not that far from my own.",
+    "temperature": 0,
+    "avg_logprob": -0.08102318211909264,
+    "compression_ratio": 1.1359223300970873,
+    "no_speech_prob": 0,
+    "words": [
+     {
+      "word": " Your",
+      "start": 29.36,
+      "end": 29.9
+     },
+     {
+      "word": " signal",
+      "start": 29.9,
+      "end": 30.36
+     },
+     {
+      "word": " here",
+      "start": 30.36,
+      "end": 31.02
+     },
+     {
+      "word": " I",
+      "start": 31.02,
+      "end": 31.4
+     },
+     {
+      "word": " think",
+      "start": 31.4,
+      "end": 31.9
+     },
+     {
+      "word": " I've",
+      "start": 31.9,
+      "end": 32.72
+     },
+     {
+      "word": " caught.",
+      "start": 32.72,
+      "end": 33.16
+     },
+     {
+      "word": " The",
+      "start": 33.36,
+      "end": 33.64
+     },
+     {
+      "word": " beating",
+      "start": 33.64,
+      "end": 34.2
+     },
+     {
+      "word": " blinking",
+      "start": 34.2,
+      "end": 34.94
+     },
+     {
+      "word": " of",
+      "start": 34.94,
+      "end": 35.9
+     },
+     {
+      "word": " a",
+      "start": 35.9,
+      "end": 36.12
+     },
+     {
+      "word": " star.",
+      "start": 36.12,
+      "end": 36.76
+     },
+     {
+      "word": " A",
+      "start": 37.14,
+      "end": 37.42
+     },
+     {
+      "word": " planet's",
+      "start": 37.42,
+      "end": 38.18
+     },
+     {
+      "word": " transit",
+      "start": 38.18,
+      "end": 38.74
+     },
+     {
+      "word": " is",
+      "start": 38.74,
+      "end": 39.24
+     },
+     {
+      "word": " not",
+      "start": 39.24,
+      "end": 39.86
+     },
+     {
+      "word": " that",
+      "start": 39.86,
+      "end": 40.6
+     },
+     {
+      "word": " far",
+      "start": 40.6,
+      "end": 41.64
+     },
+     {
+      "word": " from",
+      "start": 41.64,
+      "end": 42.3
+     },
+     {
+      "word": " my",
+      "start": 42.3,
+      "end": 43
+     },
+     {
+      "word": " own.",
+      "start": 43,
+      "end": 43.98
+     }
+    ],
+    "word_count": 23
+   }
+  ],
+  "vtt": "WEBVTT\n\n00:25.640 --> 00:26.480\n Live\n\n00:26.480 --> 00:26.940\n my\n\n00:26.940 --> 00:27.560\n life\n\n00:27.560 --> 00:27.840\n on\n\n00:27.840 --> 00:28.000\n a\n\n00:28.000 --> 00:28.420\n pale\n\n00:28.420 --> 00:28.840\n blue\n\n00:28.840 --> 00:29.360\n dot.\n\n00:29.360 --> 00:29.900\n Your\n\n00:29.900 --> 00:30.360\n signal\n\n00:30.360 --> 00:31.020\n here\n\n00:31.020 --> 00:31.400\n I\n\n00:31.400 --> 00:31.900\n think\n\n00:31.900 --> 00:32.720\n I've\n\n00:32.720 --> 00:33.160\n caught.\n\n00:33.360 --> 00:33.640\n The\n\n00:33.640 --> 00:34.200\n beating\n\n00:34.200 --> 00:34.940\n blinking\n\n00:34.940 --> 00:35.900\n of\n\n00:35.900 --> 00:36.120\n a\n\n00:36.120 --> 00:36.760\n star.\n\n00:37.140 --> 00:37.420\n A\n\n00:37.420 --> 00:38.180\n planet's\n\n00:38.180 --> 00:38.740\n transit\n\n00:38.740 --> 00:39.240\n is\n\n00:39.240 --> 00:39.860\n not\n\n00:39.860 --> 00:40.600\n that\n\n00:40.600 --> 00:41.640\n far\n\n00:41.640 --> 00:42.300\n from\n\n00:42.300 --> 00:43.000\n my\n\n00:43.000 --> 00:43.980\n own.\n\n",
+  "usage": {
+   "prompt_tokens": 0,
+   "completion_tokens": 0,
+   "total_tokens": 0,
+   "prompt_tokens_details": {
+    "cached_tokens": 0
+   },
+   "neurons": 34.972678278
+  }
+ },
+ "success": true,
+ "errors": [],
+ "messages": []
+}

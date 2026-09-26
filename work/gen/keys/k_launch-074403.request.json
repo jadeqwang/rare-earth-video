@@ -1,0 +1,13 @@
+{
+ "model": "openai/gpt-image-2",
+ "input": {
+  "quality": "high",
+  "size": "1536x1024",
+  "output_format": "png",
+  "images": [],
+  "prompt": "Anime key visual, cinematic widescreen film frame. IMPORTANT framing: the final image will be cropped to 16:9, so keep the top 12% and bottom 12% free of anything important, and leave generous headroom above every head. Modern anime style matching the character sheets: crisp clean line art, flat cel shading, strong rim light, bold simple silhouettes, low background clutter, no text, no logos. Night rocket launch seen from several kilometers away across dark marsh water: a tall white rocket just lifting off its pad on a brilliant column of fire, the exhaust plume lighting the clouds orange, reflection in the water. Rocket in the RIGHT third, left side is dark sky. No text or logos."
+ },
+ "options": {
+  "background": true
+ }
+}

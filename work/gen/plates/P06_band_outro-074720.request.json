@@ -1,0 +1,21 @@
+{
+ "model": "bytedance/seedance-2.5",
+ "input": {
+  "image": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAIBA...<496979 chars>",
+  "duration": 16,
+  "resolution": "720p",
+  "generate_audio": true,
+  "reference_images": [
+   "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABgAAAAQACAIAAA...<2835490 chars>",
+   "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABgAAAAQACAIAAA...<2960974 chars>",
+   "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABgAAAAQACAIAAA...<2894278 chars>"
+  ],
+  "reference_audios": [
+   "data:audio/mpeg;base64,SUQzBAAAAAAIEVRJVDIAAAAPAAADUGFsZSBCb...<515515 chars>"
+  ],
+  "prompt": "@Image1 is the first frame; the other images are character reference sheets. @Audio1 is the music. The band plays the big final chorus with huge energy exactly on the beat: at the first beat everyone jumps, Jade sings into the mic, Charlie strums hard, Ricky headbangs lightly, hair and skirt flying; spotlights strobe and sweep on every downbeat through thick haze. Handheld camera slowly circling. Anime style, keep every character exactly on-model with the reference sheets; clean line art; no text."
+ },
+ "options": {
+  "background": true
+ }
+}

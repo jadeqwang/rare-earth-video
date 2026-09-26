@@ -1,0 +1,13 @@
+{
+ "model": "openai/gpt-image-2",
+ "input": {
+  "quality": "high",
+  "size": "1536x1024",
+  "output_format": "png",
+  "images": [],
+  "prompt": "Anime key visual, cinematic widescreen film frame. IMPORTANT framing: the final image will be cropped to 16:9, so keep the top 12% and bottom 12% free of anything important, and leave generous headroom above every head. Modern anime style matching the character sheets: crisp clean line art, flat cel shading, strong rim light, bold simple silhouettes, low background clutter, no text, no logos. An alien world at eternal twilight: a vast plain on the terminator of a tidally locked planet, a huge dim red sun half-sunk on the horizon, and a colossal array of elegant non-human radio dishes (smooth ceramic-white bowls on tall slender tripods, arranged in a great spiral) all pointing at the dark sky. Sky gradient from crimson at the horizon to violet to black with stars. Long red shadows. No creatures, no people. Wide epic shot, horizon at the lower third."
+ },
+ "options": {
+  "background": true
+ }
+}

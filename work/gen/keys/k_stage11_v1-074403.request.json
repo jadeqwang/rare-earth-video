@@ -1,0 +1,16 @@
+{
+ "model": "openai/gpt-image-2",
+ "input": {
+  "quality": "high",
+  "size": "1536x1024",
+  "output_format": "png",
+  "images": [
+   "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABgAAAAQACAIAAA...<2835490 chars>",
+   "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAICA...<120059 chars>"
+  ],
+  "prompt": "Anime key visual, cinematic widescreen film frame. IMPORTANT framing: the final image will be cropped to 16:9, so keep the top 12% and bottom 12% free of anything important, and leave generous headroom above every head. Modern anime style matching the character sheets: crisp clean line art, flat cel shading, strong rim light, bold simple silhouettes, low background clutter, no text, no logos. Jade (2011: black bucket hat, white linen shirt, cream camisole, silver necklace, rust-red tiered skirt) sings on a small club stage at night. Medium shot from the hips up, standing in the RIGHT third, three-quarter view facing slightly left, eyes closed, black handheld microphone at her lips, the whole hat visible with space above it. Magenta and mint-green spotlights cut through thick haze behind her; the LEFT half is dark hazy empty space with faint light beams."
+ },
+ "options": {
+  "background": true
+ }
+}

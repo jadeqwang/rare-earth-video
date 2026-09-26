@@ -1,0 +1,306 @@
+{
+ "result": {
+  "transcription_info": {
+   "language": "en",
+   "language_probability": 1,
+   "duration": 60,
+   "duration_after_vad": 60
+  },
+  "text": "Weapons, wars, and now we're... Keep on looking, keep the faith. Keep up funding, our planet waits for your transmission. Our science has a vision. Do you still care. You're yearning to see the life out there. Searching for me. Are you still there. A rare earth looking for a friend.",
+  "word_count": 51,
+  "segments": [
+   {
+    "start": 10.859999999999998,
+    "end": 29.82,
+    "text": " Weapons, wars, and now we're... Keep on looking, keep the faith. Keep up funding, our planet waits for your transmission. Our science has a vision.",
+    "temperature": 0,
+    "avg_logprob": -0.13414885260556875,
+    "compression_ratio": 1.2672413793103448,
+    "no_speech_prob": 0,
+    "words": [
+     {
+      "word": " Weapons,",
+      "start": 10.859999999999998,
+      "end": 11.819999999999999
+     },
+     {
+      "word": " wars,",
+      "start": 11.819999999999999,
+      "end": 12.78
+     },
+     {
+      "word": " and",
+      "start": 13.1,
+      "end": 13.3
+     },
+     {
+      "word": " now",
+      "start": 13.3,
+      "end": 14.02
+     },
+     {
+      "word": " we're...",
+      "start": 14.02,
+      "end": 14.76
+     },
+     {
+      "word": " Keep",
+      "start": 14.76,
+      "end": 15.66
+     },
+     {
+      "word": " on",
+      "start": 15.66,
+      "end": 16.1
+     },
+     {
+      "word": " looking,",
+      "start": 16.1,
+      "end": 16.84
+     },
+     {
+      "word": " keep",
+      "start": 17.26,
+      "end": 17.52
+     },
+     {
+      "word": " the",
+      "start": 17.52,
+      "end": 17.86
+     },
+     {
+      "word": " faith.",
+      "start": 17.86,
+      "end": 18.72
+     },
+     {
+      "word": " Keep",
+      "start": 19.02,
+      "end": 19.48
+     },
+     {
+      "word": " up",
+      "start": 19.48,
+      "end": 19.8
+     },
+     {
+      "word": " funding,",
+      "start": 19.8,
+      "end": 20.54
+     },
+     {
+      "word": " our",
+      "start": 20.98,
+      "end": 21.02
+     },
+     {
+      "word": " planet",
+      "start": 21.02,
+      "end": 22.24
+     },
+     {
+      "word": " waits",
+      "start": 22.24,
+      "end": 23.4
+     },
+     {
+      "word": " for",
+      "start": 23.4,
+      "end": 23.74
+     },
+     {
+      "word": " your",
+      "start": 23.74,
+      "end": 24.06
+     },
+     {
+      "word": " transmission.",
+      "start": 24.06,
+      "end": 25.22
+     },
+     {
+      "word": " Our",
+      "start": 26.24,
+      "end": 26.74
+     },
+     {
+      "word": " science",
+      "start": 26.74,
+      "end": 27.52
+     },
+     {
+      "word": " has",
+      "start": 27.52,
+      "end": 28.18
+     },
+     {
+      "word": " a",
+      "start": 28.18,
+      "end": 28.52
+     },
+     {
+      "word": " vision.",
+      "start": 28.52,
+      "end": 29.82
+     }
+    ],
+    "word_count": 25
+   },
+   {
+    "start": 30,
+    "end": 42.54,
+    "text": " Do you still care. You're yearning to see the life out there. Searching for me. Are you still there. A rare earth looking for a friend.",
+    "temperature": 0,
+    "avg_logprob": -0.07606630228661201,
+    "compression_ratio": 1.3235294117647058,
+    "no_speech_prob": 0,
+    "words": [
+     {
+      "word": " Do",
+      "start": 30,
+      "end": 30.58
+     },
+     {
+      "word": " you",
+      "start": 30.58,
+      "end": 30.82
+     },
+     {
+      "word": " still",
+      "start": 30.82,
+      "end": 31.4
+     },
+     {
+      "word": " care.",
+      "start": 31.4,
+      "end": 31.94
+     },
+     {
+      "word": " You're",
+      "start": 32.46,
+      "end": 32.52
+     },
+     {
+      "word": " yearning",
+      "start": 32.52,
+      "end": 32.98
+     },
+     {
+      "word": " to",
+      "start": 32.98,
+      "end": 33.22
+     },
+     {
+      "word": " see",
+      "start": 33.22,
+      "end": 33.7
+     },
+     {
+      "word": " the",
+      "start": 33.7,
+      "end": 34.14
+     },
+     {
+      "word": " life",
+      "start": 34.14,
+      "end": 34.56
+     },
+     {
+      "word": " out",
+      "start": 34.56,
+      "end": 35.02
+     },
+     {
+      "word": " there.",
+      "start": 35.02,
+      "end": 35.72
+     },
+     {
+      "word": " Searching",
+      "start": 36.02,
+      "end": 36.76
+     },
+     {
+      "word": " for",
+      "start": 36.76,
+      "end": 36.96
+     },
+     {
+      "word": " me.",
+      "start": 36.96,
+      "end": 37.52
+     },
+     {
+      "word": " Are",
+      "start": 38.04,
+      "end": 38.22
+     },
+     {
+      "word": " you",
+      "start": 38.22,
+      "end": 38.46
+     },
+     {
+      "word": " still",
+      "start": 38.46,
+      "end": 39
+     },
+     {
+      "word": " there.",
+      "start": 39,
+      "end": 39.58
+     },
+     {
+      "word": " A",
+      "start": 39.98,
+      "end": 40.12
+     },
+     {
+      "word": " rare",
+      "start": 40.12,
+      "end": 40.48
+     },
+     {
+      "word": " earth",
+      "start": 40.48,
+      "end": 41.02
+     },
+     {
+      "word": " looking",
+      "start": 41.02,
+      "end": 41.38
+     },
+     {
+      "word": " for",
+      "start": 41.38,
+      "end": 41.84
+     },
+     {
+      "word": " a",
+      "start": 41.84,
+      "end": 42.06
+     },
+     {
+      "word": " friend.",
+      "start": 42.06,
+      "end": 42.54
+     }
+    ],
+    "word_count": 26
+   }
+  ],
+  "vtt": "WEBVTT\n\n00:10.860 --> 00:11.820\n Weapons,\n\n00:11.820 --> 00:12.780\n wars,\n\n00:13.100 --> 00:13.300\n and\n\n00:13.300 --> 00:14.020\n now\n\n00:14.020 --> 00:14.760\n we're...\n\n00:14.760 --> 00:15.660\n Keep\n\n00:15.660 --> 00:16.100\n on\n\n00:16.100 --> 00:16.840\n looking,\n\n00:17.260 --> 00:17.520\n keep\n\n00:17.520 --> 00:17.860\n the\n\n00:17.860 --> 00:18.720\n faith.\n\n00:19.020 --> 00:19.480\n Keep\n\n00:19.480 --> 00:19.800\n up\n\n00:19.800 --> 00:20.540\n funding,\n\n00:20.980 --> 00:21.020\n our\n\n00:21.020 --> 00:22.240\n planet\n\n00:22.240 --> 00:23.400\n waits\n\n00:23.400 --> 00:23.740\n for\n\n00:23.740 --> 00:24.060\n your\n\n00:24.060 --> 00:25.220\n transmission.\n\n00:26.240 --> 00:26.740\n Our\n\n00:26.740 --> 00:27.520\n science\n\n00:27.520 --> 00:28.180\n has\n\n00:28.180 --> 00:28.520\n a\n\n00:28.520 --> 00:29.820\n vision.\n\n00:30.000 --> 00:30.580\n Do\n\n00:30.580 --> 00:30.820\n you\n\n00:30.820 --> 00:31.400\n still\n\n00:31.400 --> 00:31.940\n care.\n\n00:32.460 --> 00:32.520\n You're\n\n00:32.520 --> 00:32.980\n yearning\n\n00:32.980 --> 00:33.220\n to\n\n00:33.220 --> 00:33.700\n see\n\n00:33.700 --> 00:34.140\n the\n\n00:34.140 --> 00:34.560\n life\n\n00:34.560 --> 00:35.020\n out\n\n00:35.020 --> 00:35.720\n there.\n\n00:36.020 --> 00:36.760\n Searching\n\n00:36.760 --> 00:36.960\n for\n\n00:36.960 --> 00:37.520\n me.\n\n00:38.040 --> 00:38.220\n Are\n\n00:38.220 --> 00:38.460\n you\n\n00:38.460 --> 00:39.000\n still\n\n00:39.000 --> 00:39.580\n there.\n\n00:39.980 --> 00:40.120\n A\n\n00:40.120 --> 00:40.480\n rare\n\n00:40.480 --> 00:41.020\n earth\n\n00:41.020 --> 00:41.380\n looking\n\n00:41.380 --> 00:41.840\n for\n\n00:41.840 --> 00:42.060\n a\n\n00:42.060 --> 00:42.540\n friend.\n\n",
+  "usage": {
+   "prompt_tokens": 0,
+   "completion_tokens": 0,
+   "total_tokens": 0,
+   "prompt_tokens_details": {
+    "cached_tokens": 0
+   },
+   "neurons": 46.630237703999995
+  }
+ },
+ "success": true,
+ "errors": [],
+ "messages": []
+}

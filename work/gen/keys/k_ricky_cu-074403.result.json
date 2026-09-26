@@ -1,0 +1,31 @@
+{
+ "state": "done",
+ "via": "webhook",
+ "payload": {
+  "id": "a3b4ef059e51a94676dc63611b676dda818a3a011273522fd3ad92bea4088509",
+  "state": "Completed",
+  "result": {
+   "image": "https://ai-gateway-outputs.0d37909e38d3e99c29fa2cd343ac421a.r2.cloudflarestorage.com/provider-outputs/a3b4ef059e51a94676dc63611b676dda818a3a011273522fd3ad92bea4088509/6de60a09-b94e-4715-b6cd-d1ee3cfc75ef?<signed-query-removed>"
+  },
+  "error": null,
+  "keySource": "Unified",
+  "provider": "openai",
+  "model": "openai/gpt-image-2",
+  "usage": {
+   "input_tokens": 148,
+   "input_image_tokens": 1536,
+   "output_tokens": 0,
+   "output_image_tokens": 5488,
+   "total_tokens": 7172
+  }
+ },
+ "t1": 1790408724215,
+ "media": [
+  {
+   "url": "https://ai-gateway-outputs.0d37909e38d3e99c29fa2cd343ac421a.r2.cloudflarestorage.com/provider-outputs/a3b4ef059e51a94676dc63611b676dda818a3a011273522fd3ad92bea4088509/6de60a09-b94e-4715-b6cd-d1ee3cfc75ef?<signed-query-removed>",
+   "key": "media:k_ricky_cu-074403:0",
+   "bytes": 1781127,
+   "type": "image/png"
+  }
+ ]
+}

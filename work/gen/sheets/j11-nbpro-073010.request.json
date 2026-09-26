@@ -1,0 +1,17 @@
+{
+ "model": "google/nano-banana-pro",
+ "input": {
+  "prompt": "Character design turnaround sheet for an anime music video. Style: modern anime key-visual \u2014 crisp clean line art, flat cel shading with two tones, bold readable silhouettes, subtle warm rim light; NOT 3D, NOT Pixar, NOT watercolor. Character: JADE in 2011, a 28-year-old East Asian indie singer. Match the woman in the reference photos: her face, long straight black hair, black bucket hat, loose white linen shirt with rolled sleeves over a cream top, rust-red tiered ruffled midi skirt, brown strappy sandals, thin silver necklace, holding a black handheld microphone. Layout on a plain light grey background: full body front view, three-quarter view, side profile, back view, and a row of three head close-ups (eyes closed singing with mouth open; soft smile at viewer; looking up in wonder). Consistent proportions, no text, no labels.",
+  "image_input": [
+   "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAICA...<120059 chars>",
+   "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAICA...<183887 chars>",
+   "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAICA...<212915 chars>"
+  ],
+  "aspect_ratio": "16:9",
+  "image_size": "2K",
+  "output_format": "png"
+ },
+ "options": {
+  "background": true
+ }
+}

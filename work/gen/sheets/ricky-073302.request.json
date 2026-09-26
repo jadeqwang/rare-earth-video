@@ -1,0 +1,18 @@
+{
+ "model": "openai/gpt-image-2",
+ "input": {
+  "quality": "high",
+  "size": "1536x1024",
+  "output_format": "png",
+  "images": [
+   "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABgAAAAQACAIAAA...<2835490 chars>",
+   "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAICA...<103539 chars>",
+   "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAICA...<122755 chars>",
+   "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAIBA...<342847 chars>"
+  ],
+  "prompt": "Same art style as the first reference sheet: modern anime key-visual, crisp clean line art, flat cel shading, warm rim light, plain light grey background, no text or labels. Character turnaround sheet: RICKY, electric guitarist of the same indie band in 2011, a slim East Asian man around 30 matching the man in the striped shirt in the photos: short black hair, calm focused face, blue-and-white vertical striped button-up shirt with sleeves rolled, dark jeans, white sneakers, playing a natural-wood Stratocaster-style electric guitar with a navy strap. Front, three-quarter, side, back; row of three head close-ups: concentrating, small smile, looking up."
+ },
+ "options": {
+  "background": true
+ }
+}

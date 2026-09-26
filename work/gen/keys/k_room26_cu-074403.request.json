@@ -1,0 +1,15 @@
+{
+ "model": "openai/gpt-image-2",
+ "input": {
+  "quality": "high",
+  "size": "1536x1024",
+  "output_format": "png",
+  "images": [
+   "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABgAAAAQACAIAAA...<2929854 chars>"
+  ],
+  "prompt": "Anime key visual, cinematic widescreen film frame. IMPORTANT framing: the final image will be cropped to 16:9, so keep the top 12% and bottom 12% free of anything important, and leave generous headroom above every head. Modern anime style matching the character sheets: crisp clean line art, flat cel shading, strong rim light, bold simple silhouettes, low background clutter, no text, no logos. Close-up portrait of Jade in 2026 (grey hoodie, loose messy bun) in a dark room at night, face in the RIGHT third, looking up and slightly left toward an unseen window, eyes glistening and wide with wonder; cool blue starlight on her face, a tiny warm lamp rim light on her hair. Left side is dark soft-focus room."
+ },
+ "options": {
+  "background": true
+ }
+}

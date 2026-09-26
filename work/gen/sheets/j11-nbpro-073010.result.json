@@ -1,0 +1,29 @@
+{
+ "state": "done",
+ "via": "webhook",
+ "payload": {
+  "id": "e88c32df2174c3bca18b3a7014aa5448abfb8fe8bbb55d9bb6622ff2dad0d7bd",
+  "state": "Completed",
+  "result": {
+   "image": "https://ai-gateway-outputs.0d37909e38d3e99c29fa2cd343ac421a.r2.cloudflarestorage.com/provider-outputs/e88c32df2174c3bca18b3a7014aa5448abfb8fe8bbb55d9bb6622ff2dad0d7bd/7c1a0370-6724-41f6-8cd1-53649c1eb360?<signed-query-removed>"
+  },
+  "error": null,
+  "keySource": "Unified",
+  "provider": "google-vertex-ai",
+  "model": "google/nano-banana-pro",
+  "usage": {
+   "input_tokens": 964,
+   "output_tokens": 1373,
+   "total_tokens": 2588
+  }
+ },
+ "t1": 1790407858561,
+ "media": [
+  {
+   "url": "https://ai-gateway-outputs.0d37909e38d3e99c29fa2cd343ac421a.r2.cloudflarestorage.com/provider-outputs/e88c32df2174c3bca18b3a7014aa5448abfb8fe8bbb55d9bb6622ff2dad0d7bd/7c1a0370-6724-41f6-8cd1-53649c1eb360?<signed-query-removed>",
+   "key": "media:j11-nbpro-073010:0",
+   "bytes": 1987419,
+   "type": "image/jpeg"
+  }
+ ]
+}

@@ -1,0 +1,31 @@
+{
+ "state": "done",
+ "via": "webhook",
+ "payload": {
+  "id": "b348241bb2f091f02427a8fa49bf602627d1d86fb91100801527e5e6cfd63189",
+  "state": "Completed",
+  "result": {
+   "video": "https://ark-acg-ap-southeast-1.tos-ap-southeast-1.volces.com/dreamina-seedance-2-5/3003289189/Video/2dayy-55745162906202-tgc_6eaeb423878a0cffff00000000000000000000984900904097120/cgt-20260926154755-yyad2.mp4?<signed-query-removed>"
+  },
+  "error": null,
+  "keySource": "Unified",
+  "provider": "bytedance",
+  "model": "bytedance/seedance-2.5",
+  "usage": {
+   "total_tokens": 130500,
+   "output_video_seconds": 6,
+   "output_video_resolution": "720p",
+   "output_video_audio": true,
+   "input_image_count": 3
+  }
+ },
+ "t1": 1790409257671,
+ "media": [
+  {
+   "url": "https://ark-acg-ap-southeast-1.tos-ap-southeast-1.volces.com/dreamina-seedance-2-5/3003289189/Video/2dayy-55745162906202-tgc_6eaeb423878a0cffff00000000000000000000984900904097120/cgt-20260926154755-yyad2.mp4?<signed-query-removed>",
+   "key": "media:A04_room26_headphones-074720:0",
+   "bytes": 4240099,
+   "type": "video/mp4"
+  }
+ ]
+}

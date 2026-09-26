@@ -1,0 +1,194 @@
+{
+ "result": {
+  "transcription_info": {
+   "language": "en",
+   "language_probability": 1,
+   "duration": 30,
+   "duration_after_vad": 30
+  },
+  "text": "Our science has a vision. Do you still care. You're yearning to see the life out there. Searching for me. Are you still there. A rare earth looking for a friend.",
+  "word_count": 31,
+  "segments": [
+   {
+    "start": 0,
+    "end": 17.48,
+    "text": " Our science has a vision. Do you still care. You're yearning to see the life out there. Searching for me. Are you still there. A rare earth looking for a friend.",
+    "temperature": 0,
+    "avg_logprob": -0.0961119158323421,
+    "compression_ratio": 1.3416666666666666,
+    "no_speech_prob": 0,
+    "words": [
+     {
+      "word": " Our",
+      "start": 0,
+      "end": 1.7
+     },
+     {
+      "word": " science",
+      "start": 1.7,
+      "end": 2.42
+     },
+     {
+      "word": " has",
+      "start": 2.42,
+      "end": 3.12
+     },
+     {
+      "word": " a",
+      "start": 3.12,
+      "end": 3.52
+     },
+     {
+      "word": " vision.",
+      "start": 3.52,
+      "end": 4.78
+     },
+     {
+      "word": " Do",
+      "start": 4.78,
+      "end": 5.6
+     },
+     {
+      "word": " you",
+      "start": 5.6,
+      "end": 5.84
+     },
+     {
+      "word": " still",
+      "start": 5.84,
+      "end": 6.32
+     },
+     {
+      "word": " care.",
+      "start": 6.32,
+      "end": 6.98
+     },
+     {
+      "word": " You're",
+      "start": 7.42,
+      "end": 7.48
+     },
+     {
+      "word": " yearning",
+      "start": 7.48,
+      "end": 8
+     },
+     {
+      "word": " to",
+      "start": 8,
+      "end": 8.22
+     },
+     {
+      "word": " see",
+      "start": 8.22,
+      "end": 8.68
+     },
+     {
+      "word": " the",
+      "start": 8.68,
+      "end": 9.14
+     },
+     {
+      "word": " life",
+      "start": 9.14,
+      "end": 9.6
+     },
+     {
+      "word": " out",
+      "start": 9.6,
+      "end": 10.02
+     },
+     {
+      "word": " there.",
+      "start": 10.02,
+      "end": 10.7
+     },
+     {
+      "word": " Searching",
+      "start": 11.08,
+      "end": 11.74
+     },
+     {
+      "word": " for",
+      "start": 11.74,
+      "end": 11.94
+     },
+     {
+      "word": " me.",
+      "start": 11.94,
+      "end": 12.48
+     },
+     {
+      "word": " Are",
+      "start": 13.12,
+      "end": 13.22
+     },
+     {
+      "word": " you",
+      "start": 13.22,
+      "end": 13.46
+     },
+     {
+      "word": " still",
+      "start": 13.46,
+      "end": 13.92
+     },
+     {
+      "word": " there.",
+      "start": 13.92,
+      "end": 14.56
+     },
+     {
+      "word": " A",
+      "start": 14.82,
+      "end": 15.12
+     },
+     {
+      "word": " rare",
+      "start": 15.12,
+      "end": 15.5
+     },
+     {
+      "word": " earth",
+      "start": 15.5,
+      "end": 16
+     },
+     {
+      "word": " looking",
+      "start": 16,
+      "end": 16.4
+     },
+     {
+      "word": " for",
+      "start": 16.4,
+      "end": 16.82
+     },
+     {
+      "word": " a",
+      "start": 16.82,
+      "end": 17.08
+     },
+     {
+      "word": " friend.",
+      "start": 17.08,
+      "end": 17.48
+     }
+    ],
+    "word_count": 31
+   }
+  ],
+  "vtt": "WEBVTT\n\n00:00.000 --> 00:01.700\n Our\n\n00:01.700 --> 00:02.420\n science\n\n00:02.420 --> 00:03.120\n has\n\n00:03.120 --> 00:03.520\n a\n\n00:03.520 --> 00:04.780\n vision.\n\n00:04.780 --> 00:05.600\n Do\n\n00:05.600 --> 00:05.840\n you\n\n00:05.840 --> 00:06.320\n still\n\n00:06.320 --> 00:06.980\n care.\n\n00:07.420 --> 00:07.480\n You're\n\n00:07.480 --> 00:08.000\n yearning\n\n00:08.000 --> 00:08.220\n to\n\n00:08.220 --> 00:08.680\n see\n\n00:08.680 --> 00:09.140\n the\n\n00:09.140 --> 00:09.600\n life\n\n00:09.600 --> 00:10.020\n out\n\n00:10.020 --> 00:10.700\n there.\n\n00:11.080 --> 00:11.740\n Searching\n\n00:11.740 --> 00:11.940\n for\n\n00:11.940 --> 00:12.480\n me.\n\n00:13.120 --> 00:13.220\n Are\n\n00:13.220 --> 00:13.460\n you\n\n00:13.460 --> 00:13.920\n still\n\n00:13.920 --> 00:14.560\n there.\n\n00:14.820 --> 00:15.120\n A\n\n00:15.120 --> 00:15.500\n rare\n\n00:15.500 --> 00:16.000\n earth\n\n00:16.000 --> 00:16.400\n looking\n\n00:16.400 --> 00:16.820\n for\n\n00:16.820 --> 00:17.080\n a\n\n00:17.080 --> 00:17.480\n friend.\n\n",
+  "usage": {
+   "prompt_tokens": 0,
+   "completion_tokens": 0,
+   "total_tokens": 0,
+   "prompt_tokens_details": {
+    "cached_tokens": 0
+   },
+   "neurons": 23.315118851999998
+  }
+ },
+ "success": true,
+ "errors": [],
+ "messages": []
+}

@@ -1,0 +1,16 @@
+{
+ "model": "openai/gpt-image-2",
+ "input": {
+  "quality": "high",
+  "size": "1536x1024",
+  "output_format": "png",
+  "images": [
+   "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABgAAAAQACAIAAA...<2929854 chars>",
+   "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABgAAAAQACAIAAA...<3311846 chars>"
+  ],
+  "prompt": "Anime key visual, cinematic 16:9 film frame (keep all important content inside the central 16:9 band, top and bottom 8% can be empty). Modern anime style matching the character sheet: crisp clean line art, flat cel shading, strong rim light, bold simple silhouettes, low background clutter, no text, no logos. Jade in 2026 (grey hoodie, loose messy bun) sits on the floor by a large window at night holding the handheld recorder (from the props sheet), thumb on PLAY, looking up out of the window at a sky dense with stars. A fluffy brown tabby cat sits on the windowsill beside her. Seen from inside the room: the window and starry sky fill the LEFT two thirds, Jade and the cat in the RIGHT third, lit by the cool starlight and a warm lamp behind."
+ },
+ "options": {
+  "background": true
+ }
+}

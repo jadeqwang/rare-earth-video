@@ -1,0 +1,21 @@
+import sys, time; sys.path.insert(0,'/home/user/rare-earth-video/pipeline')
+from gen import batch, as_data_uri
+R='/home/user/rare-earth-video/work/refs/'
+J11=as_data_uri(R+'SHEET_jade2011.png'); J26=as_data_uri(R+'SHEET_jade2026.png'); PROPS=as_data_uri(R+'SHEET_props.png')
+REAL=as_data_uri(R+'jade2011_sing.jpg')
+BASE=("Anime key visual, cinematic 16:9 film frame (keep all important content inside the central 16:9 band, top and bottom 8% "
+      "can be empty). Modern anime style matching the character sheet: crisp clean line art, flat cel shading, strong rim light, "
+      "bold simple silhouettes, low background clutter, no text, no logos. ")
+t=time.strftime("%H%M%S")
+def J(id,prompt,refs): return {"id":f"{id}-{t}","model":"openai/gpt-image-2","ext":".png","input":{"quality":"high","size":"1536x1024","output_format":"png","images":refs,"prompt":BASE+prompt}}
+jobs=[
+ J("k_stage11_v1","Jade (2011 look from the sheet: black bucket hat, white linen shirt, rust-red tiered skirt, silver necklace) sings on a small club stage at night. Medium close-up, waist up, she stands in the RIGHT third of the frame in three-quarter view facing slightly left, eyes closed, black handheld microphone at her lips. Magenta and mint-green stage spotlights cut through thick haze behind her. The LEFT half of the frame is dark hazy empty space with faint diagonal light beams.",[J11,REAL]),
+ J("k_stage11_v4","Jade (2011 look from the sheet: black bucket hat, white linen shirt, silver necklace) sings on a small club stage at night. Medium close-up, chest up, centered within the LEFT HALF of the frame, facing the viewer, eyes open and soft, black handheld microphone near her lips. Magenta and violet spotlights with haze behind her. The right half is dark empty haze.",[J11,REAL]),
+ J("k_roof26_v4","Jade in 2026 (from the sheet: grey oversized hoodie, loose messy bun) stands on a flat city rooftop at night singing softly. Medium close-up, chest up, centered within the RIGHT HALF of the frame, facing the viewer, eyes open. Behind her: deep navy night sky full of stars, distant warm city lights far below and blurred. The left half is mostly empty starry sky.",[J26]),
+ J("k_roof26_v2","Jade in 2026 (grey oversized hoodie, loose messy bun) on a flat city rooftop at night, medium shot from the waist up, standing in the RIGHT third, looking up at the sky, singing softly, one hand raised near her face with thumb and index finger almost touching as if holding a tiny star. Vast starry night sky fills the LEFT two thirds, city glow far below.",[J26]),
+ J("k_roof26_v5","Jade in 2026 (grey hoodie, loose messy bun, black over-ear headphones on) sits on the edge of a rooftop before dawn, medium close-up from the chest up in the RIGHT third, profile three-quarter facing left toward the horizon, singing quietly with eyes half closed. Blue-hour sky with a thin warm peach glow on the horizon, a few remaining stars; LEFT half is open sky.",[J26]),
+ J("k_room26_box","Jade in 2026 (grey hoodie, loose messy bun) kneels on a rug in a dim room at night beside an open cardboard moving box, lifting an old handheld digital recorder (from the props sheet) out of the box with both hands and looking at it in surprise. Single warm desk lamp light from the left, deep blue shadows, bookshelves softly out of focus. Subject in the RIGHT half; left side is dark wall and lamp glow.",[J26,PROPS]),
+ J("k_room26_window","Jade in 2026 (grey hoodie, loose messy bun) sits on the floor by a large window at night holding the handheld recorder (from the props sheet), thumb on PLAY, looking up out of the window at a sky dense with stars. A fluffy brown tabby cat sits on the windowsill beside her. Seen from inside the room: the window and starry sky fill the LEFT two thirds, Jade and the cat in the RIGHT third, lit by the cool starlight and a warm lamp behind.",[J26,PROPS]),
+ J("k_ata_night","The Allen Telescope Array in the high desert of northern California at night: rows of identical 6-meter white radio dishes on a dark plain, all tilted to the same angle, the Milky Way arching overhead, a dark volcanic mountain silhouette on the horizon. Wide cinematic shot from low angle. No people.",[]),
+]
+res=batch(jobs,".")

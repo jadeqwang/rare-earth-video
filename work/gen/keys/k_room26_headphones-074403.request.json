@@ -1,0 +1,16 @@
+{
+ "model": "openai/gpt-image-2",
+ "input": {
+  "quality": "high",
+  "size": "1536x1024",
+  "output_format": "png",
+  "images": [
+   "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABgAAAAQACAIAAA...<2929854 chars>",
+   "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABgAAAAQACAIAAA...<3311846 chars>"
+  ],
+  "prompt": "Anime key visual, cinematic widescreen film frame. IMPORTANT framing: the final image will be cropped to 16:9, so keep the top 12% and bottom 12% free of anything important, and leave generous headroom above every head. Modern anime style matching the character sheets: crisp clean line art, flat cel shading, strong rim light, bold simple silhouettes, low background clutter, no text, no logos. Jade in 2026 (grey hoodie, loose messy bun, black over-ear headphones) sits on the floor of her dim room at night leaning back against a bookshelf, eyes closed, listening intently, holding the handheld recorder (props sheet) to her chest. Medium close-up, subject in the RIGHT half; a warm desk lamp glow, deep blue shadows; left half is dark wall."
+ },
+ "options": {
+  "background": true
+ }
+}

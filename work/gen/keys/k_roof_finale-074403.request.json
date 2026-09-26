@@ -1,0 +1,19 @@
+{
+ "model": "openai/gpt-image-2",
+ "input": {
+  "quality": "high",
+  "size": "1536x1024",
+  "output_format": "png",
+  "images": [
+   "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABgAAAAQACAIAAA...<2835490 chars>",
+   "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABgAAAAQACAIAAA...<2929854 chars>",
+   "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABgAAAAQACAIAAA...<2960974 chars>",
+   "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABgAAAAQACAIAAA...<2894278 chars>",
+   "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABgAAAAQACAIAAA...<3311846 chars>"
+  ],
+  "prompt": "Anime key visual, cinematic widescreen film frame. IMPORTANT framing: the final image will be cropped to 16:9, so keep the top 12% and bottom 12% free of anything important, and leave generous headroom above every head. Modern anime style matching the character sheets: crisp clean line art, flat cel shading, strong rim light, bold simple silhouettes, low background clutter, no text, no logos. Wide shot on a flat city rooftop at night under a huge starry sky with the Milky Way. A small group seen from behind and slightly to the side, all looking up at the sky: Jade in 2011 (bucket hat, white shirt, red skirt), Jade in 2026 (grey hoodie, messy bun), Charlie (grey flat cap, acoustic guitar on his back), Ricky (blue striped shirt, electric guitar on his back), and a fluffy brown tabby cat sitting at their feet. The group fills the lower third; the sky fills the upper two thirds."
+ },
+ "options": {
+  "background": true
+ }
+}

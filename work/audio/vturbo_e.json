@@ -1,0 +1,59 @@
+{
+ "result": {
+  "transcription_info": {
+   "language": "en",
+   "language_probability": 1,
+   "duration": 27.36,
+   "duration_after_vad": 27.36
+  },
+  "text": "Could we be alone.",
+  "word_count": 4,
+  "segments": [
+   {
+    "start": 0,
+    "end": 2.24,
+    "text": " Could we be alone.",
+    "temperature": 0,
+    "avg_logprob": -0.5346679762005806,
+    "compression_ratio": 0.6923076923076923,
+    "no_speech_prob": 0,
+    "words": [
+     {
+      "word": " Could",
+      "start": 0,
+      "end": 0.42
+     },
+     {
+      "word": " we",
+      "start": 0.42,
+      "end": 0.86
+     },
+     {
+      "word": " be",
+      "start": 0.86,
+      "end": 1.32
+     },
+     {
+      "word": " alone.",
+      "start": 1.32,
+      "end": 2.24
+     }
+    ],
+    "word_count": 4
+   }
+  ],
+  "vtt": "WEBVTT\n\n00:00.000 --> 00:00.420\n Could\n\n00:00.420 --> 00:00.860\n we\n\n00:00.860 --> 00:01.320\n be\n\n00:01.320 --> 00:02.240\n alone.\n\n",
+  "usage": {
+   "prompt_tokens": 0,
+   "completion_tokens": 0,
+   "total_tokens": 0,
+   "prompt_tokens_details": {
+    "cached_tokens": 0
+   },
+   "neurons": 21.263388393023998
+  }
+ },
+ "success": true,
+ "errors": [],
+ "messages": []
+}

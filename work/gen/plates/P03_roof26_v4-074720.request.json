@@ -1,0 +1,19 @@
+{
+ "model": "bytedance/seedance-2.5",
+ "input": {
+  "image": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAIBA...<387251 chars>",
+  "duration": 14,
+  "resolution": "720p",
+  "generate_audio": true,
+  "reference_images": [
+   "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABgAAAAQACAIAAA...<2929854 chars>"
+  ],
+  "reference_audios": [
+   "data:audio/mpeg;base64,SUQzBAAAAAAIEVRJVDIAAAAPAAADUGFsZSBCb...<451147 chars>"
+  ],
+  "prompt": "@Image1 is the first frame; the other images are character reference sheets. She sings the vocals of @Audio1 with precise lip sync on every word. [0-6s] singing softly to camera, night breeze in loose strands of hair. [6-8s] she turns her head to look toward the left edge of the frame. [8-10s] she reaches her hand out toward the left edge. [10-14s] she smiles, still singing. Static camera, stars twinkle. Anime style, keep every character exactly on-model with the reference sheets; clean line art; no text."
+ },
+ "options": {
+  "background": true
+ }
+}

@@ -1,0 +1,28 @@
+{
+ "state": "done",
+ "via": "webhook",
+ "payload": {
+  "id": "929fbab42a0a7edf3b8fe23f4e275744014a54d55ece99da70d39355ad8a4b7e",
+  "state": "Completed",
+  "result": {
+   "image": "https://delivery.us2.bfl.ai/ephemeral/202609260730/b80d6b81-2dc7-4a19-9613-167a6e0d92d7/5d/8453877b93c114/7b93c1147a3848f085f825d100161aee/sample.png?<signed-query-removed>"
+  },
+  "error": null,
+  "keySource": "Unified",
+  "provider": "black-forest-labs",
+  "model": "black-forest-labs/flux-2-max",
+  "usage": {
+   "output_megapixels": 2,
+   "input_megapixels": 3
+  }
+ },
+ "t1": 1790407855552,
+ "media": [
+  {
+   "url": "https://delivery.us2.bfl.ai/ephemeral/202609260730/b80d6b81-2dc7-4a19-9613-167a6e0d92d7/5d/8453877b93c114/7b93c1147a3848f085f825d100161aee/sample.png?<signed-query-removed>",
+   "key": "media:j11-flux-073010:0",
+   "bytes": 2050849,
+   "type": "image/png"
+  }
+ ]
+}

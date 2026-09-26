@@ -1,0 +1,106 @@
+{
+ "result": {
+  "transcription_info": {
+   "language": "en",
+   "language_probability": 1,
+   "duration": 40,
+   "duration_after_vad": 40
+  },
+  "text": "Weapons, wars, and now we're still there. Could we be alone.",
+  "word_count": 11,
+  "segments": [
+   {
+    "start": 23.42,
+    "end": 29.72,
+    "text": " Weapons, wars, and now we're still there.",
+    "temperature": 0,
+    "avg_logprob": -0.5427083492279052,
+    "compression_ratio": 0.8723404255319149,
+    "no_speech_prob": 0,
+    "words": [
+     {
+      "word": " Weapons,",
+      "start": 23.42,
+      "end": 24.82
+     },
+     {
+      "word": " wars,",
+      "start": 24.82,
+      "end": 26.22
+     },
+     {
+      "word": " and",
+      "start": 28.02,
+      "end": 28.04
+     },
+     {
+      "word": " now",
+      "start": 28.04,
+      "end": 28.06
+     },
+     {
+      "word": " we're",
+      "start": 28.06,
+      "end": 29
+     },
+     {
+      "word": " still",
+      "start": 29,
+      "end": 29.02
+     },
+     {
+      "word": " there.",
+      "start": 29.02,
+      "end": 29.72
+     }
+    ],
+    "word_count": 7
+   },
+   {
+    "start": 30,
+    "end": 32.26,
+    "text": " Could we be alone.",
+    "temperature": 0,
+    "avg_logprob": -0.3598632775247097,
+    "compression_ratio": 0.6923076923076923,
+    "no_speech_prob": 0,
+    "words": [
+     {
+      "word": " Could",
+      "start": 30,
+      "end": 30.46
+     },
+     {
+      "word": " we",
+      "start": 30.46,
+      "end": 30.86
+     },
+     {
+      "word": " be",
+      "start": 30.86,
+      "end": 31.3
+     },
+     {
+      "word": " alone.",
+      "start": 31.3,
+      "end": 32.26
+     }
+    ],
+    "word_count": 4
+   }
+  ],
+  "vtt": "WEBVTT\n\n00:23.420 --> 00:24.820\n Weapons,\n\n00:24.820 --> 00:26.220\n wars,\n\n00:28.020 --> 00:28.040\n and\n\n00:28.040 --> 00:28.060\n now\n\n00:28.060 --> 00:29.000\n we're\n\n00:29.000 --> 00:29.020\n still\n\n00:29.020 --> 00:29.720\n there.\n\n00:30.000 --> 00:30.460\n Could\n\n00:30.460 --> 00:30.860\n we\n\n00:30.860 --> 00:31.300\n be\n\n00:31.300 --> 00:32.260\n alone.\n\n",
+  "usage": {
+   "prompt_tokens": 0,
+   "completion_tokens": 0,
+   "total_tokens": 0,
+   "prompt_tokens_details": {
+    "cached_tokens": 0
+   },
+   "neurons": 31.086825135999998
+  }
+ },
+ "success": true,
+ "errors": [],
+ "messages": []
+}

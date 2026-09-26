@@ -1,0 +1,23 @@
+{
+ "state": "done",
+ "via": "webhook",
+ "payload": {
+  "id": "aa90d07e5c2b7e9c1dc7f233b50bef5bfe1cc24b9064aef191393490bd504506",
+  "state": "Completed",
+  "result": {
+   "image": "https://ai-gateway-outputs.0d37909e38d3e99c29fa2cd343ac421a.r2.cloudflarestorage.com/provider-outputs/aa90d07e5c2b7e9c1dc7f233b50bef5bfe1cc24b9064aef191393490bd504506/3a34f18e-332e-4df6-9450-5beef0f617b0?<signed-query-removed>"
+  },
+  "error": null,
+  "keySource": "Unified",
+  "provider": "openai",
+  "model": "openai/gpt-image-2",
+  "usage": {
+   "input_tokens": 193,
+   "input_image_tokens": 3072,
+   "output_tokens": 0,
+   "output_image_tokens": 5488,
+   "total_tokens": 8753
+  }
+ },
+ "t1": 1790408733986
+}
