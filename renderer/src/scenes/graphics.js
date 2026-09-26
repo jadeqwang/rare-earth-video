@@ -414,7 +414,7 @@ function reply(ctx, p) {
   const Hd = g.length, Wd = g[0].length;
   const cell = Math.min((H * 0.84) / Hd, 26 * S);
   const x0 = W * (p.cx ?? 0.5) - (Wd * cell) / 2, y0 = H * 0.5 - (Hd * cell) / 2;
-  const rowsShown = Hd * ease.inOutQuad(clamp(u * 1.08));
+  const rowsShown = Hd * clamp(0.04 + u * 1.1);   // steady decode from the first frame
   const colors = { 1: '#2FE6D3', 2: '#1C8F86', 3: '#FF6A3D', 4: '#FFFFFF', 5: '#9CC8FF' };
   o.save(); o.globalCompositeOperation = 'lighter';
   for (let y = 0; y < Hd; y++) {
