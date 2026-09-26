@@ -31,6 +31,27 @@ void main(){
   c = mix(c, fogCol, f);
   o = vec4(c, 1.0);
 }`;
+// dish bowl: the same toon ramp plus panel seams (concentric rings + radial spokes) so dishes read as structures
+const DISH_VS = /* glsl */`
+out vec3 vN; out vec3 vW; out vec3 vV; out vec3 vL;
+void main(){
+  vL = position;
+  vec4 w = modelMatrix * vec4(position, 1.0);
+  vW = w.xyz;
+  vN = normalize(mat3(modelMatrix) * normal);
+  vV = normalize(cameraPosition - w.xyz);
+  gl_Position = projectionMatrix * viewMatrix * w;
+}`;
+const DISH_FS = TOON_FS.replace('in vec3 vN; in vec3 vW; in vec3 vV; out vec4 o;', 'in vec3 vN; in vec3 vW; in vec3 vV; in vec3 vL; out vec4 o; uniform float panelAmt;')
+  .replace('  float dist = length(vW - cameraPosition);', `  float pr = length(vL.xz), pa = atan(vL.z, vL.x);
+  float ringD = abs(fract(pr / 1.5 + 0.5) - 0.5) * 1.5;
+  float sa = abs(fract(pa / 6.2831853 * 24.0 + 0.5) - 0.5) * (6.2831853 / 24.0) * pr;
+  float fr = fwidth(pr) + 1e-4, fs = min(fwidth(pa), 0.1) * pr + 1e-4;
+  float ring = 1.0 - smoothstep(0.04, 0.04 + fr, ringD);
+  float spoke = pr > 1.4 ? 1.0 - smoothstep(0.04, 0.04 + fs, sa) : 0.0;
+  float seam = max(ring, spoke) * step(0.6, pr) * step(pr, 5.85);
+  c = mix(c, c * 0.7, seam * panelAmt);
+  float dist = length(vW - cameraPosition);`);
 const INK_VS = /* glsl */`
 uniform float thick;   // outline width in pixels
 uniform vec2 res;
@@ -44,12 +65,12 @@ void main(){
 const INK_FS = /* glsl */`precision highp float; out vec4 o; uniform vec3 ink; void main(){ o = vec4(ink, 1.0); }`;
 
 function toonMat(o = {}) {
-  return new THREE.ShaderMaterial({ vertexShader: TOON_VS, fragmentShader: TOON_FS, glslVersion: THREE.GLSL3, side: o.side ?? THREE.FrontSide,
+  return new THREE.ShaderMaterial({ vertexShader: o.panels ? DISH_VS : TOON_VS, fragmentShader: o.panels ? DISH_FS : TOON_FS, glslVersion: THREE.GLSL3, side: o.side ?? THREE.FrontSide,
     uniforms: { lit: { value: new THREE.Color(o.lit || '#e9eef8') }, shade: { value: new THREE.Color(o.shade || '#8d9cc4') },
       deep: { value: new THREE.Color(o.deep || '#4a5687') }, rimCol: { value: new THREE.Color(o.rim || '#bfe0ff') },
       keyDir: { value: new THREE.Vector3(-0.4, 0.8, 0.45) }, emissive: { value: new THREE.Color(o.emissive || '#000000') },
       fogCol: { value: new THREE.Color('#0b1230') }, rimAmt: { value: o.rimAmt ?? 0.35 }, fogNear: { value: 60 }, fogFar: { value: 420 },
-      bands: { value: 3 }, emissAmt: { value: 0 }, glowBottom: { value: 0 } } });
+      bands: { value: 3 }, emissAmt: { value: 0 }, glowBottom: { value: 0 }, panelAmt: { value: o.panelAmt ?? 1 } } });
 }
 function inkMat(thick = 2.2) {
   return new THREE.ShaderMaterial({ vertexShader: INK_VS, fragmentShader: INK_FS, glslVersion: THREE.GLSL3, side: THREE.BackSide,
@@ -103,7 +124,7 @@ export class DishArray {
     this.core = core;
     this.scene = new THREE.Scene();
     this.cam = new THREE.PerspectiveCamera(40, W / H, 0.5, 3000);
-    this.mats = { dish: toonMat({ lit: '#aebfe6', shade: '#5a6aa0', deep: '#2e386a', side: THREE.DoubleSide, rimAmt: 0.25 }),
+    this.mats = { dish: toonMat({ lit: '#aebfe6', shade: '#5a6aa0', deep: '#2e386a', side: THREE.DoubleSide, rimAmt: 0.25, panels: true }),
       body: toonMat({ lit: '#9dadd6', shade: '#4f5e92', deep: '#2a335f', rimAmt: 0.25 }), strut: toonMat({ lit: '#8f9fca', shade: '#465489', deep: '#262e58', rimAmt: 0.2 }),
       ink: inkMat(2.2), ground: toonMat({ lit: '#1a2248', shade: '#131a3a', deep: '#0d1230', rimAmt: 0 }) };
     this.dishes = [];

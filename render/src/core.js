@@ -78,7 +78,7 @@ export class Core {
     if (!c) {
       const el = document.createElement('canvas');
       el.width = w; el.height = h;
-      const ctx = el.getContext('2d', { alpha: true, willReadFrequently: false });
+      const ctx = el.getContext('2d', { alpha: true, willReadFrequently: true });
       const tex = new THREE.CanvasTexture(el);
       tex.colorSpace = THREE.NoColorSpace;
       tex.minFilter = THREE.LinearFilter; tex.magFilter = THREE.LinearFilter; tex.generateMipmaps = false;

@@ -76,7 +76,7 @@ const G2 = {
       T.drawBlock(g, runs, t, { anim: 'slam' });
       T.label(g, 'LGM-2  ·  NARROWBAND  ·  SAME RHYTHM AS 2011 DATA  ·  SNR 41', 1810, 1030, { size: 16, color: GOLD, align: 'right' });
     });
-    return { bloom: 0.6, thresh: 0.8 };
+    return { bloom: 0.45, thresh: 0.92 };
   },
 };
 
@@ -126,8 +126,8 @@ const G4 = {
     layer2D(ctx, s.target, 'type', (g) => {
       g.fillStyle = GOLD; g.fillRect(958, 0, 4, H);
       const w = words(ctx, 23);
-      if (t > w[1].t0) T.text(g, 'BEATING', 1440, 330, { f: 'six', size: 330, align: 'center', color: PAPER, alpha: clamp((t - w[1].t0) / 0.05) });
-      if (t > w[2].t0) T.text(g, 'BLINKING', 480, 330, { f: 'six', size: 330, align: 'center', color: GOLD, alpha: clamp((t - w[2].t0) / 0.05) });
+      if (t > w[1].t0) T.text(g, 'BEATING', 1440, 356, { f: 'six', size: 330, align: 'center', color: PAPER, alpha: clamp((t - w[1].t0) / 0.05) });
+      if (t > w[2].t0) T.text(g, 'BLINKING', 480, 356, { f: 'six', size: 330, align: 'center', color: GOLD, alpha: clamp((t - w[2].t0) / 0.05) });
       if (t > w[3].t0) T.text(g, 'of a star', 960, 800, { f: 'ital', size: 100, align: 'center', color: PAPER, alpha: clamp((t - w[3].t0) / 0.2) });
       T.label(g, 'THEIR STAR  ·  LIGHT FROM 826 AD', 480, 1010, { size: 16, color: EMBER, align: 'center' });
       T.label(g, 'OUR DISHES  ·  TONIGHT', 1440, 1010, { size: 16, color: PALE, align: 'center' });
@@ -142,7 +142,7 @@ const G5 = {
     const t = s.t, T = ctx.type, k = s.lt / s.dur, B = shared2.beacon;
     sky(ctx, s.target, { preset: 'deep', yaw: 1.3, pitch: 0.1, fov: 40, beacon: 0, horizonY: -2, starAmt: 0.4 });
     // right up against the star: its disk fills the frame; the planet's night side crosses it
-    B.render(ctx.core, s.target, { t, camPos: [0.25, -0.1, lerp(2.2, 2.05, k)], look: [0.25, -0.1, 0], fov: 50, phase: 0, R: 9, shades: false, bright: 0.85 });
+    B.render(ctx.core, s.target, { t, camPos: [0, 0, lerp(1.55, 1.45, k)], look: [0, 0, 0], fov: 40, phase: 0, R: 9, shades: false, bright: 0.85 });
     layer2D(ctx, s.target, 'type', (g) => {
       const u = lerp(0.18, 0.78, easeInOutCubic(clamp((t - 136.8) / 2.5)));
       const px = u * W, py = 640, pr = 190;
@@ -220,13 +220,13 @@ const G7 = {
   id: 'G7_alone', t0: 143.68, t1: 147.02,
   async render(ctx, s) {
     const t = s.t, T = ctx.type, k = s.lt / s.dur;
-    sky(ctx, s.target, { preset: 'dawn', yaw: 0.9, pitch: 0.3, fov: 52, beacon: beacon(ctx, t, 0.6) * 1.3, beaconSize: 1.4, beaconDir: [0.38, 0.52, -0.76], starAmt: 0.45 });
+    sky(ctx, s.target, { preset: 'dawn', yaw: 0.9, pitch: 0.62, fov: 52, beacon: beacon(ctx, t, 0.6) * 1.3, beaconSize: 1.4, beaconDir: [0.38, 0.62, -0.69], starAmt: 0.5, exposure: 0.85 });
     await plateLayer(ctx, s.target, { pid: 'P23_rim26', pt: syncedPT('P23_rim26', t), place: 'cover', grade: 'dawn', cam: { s: push(k, 1.0, 1.05), x: 10 * k },
       rim: { dir: [0.85, 0.3], col: [1.0, 0.82, 0.55], w: 6, amt: 0.9 } });
     layer2D(ctx, s.target, 'type', (g) => {
       const w = words(ctx, 25);
-      const runs = T.layout(g, [[{ ...w[0], f: 'hero', size: 160, sx: 0.8, color: NAVY }, { ...w[1], f: 'hero', size: 160, sx: 0.8, color: NAVY }],
-        [{ ...w[2], f: 'ital', size: 150, text: 'we', color: NAVY }, { ...w[3], f: 'hero', size: 160, sx: 0.8, color: NAVY }]], { x: 1810, y: 110, lead: 0.92, align: 'right' });
+      const runs = T.layout(g, [[{ ...w[0], f: 'hero', size: 160, sx: 0.8, color: PAPER }, { ...w[1], f: 'hero', size: 160, sx: 0.8, color: PAPER }],
+        [{ ...w[2], f: 'ital', size: 150, text: 'we', color: PAPER }, { ...w[3], f: 'hero', size: 160, sx: 0.8, color: PAPER }]], { x: 1810, y: 110, lead: 0.92, align: 'right' });
       T.drawBlock(g, runs, t, { anim: 'slam', hotCol: '#ffffff' });
       const A = T.slamAnim(t, w[4].t0);
       if (A) {
@@ -248,8 +248,8 @@ const H1 = {
     dawnArray(A);
     const hit = ctx.tl.kick(t, 0.12);
     A.pose((i, d) => ({ az: Math.PI + 0.3, el: 1.02, glow: 1 }), t);
-    const e = easeInCubic(k);
-    const foci = A.render(ctx, s.target, { pos: [lerp(-4, 10, e), lerp(3, 150, e), lerp(34, -30, e)], look: [lerp(10, 40, e), lerp(18, 420, e), lerp(-60, -200, e)], fov: lerp(56, 70, e), time: t,
+    const e = easeInOutCubic(k), e2 = easeInCubic(k);
+    const foci = A.render(ctx, s.target, { pos: [lerp(-6, 4, e), lerp(2.5, 30, e2), lerp(30, 4, e)], look: [lerp(10, 14, e), lerp(16, 160, e2), lerp(-60, -150, e)], fov: lerp(58, 66, e), time: t,
       sky: { preset: 'predawn', beacon: beacon(ctx, t, 0.7) * 1.3, beaconSize: 1.3, beaconDir: BEACON_DIR, starAmt: 0.9 } });
     layer2D(ctx, s.target, 'fx', (g) => {
       drawFoci(g, foci, t, { col: [255, 226, 160], k: 0.8 + 0.6 * hit });
@@ -311,7 +311,7 @@ const H4 = {
     const e = easeInOutCubic(k);
     // pull back from our sun until the whole galaxy is lit with lighthouses (we stay the pale, steady one)
     const sun = [260, 2, 40];
-    const camPos = [lerp(sun[0] + 20, 60, e), lerp(14, 620, e), lerp(sun[2] + 60, 560, e)];
+    const camPos = [lerp(sun[0] + 30, 40, e), lerp(60, 640, e), lerp(sun[2] + 170, 540, e)];
     const look = [lerp(sun[0], 0, e), lerp(sun[1], 0, e), lerp(sun[2], 0, e)];
     const bt = lerp(0.12, 1.0, easeInCubic(clamp(k * 1.1)));
     const st = GAL.render(ctx.core, s.target, { t, camPos, look, fov: 55, beaconT: bt, beat: ctx.tl.kick(t, 0.12), rot: t * 0.01 });
@@ -319,14 +319,14 @@ const H4 = {
       if (st.sun.vis) {
         g.strokeStyle = PALE; g.lineWidth = 2; g.beginPath(); g.arc(st.sun.x, st.sun.y, 18, 0, 7); g.stroke();
         g.beginPath(); g.moveTo(st.sun.x + 13, st.sun.y - 13); g.lineTo(st.sun.x + 70, st.sun.y - 60); g.stroke();
-        T.label(g, 'YOU ARE HERE  ·  LISTENING', st.sun.x + 78, st.sun.y - 62, { size: 16, color: PALE });
+        T.label(g, 'YOU ARE HERE  ·  LISTENING', st.sun.x + 78, Math.max(40, st.sun.y - 62), { size: 16, color: PALE });
       }
       const N = Math.round(lerp(1, 22408, Math.pow(bt, 2.2)));
       T.label(g, 'BLINKING STARS FOUND', 110, 960, { size: 18, color: GOLD });
       T.text(g, N.toLocaleString(), 104, 1040, { f: 'monoB', size: 64, color: PAPER });
     });
     const fl = t > 161.9 ? smooth(161.9, 162.18, t) * 0.4 : 0;
-    return { bloom: 0.85, thresh: 0.72, halation: 0.35, flash: fl, flashCol: [1, 0.9, 0.7] };
+    return { bloom: 0.45, thresh: 0.86, halation: 0.25, flash: fl, flashCol: [1, 0.9, 0.7] };
   },
 };
 
@@ -356,7 +356,7 @@ const I2 = {
       g.fillStyle = '#060a1a'; g.fillRect(0, 0, W, H);
       const a = smooth(168.1, 168.6, t);
       g.save(); g.globalAlpha = a;
-      const size = 300, cx = 1480, cy = 520;
+      const size = 440, cx = 1420, cy = 540;
       const pl = { s: size / fr.m.w, x: cx - size / 2, y: cy - size / 2 };
       drawTraced(g, fr, pl, { grade: { mode: 'none', over: { 10: '#252a29' } } });
       g.restore();

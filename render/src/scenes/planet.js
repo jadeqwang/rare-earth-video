@@ -11,7 +11,7 @@ precision highp float;
 in vec2 vUv; in vec3 vN; in vec3 vV; in vec3 vW; out vec4 o;
 uniform sampler2D day, night, clouds;
 uniform vec3 sunDir, rimCol, nightTint, termCol;
-uniform float rimAmt, nightAmt, cloudShift, cloudAmt, cel, lightsAmt, time, pulse, dayGain;
+uniform float rimAmt, nightAmt, cloudShift, cloudAmt, cel, lightsAmt, time, pulse, dayGain, termAmt;
 void main(){
   vec3 n = normalize(vN);
   float d = dot(n, normalize(sunDir));
@@ -27,7 +27,7 @@ void main(){
   c += lights * (1.0 - cl * 0.7);
   // terminator band
   float band = exp(-pow(d / 0.06, 2.0));
-  c += termCol * band * 0.5 * (1.0 - cl * 0.5);
+  c += termCol * band * termAmt * (1.0 - cl * 0.5);
   // rim (atmosphere)
   float f = pow(1.0 - max(dot(n, normalize(vV)), 0.0), 2.4);
   c += rimCol * f * rimAmt * (0.25 + 0.75 * smoothstep(-0.3, 0.4, d));
@@ -173,15 +173,12 @@ export async function makeOtherTextures() {
   });
   const clouds = canvasTex(1024, 512, (g, w, h) => {
     valueNoiseCanvas(g, w, h, 33, 7, 5, 0.6, 0.12, [255, 255, 255]);
-    // a loose cyclone over the substellar point: many short soft strokes along a log spiral
+    // a soft storm over the substellar point: concentric faint bands (no hard strokes)
     const cx = w * 0.5, cy = h * 0.5;
-    g.lineCap = 'round';
-    for (let i = 0; i < 900; i++) {
-      const arm = Math.floor(R() * 3), k = R() * 70;
-      const a = arm * 2.1 + k * 0.08 + (R() - 0.5) * 0.35, r = 10 + k * 2.3 + (R() - 0.5) * 14;
-      const x = cx + Math.cos(a) * r, y = cy + Math.sin(a) * r * 0.9;
-      g.strokeStyle = `rgba(255,255,255,${0.12 + R() * 0.3})`; g.lineWidth = 3 + R() * 7;
-      g.beginPath(); g.moveTo(x, y); g.lineTo(x + Math.cos(a + 1.4) * (8 + R() * 16), y + Math.sin(a + 1.4) * (8 + R() * 16)); g.stroke();
+    for (let i = 0; i < 7; i++) {
+      const r = 18 + i * 16;
+      g.strokeStyle = `rgba(255,255,255,${0.10 - i * 0.012})`; g.lineWidth = 10;
+      g.beginPath(); g.ellipse(cx + i * 2, cy, r * 1.1, r * 0.9, 0.3 * i, 0.4, Math.PI * 1.7); g.stroke();
     }
   });
   return { day, night, clouds };
@@ -195,7 +192,7 @@ export class Planet {
       uniforms: { day: { value: tex.day }, night: { value: tex.night }, clouds: { value: tex.clouds }, sunDir: { value: new THREE.Vector3(1, 0.2, 0.4) },
         rimCol: { value: new THREE.Color(o.rim || '#7fb8ff') }, nightTint: { value: new THREE.Color(o.nightTint || '#16204a') }, termCol: { value: new THREE.Color(o.term || '#ff9a5a') },
         rimAmt: { value: o.rimAmt ?? 0.7 }, nightAmt: { value: 0.5 }, cloudShift: { value: 0 }, cloudAmt: { value: o.cloudAmt ?? 0.6 }, cel: { value: 1 },
-        lightsAmt: { value: o.lightsAmt ?? 1.6 }, time: { value: 0 }, pulse: { value: 0 }, dayGain: { value: 1 } } });
+        lightsAmt: { value: o.lightsAmt ?? 1.6 }, time: { value: 0 }, pulse: { value: 0 }, dayGain: { value: 1 }, termAmt: { value: o.termAmt ?? 0.5 } } });
     this.mesh = new THREE.Mesh(new THREE.SphereGeometry(1, 128, 96), this.mat);
     this.scene.add(this.mesh);
     this.atm = new THREE.Mesh(new THREE.SphereGeometry(1.035, 96, 64), new THREE.ShaderMaterial({ vertexShader: PL_VS, fragmentShader: ATM_FS, glslVersion: THREE.GLSL3,

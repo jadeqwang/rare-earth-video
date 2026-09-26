@@ -77,6 +77,12 @@ function ring(p, pts, s, ox, oy) {
   p.closePath();
 }
 
+function polyArea(pts) {
+  let a = 0; const n = pts.length >> 1;
+  for (let i = 0, j = n - 1; i < n; j = i++) a += (pts[j * 2] + pts[i * 2]) * (pts[j * 2 + 1] - pts[i * 2 + 1]);
+  return a / 2;
+}
+
 // Draw one traced frame into ctx. place: {x, y, s} maps trace-grid px -> canvas px (x,y = top-left)
 // o: {grade, ink:'#hex', inkAlpha, lineScale (unused), fillStroke, alpha, hide:[labels], only:[labels], jitter}
 export function drawTraced(ctx, frame, place, o = {}) {
@@ -112,7 +118,10 @@ export function drawTraced(ctx, frame, place, o = {}) {
   }
   if ((o.inkAlpha ?? 1) > 0 && d.lines.length) {
     const lp = new Path2D();
-    for (const g of d.lines) for (const r of g) ring(lp, r, s, ox, oy);
+    // drop ink specks (tiny closed blobs from plate grain) - they read as dirt, not drawing
+    const minInk = o.minInk ?? 45;
+    if (!d._inkArea) d._inkArea = d.lines.map((g) => Math.abs(polyArea(g[0])));
+    d.lines.forEach((g, gi) => { if (d._inkArea[gi] < minInk) return; for (const r of g) ring(lp, r, s, ox, oy); });
     ctx.globalAlpha = (o.alpha ?? 1) * (o.inkAlpha ?? 1);
     ctx.fillStyle = o.ink || '#0d1026';
     ctx.fill(lp, 'evenodd');

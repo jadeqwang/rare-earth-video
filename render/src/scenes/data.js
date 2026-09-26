@@ -17,7 +17,7 @@ export function waterfall(g, o) {
       let v = Math.pow(hash2(c * 1.13 + 7, row * 0.77 + 3), 3.2) * 0.55;
       v += 0.08 * Math.sin(c * 0.05 + row * 0.02);
       if (line && line.on) {
-        const fc = line.f0 + line.drift * row / rows;
+        const fc = line.f0 + line.drift * r / rows;
         const d = Math.abs(c - fc * cols);
         v += Math.exp(-d * d / 1.2) * line.snr * (0.6 + 0.4 * hash2(row, 9));
       }

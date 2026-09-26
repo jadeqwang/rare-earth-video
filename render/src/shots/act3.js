@@ -45,7 +45,7 @@ const C1 = {
       const az = Math.PI + 0.3 * Math.sin((bp.i + col * 0.5) * 1.3);
       return { az, el, glow: up ? 1 : 0.3 };
     }, t);
-    const foci = A.render(ctx, s.target, { pos: [lerp(-72, -48, k), lerp(30, 24, k), lerp(96, 78, k)], look: [0, 12, -60], fov: 44, time: t,
+    const foci = A.render(ctx, s.target, { pos: [lerp(-34, -20, k), lerp(10, 8, k), lerp(62, 52, k)], look: [8, 15, -60], fov: 56, time: t,
       sky: { preset: 'night', beacon: beacon(ctx, t, 0.7), beaconDir: BEACON_DIR } });
     layer2D(ctx, s.target, 'fx', (g) => drawFoci(g, foci, t, { rings: false }), { mode: 'add' });
     layer2D(ctx, s.target, 'type', (g) => {
@@ -134,11 +134,11 @@ const C4 = {
   async render(ctx, s) {
     const t = s.t, T = ctx.type, A = shared.arr, k = s.lt / s.dur;
     nightArray(A);
-    // one by one the receivers go dark and the dishes stow toward the horizon
+    // one by one the receivers go dark and the dishes stow: they turn away and park pointing straight up
     A.pose((i, d) => {
       const off = 54.2 + (d.home.r * 7 + d.home.c) / 42 * 2.6;
-      const u = easeInOutCubic(clamp((t - off) / 0.8));
-      return { az: Math.PI + 0.25, el: lerp(0.75, 0.08, u), glow: t < off ? 1 : 0 };
+      const u = easeInOutCubic(clamp((t - off) / 0.9));
+      return { az: Math.PI + 0.25 - 1.2 * u, el: lerp(0.75, 1.52, u), glow: t < off ? 1 : 0 };
     }, t);
     const foci = A.render(ctx, s.target, { pos: [lerp(-10, -16, k), 4.5, 36], look: [10, 14, -50], fov: 56, time: t,
       sky: { preset: 'night', beacon: beacon(ctx, t, 0.6) * (1 - 0.6 * k), beaconDir: BEACON_DIR, exposure: lerp(1, 0.7, k) } });
@@ -336,7 +336,7 @@ const D7 = {
     sky(ctx, s.target, { preset: 'deep', yaw: 2.0, pitch: 0.1, fov: 30, beacon: beacon(ctx, t, 0.5) * 0.8, beaconDir: [0.55, 0.25, -0.8], horizonY: -2 });
     const E = shared.earth;
     E.render(ctx.core, s.target, { pos: [0, 0, lerp(4.6, 4.2, easeInOutCubic(k))], look: [0, 0, 0], fov: 30, rotY: 3.5 + (t - 72.22) * 0.035, tilt: 0.35,
-      sun: [0.75, 0.25, 0.6], at: [0.15, -0.62, 0], cloud: t * 0.004, dayGain: 0.7, lights: 2.2 });
+      sun: [0.75, 0.25, 0.6], at: [0.15, -0.62, 0], cloud: t * 0.004, dayGain: 0.7, lights: 1.3 });
     layer2D(ctx, s.target, 'fx', (g) => {
       // Earth's real radio observatories glow as the song's kicks arrive (receivers only: light flows IN)
       const kick = ctx.tl.kick(t, 0.2);

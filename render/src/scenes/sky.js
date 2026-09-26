@@ -1,6 +1,37 @@
 // Procedural sky dome: gradient, Milky Way, crisp retro-anime stars with cross flares, and the beacon star (LGM-2).
+// Fast path for software GL: the Milky Way is baked once into an equirect texture, stars are a point catalogue
+// projected in a vertex shader, and flares (bright stars, beacon) are point sprites; only the gradient is per pixel.
 import * as THREE from 'three';
 import { W, H } from '../core.js';
+import { rng } from '../lib/util.js';
+
+const NOISE = /* glsl */`
+float h13(vec3 p){ p = fract(p * .1031); p += dot(p, p.zyx + 31.32); return fract((p.x + p.y) * p.z); }
+float vnoise(vec3 p){ vec3 i = floor(p), f = fract(p); f = f*f*(3.0-2.0*f);
+  return mix(mix(mix(h13(i), h13(i+vec3(1,0,0)), f.x), mix(h13(i+vec3(0,1,0)), h13(i+vec3(1,1,0)), f.x), f.y),
+             mix(mix(h13(i+vec3(0,0,1)), h13(i+vec3(1,0,1)), f.x), mix(h13(i+vec3(0,1,1)), h13(i+vec3(1,1,1)), f.x), f.y), f.z); }
+float fbm(vec3 p){ float v = 0.0, a = 0.5; for (int i = 0; i < 5; i++){ v += a * vnoise(p); p = p * 2.03 + 11.7; a *= 0.5; } return v; }`;
+
+// bake: equirect Milky Way (lon = atan(x, z), lat = asin(y))
+const MW_BAKE_FS = /* glsl */`
+precision highp float; in vec2 vUv; out vec4 o;
+uniform vec3 galN; uniform float seed;
+${NOISE}
+void main(){
+  float lon = (vUv.x - 0.5) * 6.2831853, lat = (vUv.y - 0.5) * 3.1415927;
+  vec3 d = vec3(cos(lat) * sin(lon), sin(lat), cos(lat) * cos(lon));
+  float g = dot(d, galN);
+  float band = exp(-g * g * 16.0);
+  vec3 c = vec3(0.0);
+  if (band > 0.004) {
+    float cloud = fbm(d * 2.2 + seed);
+    float fine = fbm(d * 11.0 + 7.0 + seed);
+    float dust = fbm(d * 8.0 + 3.0 + seed);
+    float mw = band * smoothstep(0.4, 0.75, cloud * 0.7 + fine * 0.3) * (1.0 - 0.85 * smoothstep(0.52, 0.7, dust) * band);
+    c = vec3(0.5, 0.58, 1.0) * mw * 0.36 + vec3(1.0, 0.82, 0.92) * pow(band, 4.0) * smoothstep(0.6, 0.9, cloud) * 0.12;
+  }
+  o = vec4(c, 1.0);
+}`;
 
 const SKY_FS = /* glsl */`
 precision highp float; in vec2 vUv; out vec4 o;
@@ -8,121 +39,94 @@ uniform vec2 res;
 uniform vec3 camF, camR, camU;      // camera basis
 uniform float tanHalf;               // tan(fov/2) vertical
 uniform vec3 zenith, horizon, glowCol;
-uniform float horizonY, glowAmt, starAmt, mwAmt, time, twinkle, seed, beacon, beaconSize, flareAmt, exposure;
-uniform vec3 galN, beaconDir, beaconCol;
-uniform float trail;                 // star-trail length (radians of rotation about pole), 0 = none
-uniform vec3 pole;
-
-float h13(vec3 p){ p = fract(p * .1031); p += dot(p, p.zyx + 31.32); return fract((p.x + p.y) * p.z); }
-vec3 h33(vec3 p){ p = fract(p * vec3(.1031,.1030,.0973)); p += dot(p, p.yxz + 33.33); return fract((p.xxy + p.yxx) * p.zyx); }
-float vnoise(vec3 p){ vec3 i = floor(p), f = fract(p); f = f*f*(3.0-2.0*f);
-  return mix(mix(mix(h13(i), h13(i+vec3(1,0,0)), f.x), mix(h13(i+vec3(0,1,0)), h13(i+vec3(1,1,0)), f.x), f.y),
-             mix(mix(h13(i+vec3(0,0,1)), h13(i+vec3(1,0,1)), f.x), mix(h13(i+vec3(0,1,1)), h13(i+vec3(1,1,1)), f.x), f.y), f.z); }
-float fbm(vec3 p){ float v = 0.0, a = 0.5; for (int i = 0; i < 5; i++){ v += a * vnoise(p); p = p * 2.03 + 11.7; a *= 0.5; } return v; }
-
-// octahedral map: direction -> [-1,1]^2 (area-uniform enough for star cells)
-vec2 oct(vec3 n){ n /= (abs(n.x) + abs(n.y) + abs(n.z)); vec2 p = n.xy; if (n.z < 0.0) p = (1.0 - abs(p.yx)) * vec2(p.x >= 0.0 ? 1.0 : -1.0, p.y >= 0.0 ? 1.0 : -1.0); return p; }
-
-// octahedral decode (inverse of oct())
-vec3 octDec(vec2 p){ vec3 n = vec3(p, 1.0 - abs(p.x) - abs(p.y)); if (n.z < 0.0) n.xy = (1.0 - abs(n.yx)) * vec2(n.x >= 0.0 ? 1.0 : -1.0, n.y >= 0.0 ? 1.0 : -1.0); return normalize(n); }
-
-// project a direction to pixel coordinates (returns z<=0 if behind)
-vec3 toPx(vec3 sd){ float fz = dot(sd, camF); if (fz <= 0.01) return vec3(0.0, 0.0, -1.0);
-  vec2 nd = vec2(dot(sd, camR) / (fz * tanHalf * res.x / res.y), dot(sd, camU) / (fz * tanHalf));
-  return vec3((nd * 0.5 + 0.5) * res, 1.0); }
-
-// one star layer: jittered cells in octahedral space; distance measured in true screen pixels
-vec3 stars(vec3 d, vec2 frag, float dens, float sizePx, float prob, float bright, float layer){
-  vec2 p = oct(d) * dens;
-  vec2 ip = floor(p);
-  vec3 acc = vec3(0.0);
-  for (int j = -1; j <= 1; j++) for (int i = -1; i <= 1; i++) {
-    vec2 c = ip + vec2(i, j);
-    vec3 r = h33(vec3(c, layer + seed));
-    if (r.z > prob) continue;
-    vec3 sp = toPx(octDec((c + r.xy) / dens));
-    if (sp.z < 0.0) continue;
-    vec2 dv = frag - sp.xy;
-    float d2 = dot(dv, dv);
-    if (d2 > 36.0) continue;
-    float mag = pow(h13(vec3(c * 1.7, layer + 5.0)), 4.0);
-    float tw = 1.0 + twinkle * sin(time * (2.0 + 5.0 * r.x) + r.y * 40.0) * 0.5;
-    float sz = sizePx * (0.55 + 1.1 * mag);
-    float core = exp(-d2 / (sz * sz)) * (0.25 + 2.6 * mag) * tw;
-    float t = h13(vec3(c, layer + 9.0));
-    vec3 col = t < 0.12 ? vec3(1.0, 0.8, 0.58) : (t < 0.38 ? vec3(0.76, 0.85, 1.0) : (t < 0.46 ? vec3(1.0, 0.94, 0.82) : vec3(0.93, 0.96, 1.0)));
-    acc += col * core * bright;
+uniform float horizonY, glowAmt, mwAmt, exposure;
+uniform sampler2D mwTex;
+void main(){
+  vec2 ndc = (vUv - 0.5) * 2.0;
+  vec3 d = normalize(camF + ndc.x * camR * tanHalf * res.x / res.y + ndc.y * camU * tanHalf);
+  float up = d.y;                                    // world up = +y
+  float t = smoothstep(horizonY - 0.05, 0.9, up);
+  vec3 col = mix(horizon, zenith, pow(t, 0.55));
+  col += glowCol * glowAmt * exp(-max(up - horizonY, 0.0) * 7.0);
+  if (mwAmt > 0.001) {
+    vec2 uv = vec2(atan(d.x, d.z) / 6.2831853 + 0.5, asin(clamp(d.y, -1.0, 1.0)) / 3.1415927 + 0.5);
+    col += texture(mwTex, uv).rgb * mwAmt;
   }
-  return acc;
-}
+  o = vec4(col * exposure, 1.0);
+}`;
 
-// four-point cross flare for bright stars (screen-space, around projected position)
+// shared projection for point passes: direction -> clip, same basis as the gradient pass
+const PROJ = /* glsl */`
+uniform vec3 camF, camR, camU; uniform float tanHalf; uniform vec2 res;
+bool projectDir(vec3 d, out vec4 clip){
+  float fz = dot(d, camF);
+  if (fz <= 0.02) { clip = vec4(2.0, 2.0, 2.0, 1.0); return false; }
+  clip = vec4(dot(d, camR) / (fz * tanHalf * res.x / res.y), dot(d, camU) / (fz * tanHalf), 0.0, 1.0);
+  return true;
+}`;
+
+const STAR_VS = /* glsl */`
+in float size; in float bright; in vec3 scol; in float ph;
+uniform float time, twinkle, starAmt, horizonY, exposure;
+out vec3 vCol; out float vSz; out float vBox;
+${PROJ}
+void main(){
+  vec3 d = normalize(position);
+  vec4 clip;
+  if (!projectDir(d, clip) || starAmt <= 0.0) { gl_Position = vec4(2.0, 2.0, 2.0, 1.0); gl_PointSize = 0.0; vCol = vec3(0.0); vSz = 1.0; vBox = 1.0; return; }
+  gl_Position = clip;
+  float tw = 1.0 + twinkle * sin(time * (2.0 + 5.0 * ph) + ph * 40.0) * 0.5;
+  float hf = smoothstep(horizonY - 0.02, horizonY + 0.12, d.y);
+  vSz = size;
+  vBox = ceil(size * 5.0) * 2.0 + 1.0;
+  gl_PointSize = vBox;
+  vCol = scol * bright * tw * hf * starAmt * exposure;
+}`;
+const STAR_FS = /* glsl */`
+precision highp float; in vec3 vCol; in float vSz; in float vBox; out vec4 o;
+void main(){ vec2 q = (gl_PointCoord - 0.5) * vBox; float d2 = dot(q, q); if (d2 > 36.0) discard; o = vec4(vCol * exp(-d2 / (vSz * vSz)), 1.0); }`;
+
+const FLARE_VS = /* glsl */`
+in float kind; in float mag; in float ph;
+uniform float time, starAmt, horizonY, exposure, beacon, beaconSize;
+uniform vec3 beaconDir;
+out float vKind; out float vM; out float vBox; out float vA;
+${PROJ}
+void main(){
+  vec3 d = kind > 0.5 ? normalize(beaconDir) : normalize(position);
+  vec4 clip;
+  float on = kind > 0.5 ? beacon : starAmt;
+  if (!projectDir(d, clip) || on <= 0.0 || (kind < 0.5 && dot(d, camF) <= 0.1)) { gl_Position = vec4(2.0, 2.0, 2.0, 1.0); gl_PointSize = 0.0; vKind = 0.0; vM = 0.0; vBox = 1.0; vA = 0.0; return; }
+  gl_Position = clip;
+  float hf = smoothstep(horizonY - 0.02, horizonY + 0.12, d.y);
+  vKind = kind; vM = mag;
+  vBox = kind > 0.5 ? min(1000.0, ceil(400.0 * beaconSize)) : 241.0;
+  gl_PointSize = vBox;
+  vA = (kind > 0.5 ? beacon : starAmt * hf * (0.85 + 0.15 * sin(time * 3.0 + ph * 2.1))) * exposure;
+}`;
+const FLARE_FS = /* glsl */`
+precision highp float; in float vKind; in float vM; in float vBox; in float vA; out vec4 o;
+uniform float beaconSize, flareAmt; uniform vec3 beaconCol;
 float cross4(vec2 q, float len, float w){
   float a = exp(-abs(q.x) / len) * exp(-q.y * q.y / (w * w));
   float b = exp(-abs(q.y) / len) * exp(-q.x * q.x / (w * w));
   return a + b;
 }
-
 void main(){
-  vec2 ndc = (vUv - 0.5) * 2.0;
-  vec3 d = normalize(camF + ndc.x * camR * tanHalf * res.x / res.y + ndc.y * camU * tanHalf);
-  float up = d.y;                                    // world up = +y
-  // gradient
-  float t = smoothstep(horizonY - 0.05, 0.9, up);
-  vec3 col = mix(horizon, zenith, pow(t, 0.55));
-  col += glowCol * glowAmt * exp(-max(up - horizonY, 0.0) * 7.0);
-  // Milky Way
-  float g = dot(d, galN);
-  float band = exp(-g * g * 16.0);
-  float cloud = fbm(d * 2.2 + seed);
-  float fine = fbm(d * 11.0 + 7.0 + seed);
-  float dust = fbm(d * 8.0 + 3.0 + seed);
-  float mw = band * smoothstep(0.4, 0.75, cloud * 0.7 + fine * 0.3) * (1.0 - 0.85 * smoothstep(0.52, 0.7, dust) * band);
-  col += vec3(0.5, 0.58, 1.0) * mw * mwAmt * 0.36;
-  col += vec3(1.0, 0.82, 0.92) * pow(band, 4.0) * smoothstep(0.6, 0.9, cloud) * mwAmt * 0.12;
-  // stars: three layers (more in the band)
-  vec3 s = vec3(0.0);
-  if (trail > 0.0) {
-    // star trails: accumulate rotated samples about the pole
-    for (int k = 0; k < 24; k++) {
-      float a = trail * float(k) / 23.0;
-      float ca = cos(a), sa = sin(a);
-      vec3 dd = d * ca + cross(pole, d) * sa + pole * dot(pole, d) * (1.0 - ca);
-      s += stars(dd, gl_FragCoord.xy, 60.0, 1.0, 0.5, 0.9, 1.0) / 8.0 + stars(dd, gl_FragCoord.xy, 22.0, 1.3, 0.4, 1.4, 2.0) / 6.0;
-    }
-  } else {
-    s += stars(d, gl_FragCoord.xy, 120.0, 0.75, 0.22 + 0.45 * band, 0.45, 1.0);
-    s += stars(d, gl_FragCoord.xy, 48.0, 0.95, 0.42, 0.85, 2.0);
-    s += stars(d, gl_FragCoord.xy, 15.0, 1.25, 0.35, 1.4, 3.0);
-  }
-  float horizonFade = smoothstep(horizonY - 0.02, horizonY + 0.12, up);
-  col += s * starAmt * horizonFade;
-  // bright named stars with cross flares (fixed directions from seed)
-  for (int k = 0; k < 7; k++) {
-    vec3 r = h33(vec3(float(k) * 7.3, seed, 3.0)) * 2.0 - 1.0;
-    vec3 sd = normalize(r + vec3(0.0, 0.6, 0.0));
-    float fz = dot(sd, camF);
-    if (fz <= 0.1) continue;
-    vec2 sp = vec2(dot(sd, camR), dot(sd, camU)) / fz / tanHalf; sp.x *= res.y / res.x;
-    vec2 q = (ndc - sp) * res * 0.5;
-    float m = 0.4 + 0.6 * h13(vec3(float(k), 2.0, seed));
-    float tw = 0.85 + 0.15 * sin(time * 3.0 + float(k) * 2.1);
-    col += vec3(0.85, 0.92, 1.0) * (exp(-dot(q, q) / 3.0) * 2.5 + cross4(q, 9.0 * m, 0.9) * 0.55 * flareAmt) * m * tw * starAmt * horizonFade;
-  }
-  // beacon LGM-2
-  float bz = dot(beaconDir, camF);
-  if (bz > 0.05 && beacon > 0.0) {
-    vec2 bp = vec2(dot(beaconDir, camR), dot(beaconDir, camU)) / bz / tanHalf; bp.x *= res.y / res.x;
-    vec2 q = (ndc - bp) * res * 0.5;
-    float r2 = dot(q, q);
-    float sz = beaconSize;
-    vec3 bc = beaconCol * beacon;
-    col += bc * (exp(-r2 / (2.2 * sz * sz)) * 3.0 + exp(-r2 / (60.0 * sz * sz)) * 0.35 + exp(-sqrt(r2) / (40.0 * sz)) * 0.12);
-    col += bc * cross4(q, 26.0 * sz, 1.1 * sz) * 0.9 * flareAmt;
+  vec2 q = (gl_PointCoord - 0.5) * vBox;
+  vec3 c;
+  if (vKind > 0.5) {
+    float sz = beaconSize, r2 = dot(q, q);
+    vec3 bc = beaconCol * vA;
+    c = bc * (exp(-r2 / (2.2 * sz * sz)) * 3.0 + exp(-r2 / (60.0 * sz * sz)) * 0.35 + exp(-sqrt(r2) / (40.0 * sz)) * 0.12);
+    c += bc * cross4(q, 26.0 * sz, 1.1 * sz) * 0.9 * flareAmt;
     vec2 qd = mat2(0.7071, -0.7071, 0.7071, 0.7071) * q;
-    col += bc * cross4(qd, 9.0 * sz, 0.8 * sz) * 0.45 * flareAmt;
+    c += bc * cross4(qd, 9.0 * sz, 0.8 * sz) * 0.45 * flareAmt;
+  } else {
+    float m = vM;
+    c = vec3(0.85, 0.92, 1.0) * (exp(-dot(q, q) / 3.0) * 2.5 + cross4(q, 9.0 * m, 0.9) * 0.55 * flareAmt) * m * vA;
   }
-  o = vec4(col * exposure, 1.0);
+  o = vec4(c, 1.0);
 }`;
 
 export function camBasis(yaw, pitch, roll = 0) {
@@ -143,16 +147,81 @@ export const SKY_PRESETS = {
   predawn: { zenith: [0.03, 0.05, 0.15], horizon: [0.45, 0.35, 0.5], glowCol: [0.9, 0.55, 0.4], glowAmt: 0.45, starAmt: 0.75, mwAmt: 0.5, horizonY: -0.02 },
 };
 
+const GAL_N = new THREE.Vector3(0.35, 0.5, 0.79).normalize();
+const SEED = 1.7;
+
 export class Sky {
   constructor(core) {
     this.core = core;
+    this.mwRT = core.rt('skyMW', 2048, 1024, { float: true });
+    this.mwRT.texture.wrapS = THREE.RepeatWrapping;
+    const bake = core.material('skyMWBake', MW_BAKE_FS, { galN: GAL_N, seed: SEED });
+    core.pass(bake, this.mwRT, { galN: GAL_N, seed: SEED });
     this.mat = core.material('sky', SKY_FS, {
       res: new THREE.Vector2(W, H), camF: new THREE.Vector3(), camR: new THREE.Vector3(), camU: new THREE.Vector3(), tanHalf: 0.5,
-      zenith: new THREE.Vector3(), horizon: new THREE.Vector3(), glowCol: new THREE.Vector3(), horizonY: 0, glowAmt: 0, starAmt: 1,
-      mwAmt: 1, time: 0, twinkle: 0.4, seed: 1.7, beacon: 0, beaconSize: 1, flareAmt: 1, exposure: 1,
-      galN: new THREE.Vector3(0.35, 0.5, 0.79).normalize(), beaconDir: new THREE.Vector3(-0.35, 0.55, -0.76).normalize(),
-      beaconCol: new THREE.Vector3(1.0, 0.8, 0.42), trail: 0, pole: new THREE.Vector3(0, 0.8, -0.6).normalize() });
+      zenith: new THREE.Vector3(), horizon: new THREE.Vector3(), glowCol: new THREE.Vector3(), horizonY: 0, glowAmt: 0,
+      mwAmt: 1, exposure: 1, mwTex: this.mwRT.texture });
+    this.cam = new THREE.OrthographicCamera(-1, 1, 1, -1, 0, 1);
+    // shared uniforms for the point passes
+    this.U = { camF: { value: new THREE.Vector3() }, camR: { value: new THREE.Vector3() }, camU: { value: new THREE.Vector3() }, tanHalf: { value: 0.5 },
+      res: { value: new THREE.Vector2(W, H) }, time: { value: 0 }, twinkle: { value: 0.4 }, starAmt: { value: 1 }, horizonY: { value: 0 }, exposure: { value: 1 },
+      beacon: { value: 0 }, beaconSize: { value: 1 }, flareAmt: { value: 1 }, beaconDir: { value: new THREE.Vector3(-0.35, 0.55, -0.76).normalize() },
+      beaconCol: { value: new THREE.Vector3(1.0, 0.8, 0.42) } };
+    this.starScene = new THREE.Scene();
+    this.starScene.add(this.makeStars());
+    this.starScene.add(this.makeFlares());
   }
+
+  // star catalogue: three magnitude layers like the old procedural field, extra faint stars along the galactic band
+  makeStars() {
+    const R = rng(1234);
+    const pos = [], size = [], bright = [], scol = [], ph = [];
+    const layers = [[30000, 0.75, 0.45, true], [7700, 0.95, 0.85, false], [640, 1.25, 1.4, false]];
+    for (const [n, sizePx, br, bandBoost] of layers) {
+      let made = 0, guard = 0;
+      while (made < n && guard++ < n * 6) {
+        const z = R() * 2 - 1, a = R() * Math.PI * 2, r = Math.sqrt(1 - z * z);
+        const d = new THREE.Vector3(r * Math.cos(a), z, r * Math.sin(a));
+        if (bandBoost) { const g = d.dot(GAL_N); const band = Math.exp(-g * g * 16); if (R() > (0.22 + 0.45 * band) / 0.67) continue; }
+        const mag = Math.pow(R(), 4);
+        const t = R();
+        const c = t < 0.12 ? [1.0, 0.8, 0.58] : (t < 0.38 ? [0.76, 0.85, 1.0] : (t < 0.46 ? [1.0, 0.94, 0.82] : [0.93, 0.96, 1.0]));
+        pos.push(d.x, d.y, d.z); size.push(sizePx * (0.55 + 1.1 * mag)); bright.push((0.25 + 2.6 * mag) * br); scol.push(...c); ph.push(R());
+        made++;
+      }
+    }
+    const g = new THREE.BufferGeometry();
+    g.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3));
+    g.setAttribute('size', new THREE.Float32BufferAttribute(size, 1));
+    g.setAttribute('bright', new THREE.Float32BufferAttribute(bright, 1));
+    g.setAttribute('scol', new THREE.Float32BufferAttribute(scol, 3));
+    g.setAttribute('ph', new THREE.Float32BufferAttribute(ph, 1));
+    const m = new THREE.ShaderMaterial({ vertexShader: STAR_VS, fragmentShader: STAR_FS, glslVersion: THREE.GLSL3, uniforms: this.U,
+      transparent: true, depthTest: false, depthWrite: false, blending: THREE.AdditiveBlending });
+    const p = new THREE.Points(g, m); p.frustumCulled = false;
+    return p;
+  }
+
+  // 7 bright named stars (fixed directions) + the beacon as point sprites
+  makeFlares() {
+    const R = rng(77);
+    const pos = [], kind = [], mag = [], ph = [];
+    for (let k = 0; k < 7; k++) {
+      const d = new THREE.Vector3(R() * 2 - 1, R() * 2 - 1 + 0.6, R() * 2 - 1).normalize();
+      pos.push(d.x, d.y, d.z); kind.push(0); mag.push(0.4 + 0.6 * R()); ph.push(k);
+    }
+    pos.push(0, 1, 0); kind.push(1); mag.push(1); ph.push(0);
+    const g = new THREE.BufferGeometry();
+    g.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3));
+    g.setAttribute('kind', new THREE.Float32BufferAttribute(kind, 1));
+    g.setAttribute('mag', new THREE.Float32BufferAttribute(mag, 1));
+    g.setAttribute('ph', new THREE.Float32BufferAttribute(ph, 1));
+    const m = new THREE.ShaderMaterial({ vertexShader: FLARE_VS, fragmentShader: FLARE_FS, glslVersion: THREE.GLSL3, uniforms: this.U,
+      transparent: true, depthTest: false, depthWrite: false, blending: THREE.AdditiveBlending });
+    const p = new THREE.Points(g, m); p.frustumCulled = false;
+    return p;
+  }
+
   // o: {yaw,pitch,roll,fov(deg), preset or colors, beacon, time, ...}
   render(target, o) {
     const { F, R, U } = camBasis(o.yaw || 0, o.pitch || 0, o.roll || 0);
@@ -163,13 +232,21 @@ export class Sky {
     const P = { ...SKY_PRESETS[o.preset || 'night'], ...o };
     const { F, R, U } = P;
     const V = (a) => new THREE.Vector3(...a);
+    const tanHalf = Math.tan(((P.fov || 60) * Math.PI / 180) / 2);
+    const exposure = P.exposure ?? 1;
     this.core.pass(this.mat, target, {
-      camF: F, camR: R, camU: U, tanHalf: Math.tan(((P.fov || 60) * Math.PI / 180) / 2),
+      camF: F, camR: R, camU: U, tanHalf,
       zenith: V(P.zenith), horizon: V(P.horizon), glowCol: V(P.glowCol), horizonY: P.horizonY, glowAmt: P.glowAmt,
-      starAmt: P.starAmt, mwAmt: P.mwAmt, time: P.time || 0, twinkle: P.twinkle ?? 0.4, seed: P.seed ?? 1.7,
-      beacon: P.beacon ?? 0, beaconSize: P.beaconSize ?? 1, flareAmt: P.flareAmt ?? 1, exposure: P.exposure ?? 1,
-      trail: P.trail || 0, beaconDir: P.beaconDir ? V(P.beaconDir).normalize() : this.mat.uniforms.beaconDir.value,
-      galN: P.galN ? V(P.galN).normalize() : this.mat.uniforms.galN.value,
+      mwAmt: P.mwAmt, exposure,
     });
+    const u = this.U;
+    u.camF.value.copy(F); u.camR.value.copy(R); u.camU.value.copy(U); u.tanHalf.value = tanHalf;
+    u.time.value = P.time || 0; u.twinkle.value = P.twinkle ?? 0.4; u.starAmt.value = P.starAmt; u.horizonY.value = P.horizonY; u.exposure.value = exposure;
+    u.beacon.value = P.beacon ?? 0; u.beaconSize.value = P.beaconSize ?? 1; u.flareAmt.value = P.flareAmt ?? 1;
+    if (P.beaconDir) u.beaconDir.value.set(...P.beaconDir).normalize();
+    else u.beaconDir.value.set(-0.35, 0.55, -0.76).normalize();
+    const r = this.core.renderer;
+    r.setRenderTarget(target);
+    r.render(this.starScene, this.cam);
   }
 }

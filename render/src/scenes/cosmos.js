@@ -82,8 +82,8 @@ void main(){
   float on = step(bt, beaconT);
   float blink = 0.55 + 0.45 * sin(time * 6.2832 * 0.9 + bph * 6.2832);
   vB = on * blink;
-  vCol = mix(col, vec3(1.0, 0.8, 0.38) * 2.2, on);
-  gl_PointSize = size * scale / -mv.z * (1.0 + on * (1.6 + 1.2 * beat));
+  vCol = mix(col * 0.55, vec3(1.0, 0.78, 0.36) * 1.5, on);
+  gl_PointSize = min(size * scale / -mv.z, 9.0) * (1.0 + on * (1.4 + 1.0 * beat));
   gl_Position = projectionMatrix * mv;
 }`;
 const GAL_FS = /* glsl */`

@@ -9,6 +9,7 @@ import { clamp, lerp, smooth, easeOutCubic, easeInOutCubic, easeOutExpo, easeOut
 
 const EMBER = '#ff9a6a';
 const kicksIn = (ctx, a, b) => ctx.tl.kicks.filter((k) => k >= a && k <= b);
+const beatsIn = (ctx, a, b) => ctx.tl.beats.filter((k) => k >= a && k <= b);
 
 // ======================================================================================== ACT V
 const E1 = {
@@ -83,7 +84,7 @@ const E4 = {
     await plateLayer(ctx, s.target, { pid: 'P18_jade26', pt: syncedPT('P18_jade26', t), place: 'cover', grade: 'night', cam: { s: push(k, 1.02, 1.07), x: -20 * k } });
     layer2D(ctx, s.target, 'type', (g) => {
       const w = words(ctx, 19);
-      const runs = T.layout(g, [[{ ...w[0], f: 'hero', size: 150, sx: 0.8 }, { ...w[1], f: 'hero', size: 150, sx: 0.8 }], [{ ...w[2], f: 'ital', size: 140, text: 'still' }, { ...w[3], f: 'hero', size: 150, sx: 0.8, text: 'THERE?' }]], { x: 1810, y: 610, lead: 0.95, align: 'right' });
+      const runs = T.layout(g, [[{ ...w[0], f: 'hero', size: 150, sx: 0.8 }, { ...w[1], f: 'hero', size: 150, sx: 0.8 }], [{ ...w[2], f: 'ital', size: 140, text: 'still' }, { ...w[3], f: 'hero', size: 150, sx: 0.8, text: 'THERE?' }]], { x: 1810, y: 90, lead: 0.95, align: 'right' });
       T.drawBlock(g, runs, t, { anim: 'slam' });
       T.label(g, '2026', 110, 1010, { size: 20, color: '#ffcf5a' });
     });
@@ -103,8 +104,8 @@ const E5 = {
       const w = words(ctx, 20);
       const A = T.slamAnim(t, w[1].t0), B = T.slamAnim(t, w[2].t0);
       if (A) T.text(g, 'RARE', 960, 250, { f: 'hero', size: 210, sx: 0.8, align: 'center', alpha: A.a });
-      if (B) { T.text(g, 'EARTH', 520, 980, { f: 'hero', size: 150, sx: 0.8, align: 'center', color: '#8ecbff', alpha: B.a }); T.text(g, 'EARTH', 1400, 980, { f: 'hero', size: 150, sx: 0.8, align: 'center', color: EMBER, alpha: B.a }); }
-      T.karaoke(g, w.slice(3, 7).map((x) => ({ ...x, text: x.text.toLowerCase() })), t, { x: 960, y: 560, f: 'ital', size: 70, align: 'center', dim: 0.2 });
+      if (B) { T.text(g, 'EARTH', 520, 930, { f: 'hero', size: 150, sx: 0.8, align: 'center', color: '#8ecbff', alpha: B.a }); T.text(g, 'EARTH', 1400, 930, { f: 'hero', size: 150, sx: 0.8, align: 'center', color: EMBER, alpha: B.a }); }
+      T.karaoke(g, w.slice(3, 7).map((x) => ({ ...x, text: x.text.toLowerCase() })), t, { x: 960, y: 1045, f: 'ital', size: 54, align: 'center', dim: 0.2 });
     });
     return { bloom: 0.6, thresh: 0.85 };
   },
@@ -115,23 +116,32 @@ const E6 = {
   async render(ctx, s) {
     const t = s.t, T = ctx.type, k = s.lt / s.dur;
     sky(ctx, s.target, { preset: 'deep', yaw: 1.2 + k * 0.1, pitch: 0.02, fov: 60, beacon: 0, horizonY: -2, starAmt: 1.0, mwAmt: 1.3 });
+    // one pulse of their light crosses 1,200 light-years (right -> left) and arrives at a tiny blue Earth as the years roll
+    const u = easeInOutCubic(clamp((t - 93.2) / 3.9));
+    const ex = 250, ey = 600, sx = 1700, sy = 470;
+    const px = lerp(sx, ex, u), py = lerp(sy, ey, u);
+    const arrive = t > 97.1 ? Math.exp(-(t - 97.1) / 0.35) : 0;
     layer2D(ctx, s.target, 'fx', (g) => {
-      // their light travels toward us (right -> left), a gold thread arriving at a tiny blue Earth
-      const ex = 260, ey = 560, sx = 1720, sy = 470;
-      glow(g, sx, sy, 60, [255, 130, 70], 0.8); glow(g, ex, ey, 26, [120, 180, 255], 0.9);
-      g.strokeStyle = 'rgba(255,207,90,0.25)'; g.lineWidth = 1.5; g.setLineDash([6, 10]);
+      glow(g, sx, sy, 70, [255, 130, 70], 0.8 * (1 - 0.5 * ctx.tl.kick(t, 0.1)));
+      glow(g, ex, ey, 26 + 120 * arrive, [120, 180, 255], 0.9);
+      g.strokeStyle = 'rgba(255,207,90,0.22)'; g.lineWidth = 1.5; g.setLineDash([6, 10]);
       g.beginPath(); g.moveTo(sx, sy); g.lineTo(ex, ey); g.stroke(); g.setLineDash([]);
-      for (let i = 0; i < 7; i++) {
-        const u = ((k * 1.4 + i / 7) % 1);
-        const x = lerp(sx, ex, u), y = lerp(sy, ey, u);
-        glow(g, x, y, 22 * (1 - u * 0.4), [255, 214, 130], 0.9 * Math.sin(u * Math.PI));
-      }
+      g.strokeStyle = 'rgba(255,214,130,0.85)'; g.lineWidth = 3;
+      g.beginPath(); g.moveTo(sx, sy); g.lineTo(px, py); g.stroke();
+      if (u > 0 && u < 1) glow(g, px, py, 40, [255, 224, 150], 1.0);
+      if (arrive > 0) incoming(g, ex, ey, t, { r0: 140, n: 2, period: 0.7, col: '180,215,255', w: 2, a: arrive });
     }, { mode: 'add' });
     layer2D(ctx, s.target, 'type', (g) => {
-      const yr = Math.floor(lerp(826, 2026, easeInOutCubic(k)));
-      T.text(g, 'friend', 960, 300, { f: 'ital', size: 170, align: 'center', color: '#ffcf5a', alpha: 1 - smooth(96.8, 97.7, t), glow: 12 });
-      T.label(g, `LIGHT LEFT LGM-2 IN 826 AD   ·   1,200 LIGHT-YEARS   ·   NOW ${yr}`, 960, 820, { size: 20, color: '#f4f1e8', align: 'center' });
-      T.label(g, 'ARE THEY STILL THERE?', 960, 870, { size: 20, color: EMBER, align: 'center', alpha: smooth(94.5, 95.5, t) });
+      const fA = 1 - smooth(93.4, 93.9, t);
+      if (fA > 0) T.text(g, 'friend', 960, 300, { f: 'ital', size: 170, align: 'center', color: '#ffcf5a', alpha: fA, glow: 12 });
+      const a = smooth(93.3, 93.6, t);
+      const yr = Math.floor(lerp(826, 2026, u));
+      T.label(g, 'THE LIGHT WE SEE TONIGHT LEFT LGM-2 IN', 960, 250, { size: 20, color: '#f4f1e8', align: 'center', alpha: a * (1 - smooth(96.9, 97.2, t)) });
+      T.text(g, t > 97.1 ? '2026' : `${yr} AD`, 960, 520, { f: 'six', size: 300, align: 'center', color: t > 97.1 ? '#8ecbff' : '#ffcf5a', alpha: a });
+      T.label(g, t > 97.1 ? 'ARRIVING NOW' : '1,200 LIGHT-YEARS', 960, 590, { size: 20, color: '#f4f1e8', align: 'center', alpha: a });
+      T.label(g, 'ARE THEY STILL THERE?', 960, 900, { size: 22, color: EMBER, align: 'center', alpha: smooth(97.2, 97.5, t) });
+      T.label(g, 'LGM-2', sx, sy + 70, { size: 16, color: EMBER, align: 'center', alpha: a });
+      T.label(g, 'EARTH', ex, ey + 50, { size: 16, color: '#8ecbff', align: 'center', alpha: a });
     });
     return { bloom: 0.6, thresh: 0.82 };
   },
@@ -196,7 +206,7 @@ const F1 = {
       icon(g, kind, 960, 720, 1.6, u);
       T.label(g, cap, 960, 900, { size: 22, color: '#ffcf5a', align: 'center' });
       // ticker of all years
-      YEARS.forEach(([y2], i) => T.label(g, String(y2), 160 + i * 115, 1010, { size: 16, color: i === yi ? '#ffcf5a' : '#8ecbff', alpha: i <= yi ? 1 : 0.3 }));
+      YEARS.forEach(([y2], i) => T.label(g, String(y2), 110 + i * 100, 1010, { size: 16, color: i === yi ? '#ffcf5a' : '#8ecbff', alpha: i <= yi ? 1 : 0.3 }));
       T.label(g, 'STILL LISTENING', 1760, 1010, { size: 16, color: '#f4f1e8', align: 'right', alpha: 0.7 });
     });
     return { bloom: 0.5, thresh: 0.88 };
@@ -229,8 +239,8 @@ const F2 = {
       for (let i = 0; i < 26; i++) { const x = R() * W, y = 740 + R() * 320; g.fillStyle = '#4a4751'; g.beginPath(); g.ellipse(x, y, 6 + R() * 22, 4 + R() * 10, 0, 0, 7); g.fill(); }
     });
     layer2D(ctx, s.target, 'type', (g) => {
-      T.text(g, '2026', 110, 200, { f: 'six', size: 260, color: '#f4f1e8' });
-      T.label(g, 'FAR SIDE OF THE MOON  ·  THE QUIETEST PLACE WE KNOW  ·  LISTENING ONLY', 118, 250, { size: 18, color: '#ffcf5a' });
+      T.text(g, '2026', 110, 290, { f: 'six', size: 260, color: '#f4f1e8' });
+      T.label(g, 'FAR SIDE OF THE MOON  ·  THE QUIETEST PLACE WE KNOW  ·  LISTENING ONLY', 118, 340, { size: 18, color: '#ffcf5a' });
     });
     return { bloom: 0.55, thresh: 0.86 };
   },
@@ -245,8 +255,8 @@ const F3 = {
       // a plain mail archive list (generic UI, no brand)
       const x = 260, y = 150, w = 1400;
       panelFrame(g, x - 20, y - 60, w + 40, 800, 'ARCHIVE  ·  SEARCH: rare earth', { col: 'rgba(142,203,255,0.6)' });
-      const rows = [['RNA', 'rehearsal thursday?', 'May 2011'], ['jade', 'rare earth (demo) — recorded tonight', 'May 31 2011'], ['charlie', 're: set list for the SETI night', 'Jun 2011'],
-        ['ricky', 'photos from the show', 'Jun 2011'], ['jade', 'lyrics v3 — "keep up funding" stays', 'Jun 2011'], ['jade', 'rare earth (demo).m4a', '2011']];
+      const rows = [['RNA', 'rehearsal?', '2011'], ['jade', 'rare earth (jade vocals).mp3', '2011'], ['charlie', 're: set list for the SETI night', '2011'],
+        ['ricky', 'photos', '2011'], ['jade', 'rare earth lyrics', '2011'], ['RNA', 'robot ninja apocalypse logo final', '2011']];
       rows.forEach(([from, subj, d], i) => {
         const yy = y + i * 110;
         const hi = i === 1 && t > 115.6;
@@ -273,13 +283,13 @@ const F4 = {
         const x = 110 + (i % 2) * 870, y = 140 + Math.floor(i / 2) * 420, w = 830, h = 330;
         const on = t > 118.7 + i * 0.47;
         panelFrame(g, x, y, w, h, name, { col, alpha: on ? 1 : 0.3 });
-        if (on) lightCurve(g, { x: x + 20, y: y + 40, w: w - 40, h: h - 80, t, t0: 118.63, span: 3.8, dips: kicksIn(ctx, 118.6, 122.5), depth: 0.3, width: 0.05, color: col, grid: false });
+        if (on) lightCurve(g, { x: x + 20, y: y + 40, w: w - 40, h: h - 80, t, t0: 118.63, span: 3.8, dips: beatsIn(ctx, 118.6, 122.5), depth: 0.3, width: 0.05, color: col, grid: false });
       });
     });
     layer2D(ctx, s.target, 'type', (g) => {
       const a = smooth(121.2, 121.6, t);
-      g.fillStyle = `rgba(4,5,11,${0.7 * a})`; g.fillRect(0, 440, W, 200);
-      T.text(g, 'SAME RHYTHM. FOUR INSTRUMENTS.', 960, 560, { f: 'hero', size: 110, sx: 0.8, align: 'center', alpha: a });
+      g.fillStyle = `rgba(4,5,11,${0.85 * a})`; g.fillRect(0, 478, W, 80);
+      T.text(g, 'SAME RHYTHM. FOUR INSTRUMENTS.', 960, 546, { f: 'hero', size: 80, sx: 0.8, align: 'center', alpha: a });
     });
     return { bloom: 0.55, thresh: 0.85 };
   },

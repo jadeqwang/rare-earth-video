@@ -11,7 +11,7 @@ export const shared = { get arr() { return ARR; }, get earth() { return EARTH; }
 
 export async function initAct1(ctx) {
   if (!ARR) ARR = new DishArray(ctx.core);
-  if (!EARTH) EARTH = new Planet(await makeEarthTextures(''), { rim: '#7fb8ff', lightsAmt: 1.8 });
+  if (!EARTH) EARTH = new Planet(await makeEarthTextures(''), { rim: '#7fb8ff', lightsAmt: 1.2, termAmt: 0.22 });
 }
 
 // ---------------------------------------------------------------------------------------------------
@@ -33,7 +33,7 @@ const A1 = {
       T.label(g, '2011 → 2026', 118, 640, { size: 18, color: '#8ecbff', alpha: 0.8 * a });
       T.typewriter(g, '> are you still there?', t, 0.35, { x: 118, y: 960, size: 30, cps: 17, color: '#ffcf5a', alpha: a });
     });
-    return { bloom: 0.5, thresh: 0.9, vig: 0.35, fade: 1 - smooth(0, 0.25, t) * 0.0 };
+    return { bloom: 0.5, thresh: 0.9, vig: 0.35, fade: 0 };
   },
 };
 
@@ -53,7 +53,7 @@ const A2 = {
         [{ ...w0[0], f: 'hero', size: 300, sx: 0.8 }, { ...w0[1], f: 'hero', size: 300, sx: 0.8 }],
         [{ ...w0[2], text: 'still', f: 'ital', size: 250, dx: 10 }],
         [{ ...w0[3], f: 'hero', size: 420, sx: 0.8 }],
-      ], { x: 96, y: 40, lead: 0.8 });
+      ], { x: 96, y: 72, lead: 0.8 });
       if (out1 < 1) T.drawBlock(g, runs, t, { anim: 'slam', glow: 0, alpha: 1 - out1 });
       // "you're yearning to see" rises as the block leaves
       const w1 = words(ctx, 1);
@@ -136,10 +136,30 @@ const A4 = {
       const id = `HIP ${(41000 + ((hopIdx * 7919) % 9000))}`;
       T.label(g, `${id}   1420.405 MHz   SNR 0.${(hopIdx * 37) % 9}   NO SIGNAL`, x + r + 40, y - 12, { size: 16, color: '#8ecbff' });
       T.label(g, `RA ${(10 + (hopIdx % 12))}h ${(hopIdx * 13) % 60}m   DEC +${(hopIdx * 7) % 70}°`, x + r + 40, y + 14, { size: 16, color: '#8ecbff', alpha: 0.7 });
+      // every star already checked keeps a small bracket + NO SIGNAL (the search is exhaustive, and so far empty)
+      const b0 = ctx.tl.beatIndex(9.56);
+      for (let j = b0; j < hopIdx; j++) {
+        const p = targets[((j % targets.length) + targets.length) % targets.length];
+        const jx = p[0] + ((j * 131) % 90) - 45, jy = p[1] + ((j * 71) % 70) - 35;
+        g.strokeStyle = 'rgba(142,203,255,0.45)'; g.lineWidth = 1.2;
+        for (const [sx, sy] of [[-1, -1], [1, -1], [-1, 1], [1, 1]]) { g.beginPath(); g.moveTo(jx + sx * 16, jy + sy * 8); g.lineTo(jx + sx * 16, jy + sy * 16); g.lineTo(jx + sx * 8, jy + sy * 16); g.stroke(); }
+        T.label(g, 'NO SIGNAL', jx + 22, jy + 5, { size: 12, color: 'rgba(142,203,255,0.6)' });
+      }
+      // scrolling target catalogue
+      const rowsN = 26, sc = (t - 9.56) * 22;
+      g.save(); g.beginPath(); g.rect(W - 420, 130, 340, 800); g.clip();
+      for (let r = 0; r < rowsN + 1; r++) {
+        const n = Math.floor(sc) + r, yy = 150 + (r - (sc % 1)) * 31;
+        T.label(g, `HIP ${40000 + (n * 7919) % 60000}  ·  1420 MHz  ·  –`, W - 410, yy, { size: 13, color: 'rgba(142,203,255,0.55)' });
+      }
+      g.restore();
       // frame HUD
       g.strokeStyle = 'rgba(142,203,255,0.35)'; g.lineWidth = 1; g.strokeRect(60, 60, W - 120, H - 120);
       T.label(g, 'ARRAY  ·  BEAM 07  ·  SEARCHING', 80, 92, { size: 16, color: '#8ecbff' });
       T.label(g, `T+${(t - 9.56).toFixed(2)}s`, W - 80, 92, { size: 16, color: '#8ecbff', align: 'right' });
+    });
+    layer2D(ctx, s.target, 'typeBack', (g) => {
+      T.text(g, 'SEARCHING', 960, 1060, { f: 'six', size: 1150, align: 'center', color: '#8ecbff', alpha: 0.09 });
     });
     layer2D(ctx, s.target, 'type', (g) => {
       const w = words(ctx, 2);
@@ -160,7 +180,7 @@ const A5 = {
     const w = words(ctx, 3);
     layer2D(ctx, s.target, 'typeBack', (g) => {
       const runs = T.layout(g, [[{ ...w[0], f: 'hero', size: 250, sx: 0.8 }, { ...w[1], f: 'hero', size: 250, sx: 0.8 }],
-        [{ ...w[2], f: 'ital', size: 220, text: 'still' }], [{ ...w[3], f: 'hero', size: 330, sx: 0.8, text: 'THERE?' }]], { x: 100, y: 60, lead: 0.82 });
+        [{ ...w[2], f: 'ital', size: 220, text: 'still' }], [{ ...w[3], f: 'hero', size: 330, sx: 0.8, text: 'THERE?' }]], { x: 100, y: 96, lead: 0.82 });
       T.drawBlock(g, runs, t, { anim: 'slam' });
     });
     await plateLayer(ctx, s.target, { pid: 'P03_there', pt: syncedPT('P03_there', t), place: { cx: 1150, cy: 540, h: 1100 }, grade: 'night',
@@ -178,7 +198,7 @@ const A6 = {
     const k = s.lt / s.dur;
     sky(ctx, s.target, { preset: 'deep', yaw: 2.2, pitch: 0.1, fov: 30, beacon: beacon(ctx, t, 0.5) * 0.7, beaconSize: 0.7, beaconDir: [0.5, 0.2, -0.84], horizonY: -2 });
     EARTH.render(ctx.core, s.target, { pos: [0, 0, lerp(6.2, 5.6, easeInOutCubic(k))], look: [0, 0, 0], fov: 30, rotY: 2.5 + t * 0.05, tilt: 0.35,
-      sun: [0.9, 0.3, 0.55], cloud: t * 0.004, lights: 2.0, at: [0.62, -0.02, 0], dayGain: 0.72 });
+      sun: [0.9, 0.3, 0.55], cloud: t * 0.004, lights: 1.2, at: [0.9, -0.02, 0], dayGain: 0.72 });
     layer2D(ctx, s.target, 'type', (g) => {
       const w = words(ctx, 4);
       T.text(g, 'a', 118, 250, { f: 'ital', size: 130, color: '#8ecbff', alpha: clamp((t - w[0].t0) / 0.08) });
