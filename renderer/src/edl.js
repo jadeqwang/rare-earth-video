@@ -35,11 +35,11 @@ export function buildEDL(tim) {
     cam: { z0: 1.0, z1: 1.07, x0: 0.5, x1: 0.47, y0: 0.5, y1: 0.54 },
     cues: [{ k: 'voice', line: ['V1', 1], from: 4, to: 8, x: 0.07, y: 0.42, px: 150, maxW: 0.62 }] });
   add('S06', 9.82, 11.66, 'plate', STAGE(3.4, { light: { scan: 0.6, split: 1.5, cell: 6, hueKeep: 0.55 },
-    cam: { z0: 1.55, z1: 1.7, x0: 0.56, y0: 0.66, y1: 0.67 },
+    cam: { z0: 1.55, z1: 1.7, x0: 0.47, x1: 0.45, y0: 0.66, y1: 0.67 },
     cues: [{ k: 'stack', line: ['V1', 2], x: 0.06, y: 0.1, maxW: 0.34, px: 230, flash: '#3DFFB2' }] }));
   add('S07', 11.66, 13.69, 'plate', { plate: 'A03', mat: 'ink', palette: 'inkRoomCool', pt0: 0.3,
     cam: { z0: 1.0, z1: 1.1, x0: 0.55, x1: 0.58, y0: 0.52, y1: 0.54 },
-    cues: [{ k: 'termWords', line: ['V1', 3], x: 0.063, y: 0.5, px: 46, prompt: '> ', suffix: '?' }] });
+    cues: [{ k: 'termWords', line: ['V1', 3], x: 0.063, y: 0.5, px: 58, prompt: '> ', suffix: '?' }] });
   add('S08', 13.69, 15.761, 'globe', { lon: -100, tilt: -22, radius: 270, cx: 0.5, cy: 0.56, spin: 0.08, mw: 0.25,
     cues: [
       { k: 'single', words: [W('Rare', 13.96)], x: 0.5, y: 0.86, px: 300, maxW: 0.6, until: 14.28 },
@@ -49,7 +49,7 @@ export function buildEDL(tim) {
   add('S09', 15.761, 17.699, 'globe', { lon: -100, tilt: -22, cx: 0.5, cy: 0.5, spin: 0.08, mw: 0.6,
     radius: (c) => 270 * c.S * Math.pow(0.004, Math.min(1, c.lt / 1.5) ** 1.4),
     rings: { period: 0.95, n: 4, spread: 60 },
-    cues: [{ k: 'voice', line: ['V1', 4], from: 3, to: 7, x: 0.5, y: 0.8, px: 96, align: 'center', maxW: 0.9 }] });
+    cues: [{ k: 'voice', line: ['V1', 4], from: 3, to: 7, x: 0.5, y: 0.82, px: 136, align: 'center', maxW: 0.9 }] });
   add('S10', 17.699, 19.52, 'triptych', {
     panels: [
       { plate: 'A08', mat: 'light', palette: 'light2011', neon: '#C8FFE8', song: 42.6 - 24.9, light: { scan: 0.6, split: 1.2 }, cam: { z0: 1.0, x0: 0.38 + 0.333 } },
@@ -77,21 +77,21 @@ export function buildEDL(tim) {
   add('S15', 27.03, 30.97, 'pulsar', {
     cues: [
       { k: 'single', line: ['V2', 2], from: 1, to: 3, x: 0.5, y: 0.17, px: 150, maxW: 0.7 },
-      { k: 'voice', line: ['V2', 2], from: 3, to: 6, x: 0.5, y: 0.97, px: 64, align: 'center' },
+      { k: 'voice', line: ['V2', 2], from: 3, to: 6, x: 0.5, y: 0.965, px: 92, align: 'center' },
     ] });
   add('S16', 30.97, 34.981, 'transit', { t0: 30.97,
     cues: [{ k: 'block', line: ['V2', 3], from: 0, to: 7, x: 0.5, y: 0.13, px: 84, align: 'center', maxW: 0.9 }] });
   add('S17', 34.981, 38.23, 'transit', { t0: 30.97, merge: true,
     cues: [{ k: 'voice', line: ['V2', 3], from: 6, to: 10, x: 0.5, y: 0.14, px: 120, align: 'center', maxW: 0.9 }] });
-  add('S18', 38.23, 40.71, 'galaxy', { z0: 3.0, z1: 0.7, dots: true,
-    cues: [{ k: 'stack', line: ['V2', 4], x: 0.07, y: 0.02, maxW: 0.34, px: 160, lead: 0.88 }] });
+  add('S18', 38.23, 40.71, 'galaxy', { z0: 1.8, z1: 0.75, dots: true,
+    cues: [{ k: 'stack', line: ['V2', 4], x: 0.07, y: 0.07, maxW: 0.34, px: 150, lead: 0.88 }] });
 
   // ================= BREAK: the broadcast leaves =================
   add('S19', 40.71, 42.632, 'plate', { plate: 'E01', mat: 'ink', palette: 'inkDesert', ink: { allSoft: 0.55 }, analyse: { radius: 3 }, pt0: 2.6, sparkle: 1.2, beam: true,
     cues: [{ k: 'term', text: 'transmit --signal "rare earth" --origin earth --year 2011', t0: 40.8, x: 0.05, y: 0.1, px: 26, prompt: '$ ', cps: 70 }] });
   add('S20', 42.632, 46.457, 'flyby');
   add('S21', 46.457, 50.277, 'warp', { ly0: 0.0, ly1: 4.0 });
-  add('S22', 50.277, 57.916, 'bubble', { y0: 4.0, y1: 16.3, ease: false });
+  add('S22', 50.277, 57.916, 'bubble', { y0: 4.0, y1: 17.0, ease: false });
 
   // ================= V3 =================
   add('S23', 57.916, 59.55, 'plate', { plate: 'E03', mat: 'ink', palette: 'inkLaunch', pt0: 0.3,
@@ -105,33 +105,34 @@ export function buildEDL(tim) {
     cam: { z0: 1.05, z1: 1.12, x0: 0.44 },
     cues: [{ k: 'stack', line: ['V3', 1], from: 2, to: 5, x: 0.56, y: 0.14, maxW: 0.38, px: 170 }] });
   add('S27', 64.48, 65.38, 'hole');
-  add('S28', 65.38, 67.42, 'plate', { plate: 'E02', mat: 'ink', palette: 'inkDay', pt0: 0.0, sparkle: 0.6,
+  add('S28', 65.38, 67.42, 'plate', { plate: 'E02', mat: 'ink', palette: 'inkDay', ink: { allSoft: 0.5 }, pt0: 0.0, sparkle: 0.6,
     cam: { z0: 1.0, z1: 1.05 },
     cues: [{ k: 'stack', line: ['V3', 2], from: 0, to: 3, x: 0.05, y: 0.05, maxW: 0.45, px: 190, fill: '#FFFFFF' }] });
-  add('S29', 67.42, 69.18, 'plate', { plate: 'E02', mat: 'ink', palette: 'inkDay', pt0: 2.0, sparkle: 0.6,
+  add('S29', 67.42, 69.18, 'plate', { plate: 'E02', mat: 'ink', palette: 'inkDay', ink: { allSoft: 0.5 }, pt0: 2.0, sparkle: 0.6,
     cam: { z0: 1.05, z1: 1.1 },
     cues: [{ k: 'voice', line: ['V3', 2], from: 3, to: 6, x: 0.5, y: 0.3, px: 170, align: 'center', maxW: 0.9, fill: '#16244A' }] });
   add('S30', 69.18, 73.59, 'crowdfund', {
     cues: [{ k: 'block', line: ['V3', 3], x: 0.5, y: 0.955, px: 66, align: 'center', maxW: 0.96, fill: '#FFFFFF', band: 0.95, bandH: 1.4 }] });
-  add('S31', 73.59, 76.34, 'plate', { plate: 'A04', mat: 'ink', palette: 'inkRoom', pt0: 0.5,
+  add('S31', 73.59, 76.34, 'plate', { plate: 'A04', mat: 'ink', palette: 'inkRoom', pt0: 0.5, ink: { exposure: 1.3 },
     cam: { z0: 1.0, z1: 1.08, x0: 0.55, x1: 0.57 },
     cues: [{ k: 'voice', line: ['V3', 4], x: 0.06, y: 0.45, px: 110, maxW: 0.5 }] });
   add('S32', 76.34, 80.40, 'jwst', { cx: 0.68,
     cues: [
-      { k: 'block', line: ['V3', 5], from: 0, to: 4, x: 0.05, y: 0.3, px: 110, maxW: 0.4 },
-      { k: 'voice', line: ['V3', 5], from: 4, to: 5, x: 0.05, y: 0.62, px: 220, maxW: 0.45, fill: '#E8C77A' },
+      { k: 'block', line: ['V3', 5], from: 0, to: 4, x: 0.05, y: 0.25, px: 110, maxW: 0.4 },
+      { k: 'voice', line: ['V3', 5], from: 4, to: 5, x: 0.05, y: 0.74, px: 220, maxW: 0.45, fill: '#E8C77A' },
     ] });
 
   // ================= V4: split-screen duet, then one frame =================
   const seamGlow = (c) => 0.5;
-  add('S33', 80.40, 86.17, 'split', { left: STAGE4(), right: ROOF4(), seam: seamGlow, stamp: true,
+  add('S33', 80.40, 86.17, 'split', { left: STAGE4({ cam: { z0: 1.0, z1: 1.08, x0: 0.5, x1: 0.47, y0: 0.5, y1: 0.5 } }), right: ROOF4({ cam: { z0: 1.0, z1: 1.08, x0: 0.5, x1: 0.53, y0: 0.5, y1: 0.52 } }), seam: seamGlow, stamp: true,
     cues: [
       { k: 'single', line: ['V4', 0], x: 0.5, y: 0.88, px: 300, maxW: 0.9, until: 82.30, flash: '#9CC8FF' },
       { k: 'block', line: ['V4', 1], x: 0.5, y: 0.9, px: 76, align: 'center', maxW: 0.94 },
     ] });
-  add('S34', 86.17, 88.07, 'split', { left: STAGE4(), right: ROOF4(), seam: seamGlow, stamp: true,
+  // closer on both faces (each framed to the centre of its half)
+  add('S34', 86.17, 88.07, 'split', { left: STAGE4({ cam: { z0: 1.3, z1: 1.36, x0: 0.512, x1: 0.504, y0: 0.458, y1: 0.46 } }), right: ROOF4({ cam: { z0: 1.3, z1: 1.36, x0: 0.458, x1: 0.466, y0: 0.518, y1: 0.52 } }), seam: seamGlow, stamp: true,
     cues: [{ k: 'block', line: ['V4', 2], x: 0.5, y: 0.9, px: 96, align: 'center', maxW: 0.9 }] });
-  add('S35', 88.07, 89.99, 'split', { left: STAGE4(), right: ROOF4(), seam: seamGlow, glow: 4, stamp: true,
+  add('S35', 88.07, 89.99, 'split', { left: STAGE4({ cam: { z0: 1.12, z1: 1.18, x0: 0.44, y0: 0.5 } }), right: ROOF4({ cam: { z0: 1.12, z1: 1.18, x0: 0.56, y0: 0.53 } }), seam: seamGlow, glow: 4, angle: 0.12, stamp: true,
     cues: [
       { k: 'block', line: ['V4', 3], x: 0.5, y: 0.9, px: 96, align: 'center', maxW: 0.9 },
       { k: 'term', text: 'git merge legacy/2011', t0: 88.3, x: 0.5, y: 0.08, px: 26, prompt: '$ ', cps: 40, fill: '#E8F0FF' },
@@ -158,8 +159,8 @@ export function buildEDL(tim) {
   add('S40', 103.486, 107.27, 'plate', { plate: 'E04', mat: 'light', pt0: 0.0, ...ALIENL });
   add('S41', 107.27, 111.061, 'alienOrbit', { r: 520, z0: 1.0, z1: 1.3, cx: 0.42, lon0: 1.1,
     cues: [{ k: 'term', text: 'SIGNAL RECEIVED  ·  ORIGIN: 3RD PLANET, G-TYPE STAR  ·  AGE 15.8 YEARS', t0: 107.5, x: 0.05, y: 0.9, px: 22, cps: 50, fill: '#7FF0E0' }] });
-  add('S42', 111.061, 116.733, 'alienOrbit', { r: 330, z0: 1.15, z1: 1.2, listen: true, fadeLights: true,
-    cues: [{ k: 'label', text: 'LISTENING', x: 0.5, y: 0.92, t0: 111.3, px: 20, align: 'center', fill: '#7FF0E0' }] });
+  add('S42', 111.061, 116.733, 'alienOrbit', { r: 330, z0: 1.05, z1: 1.35, listen: true, fadeLights: true, incoming: { period: 1.9 },
+    cues: [{ k: 'label', text: 'LISTENING', x: 0.5, y: 0.93, t0: 111.3, px: 30, align: 'center', fill: '#7FF0E0' }] });
   add('S43', 116.733, 122.427, 'reply', { cx: 0.62 });
   add('S44', 122.427, 126.13, 'replyBeam', { fx: {} });
 
@@ -207,8 +208,8 @@ export function buildEDL(tim) {
   });
   add('S49', 143.221, 147.006, 'black', { stars: 0.25,
     cues: [
-      { k: 'block', line: ['V5', 4], from: 0, to: 4, x: 0.5, y: 0.5, px: 44, fam: 'mono', wght: 500, caps: false, align: 'center', maxW: 0.8 },
-      { k: 'voice', line: ['V5', 4], from: 4, to: 5, x: 0.5, y: 0.62, px: 150, align: 'center' },
+      { k: 'block', line: ['V5', 4], from: 0, to: 4, x: 0.5, y: 0.47, px: 84, fam: 'mono', wght: 500, caps: false, align: 'center', maxW: 0.9 },
+      { k: 'voice', line: ['V5', 4], from: 4, to: 5, x: 0.5, y: 0.68, px: 210, align: 'center' },
     ] });
 
   // ================= OUTRO: contact =================
@@ -231,7 +232,7 @@ export function buildEDL(tim) {
     ['plate', { plate: 'A09', mat: 'light', palette: 'light2011', song: 146.8 - 100, light: { scan: 0.4 } }],
     ['globe', { lon: -100, tilt: -22, radius: 300, rings: { period: 0.5, n: 5, spread: 3 } }],
     ['plate', { plate: 'P04', mat: 'ink', palette: 'inkRoof', pt0: 4.2, cam: { z0: 1.9, x0: 0.76, y0: 0.64 } }],
-    ['plate', { plate: 'E02', mat: 'ink', palette: 'inkDay', pt0: 3.0 }],
+    ['plate', { plate: 'E02', mat: 'ink', palette: 'inkDay', ink: { allSoft: 0.5 }, pt0: 3.0 }],
     ['plate', { plate: 'P03', mat: 'ink', palette: 'inkRoof', pt0: 12.0 }],
     ['plate', { photo: 'rna_band2.jpg', mat: 'light', palette: 'light2011', neon: '#FFD6F0', light: { scan: 0.6, cell: 6, hueKeep: 0.6 }, stamp: true, cam: { z0: 1.05, z1: 1.15 } }],
     ['plate', { plate: 'A06', mat: 'ink', palette: 'inkRoof', pt0: 4.0 }],

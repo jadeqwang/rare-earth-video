@@ -186,6 +186,7 @@ uniform sampler2D soft; uniform sampler2D edge; uniform sampler2D plate; uniform
 uniform vec3 c0; uniform vec3 c1; uniform vec3 c2; uniform vec3 c3; uniform vec3 neon;
 uniform float cell; uniform float ang; uniform float gain; uniform float hueKeep; uniform float lineW;
 uniform float scan; uniform float split; uniform float hasMask; uniform float bgDim; uniform float dotMin; uniform float t; uniform float dotMax; uniform float hiComp; uniform float exposure;
+uniform float localK; uniform float localLod; uniform float darkLines;
 ${PLATE_UV}
 vec3 skinAt(vec2 q){ return texture(soft, q).rgb; }
 ${MOUTH}
@@ -199,7 +200,11 @@ void main(){
   vec2 cq = plateUV(cpx / res);
   vec3 s = samplePlate(cq);
   float m = hasMask > 0.5 ? texture(mask, cq).r : 1.0;
-  float L = clamp(lum(s) * gain, 0.0, 1.0) * mix(bgDim, 1.0, m);
+  // local contrast against a coarse mip (the neighbourhood mean): features inside bright,
+  // flat-lit areas (eyes, brows, lips on a spot-lit face) stay readable as smaller dots
+  float Ls = lum(s);
+  float Lm = lum(textureLod(plate, cq, localLod).rgb);
+  float L = clamp((Ls + localK * (Ls - Lm)) * gain, 0.0, 1.0) * mix(bgDim, 1.0, m);
   L = L / (1.0 + L * hiComp) * (1.0 + hiComp);      // compress highlights so whites stay as dots
   float r = sqrt(max(L, dotMin)) * dotMax;
   float d = length(hp - g);
@@ -215,7 +220,10 @@ void main(){
   er = texture(edge, q + so).r; eg = texture(edge, q).r; eb = texture(edge, q - so).r;
   float mm = hasMask > 0.5 ? texture(mask, q).r : 1.0;
   vec3 e = vec3(er, eg, eb) * mix(0.35, 1.0, mm) * lineW;
-  col += neon * e;
+  // contour: neon (added light) over dark areas, but printed as dark ink over bright ones,
+  // so features on a spot-lit face or a white shirt don't vanish into the highlight
+  float onBright = smoothstep(0.45, 0.8, L) * darkLines;
+  col = mix(col + neon * e, col * (1.0 - clamp(eg * 1.3, 0.0, 0.85)), onBright);
   // drawn mouth as neon
   vec3 mk = mouthMasks(q);
   col += neon * mk.y * 1.2 + neon * 0.25 * mk.x;
@@ -255,8 +263,10 @@ export class Materials {
       if (old) { T = this.work.get(old); this.work.delete(old); T.lastImg = null; }
     }
     if (!T) {
-      const g = this.g;
+      const g = this.g, gl = g.gl;
       T = { src: g.texture(w, h), flat: g.target(w, h), t1: g.target(w, h), g1: g.target(w, h), g2: g.target(w, h), edge: g.target(w, h), soft: g.target(w, h) };
+      gl.bindTexture(gl.TEXTURE_2D, T.src.t);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR);
     }
     this.work.set(key, T);
     return T;
@@ -271,6 +281,7 @@ export class Materials {
     if (T.lastImg === img && T.lastSig === sig) return T;
     T.lastImg = img; T.lastSig = sig;
     g.upload(T.src, img);
+    g.gl.generateMipmap(g.gl.TEXTURE_2D);   // coarse levels = local mean for LIGHT's local contrast
     this.plateTex = T.src;
     const s1 = opt.edgeSigma ?? 1.0;
     g.pass(this.pB, T.t1, { src: this.plateTex }, { dir: [1, 0], sigma: s1 });
@@ -316,7 +327,7 @@ export class Materials {
     this.g.pass(this.pLight, out, { soft: T.soft, edge: T.edge, plate: T.src, mask: o.hasMask ? this.maskTex : this.blank }, {
       c0: hex(p[0]), c1: hex(p[1]), c2: hex(p[2]), c3: hex(p[3]), neon: o.neon || [1, 1, 1],
       cell: o.cell ?? 7, ang: o.ang ?? 0.5236, gain: o.gain ?? 1.0, hueKeep: o.hueKeep ?? 0.45, lineW: o.lineW ?? 0.75,
-      scan: o.scan ?? 0, split: o.split ?? 0, hasMask: o.hasMask ? 1 : 0, bgDim: o.bgDim ?? 1.0, dotMin: o.dotMin ?? 0.0, t: o.t || 0, dotMax: o.dotMax ?? 0.5, hiComp: o.hiComp ?? 1.2, exposure: o.exposure ?? 0.95,
+      scan: o.scan ?? 0, split: o.split ?? 0, hasMask: o.hasMask ? 1 : 0, bgDim: o.bgDim ?? 1.0, dotMin: o.dotMin ?? 0.0, t: o.t || 0, dotMax: o.dotMax ?? 0.5, hiComp: o.hiComp ?? 1.2, exposure: o.exposure ?? 0.95, localK: o.localK ?? 0.9, localLod: o.localLod ?? 4.5, darkLines: o.darkLines ?? 1.0,
       xf: o.xf || [1, 0.5, 0.5, 0], shake: o.shake || [0, 0], plateAspect: o.plateAspect || 16 / 9,
       ...this._mouthUniforms(o.mouth),
     });

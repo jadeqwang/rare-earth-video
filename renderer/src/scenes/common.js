@@ -161,7 +161,7 @@ export function drawCues(ctx, cues = []) {
         const ws = wordsOf(tim, c.line);
         if (!ws.length) break;
         const txt = c.text || ws.map((w) => w.w).join(' ').toLowerCase();
-        subtitle(o, txt, t, ws[0].t0 - 0.05, c.t1 ?? ws[ws.length - 1].t1 + 0.25, { x: X(c.x ?? 0.063), y: Y(c.y ?? 0.905), px: c.px ?? 40, S, fill: c.fill || '#F4F1EA' });
+        subtitle(o, txt, t, ws[0].t0 - 0.05, c.t1 ?? ws[ws.length - 1].t1 + 0.25, { x: X(c.x ?? 0.063), y: Y(c.y ?? 0.9), px: c.px ?? 52, S, fill: c.fill || '#F4F1EA' });
         break;
       }
       case 'termWords': { // terminal line whose words type out on their sung onsets

@@ -19,7 +19,7 @@ float starLayerB(vec2 p, float scale, float seed, float base, out vec3 col){
     if (h > density) continue;
     vec2 pos = hash22(c + seed * 1.7);
     float mag = pow(hash21(c * 1.3 + seed), 6.0);
-    float d = length((f - vec2(x, y) - pos) / scale) * res.y;       // px distance
+    float d = length((f - vec2(x, y) - pos) / scale) * res.y * zoom; // px distance (stars stay points under zoom)
     float size = 0.55 + mag * 2.6;
     float tw = 1.0 - twinkle * 0.5 * (0.5 + 0.5 * sin(t * (2.0 + h * 9.0) + h * 40.0));
     float v = exp(-d * d / (size * size)) * (base + mag * 2.2) * tw;
@@ -41,7 +41,7 @@ void main(){
     float band = exp(-pow((b.y - mwOff) * 3.2, 2.0));
     float cloud = fbm(b * 3.0 + 4.0) * 0.8 + fbm(b * 9.0) * 0.4;
     float dust = smoothstep(0.45, 0.75, fbm(b * 5.0 + 11.0)) * exp(-pow((b.y - mwOff) * 7.0, 2.0));
-    float glow = band * cloud * (1.0 - dust * 0.85);
+    float glow = band * cloud * (1.0 - dust * 0.6);
     col += glow * mw * vec3(0.55, 0.62, 0.9) * 0.55;
     vec3 c2; float dense = starLayerB(p, 160.0, 21.0, 0.03, c2);
     col += c2 * band * mw * 0.45 * (1.0 - dust);
@@ -177,9 +177,9 @@ void main(){
   vec2 q = rot(-0.18) * (p - 0.5);
   float b1 = exp(-pow((q.x + 0.02) * 9.0, 2.0)), b2 = exp(-pow((q.x - 0.19) * 12.0, 2.0)), b3 = exp(-pow((q.x + 0.27) * 14.0, 2.0));
   float n = fbm(vec2(q.x * 30.0, q.y * 2.0)) * 0.5 + 0.5;
-  col += vec3(0.55, 0.36, 0.22) * b1 * 0.55 * n;
-  col += vec3(0.30, 0.34, 0.52) * b2 * 0.40 * n;
-  col += vec3(0.45, 0.30, 0.34) * b3 * 0.30 * n;
+  col += vec3(0.62, 0.36, 0.18) * b1 * 0.95 * n;
+  col += vec3(0.28, 0.36, 0.62) * b2 * 0.75 * n;
+  col += vec3(0.55, 0.28, 0.36) * b3 * 0.55 * n;
   col *= bandAmt;
   // the dot
   float d = length((p - dotP) * res) ;

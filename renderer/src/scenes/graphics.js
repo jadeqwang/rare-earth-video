@@ -75,7 +75,7 @@ function wow(ctx, p) {
   }
   o.restore();
   drawCues(ctx, p.cues);
-  ctx.fx.bloom = 0.2; ctx.fx.grain = 0.05; ctx.fx.vignette = 0.55;
+  ctx.fx.bloom = 0.2; ctx.fx.grain = 0.035; ctx.fx.vignette = 0.55;
 }
 
 // ---------------------------------------------------------------------------
@@ -84,7 +84,7 @@ function pulsar(ctx, p) {
   const { o, W, H, S, t, lt, tim } = ctx;
   clearScene(ctx);
   bg(o, W, H, '#000');
-  const N = p.lines ?? 56, x0 = W * 0.33, x1 = W * 0.67, top = H * 0.2, bot = H * 0.9;
+  const N = p.lines ?? 56, x0 = W * 0.25, x1 = W * 0.75, top = H * 0.25, bot = H * 0.86;
   const dy = (bot - top) / N;
   const pts = 120;
   const beat = tim.pulse(t, 0.14);
@@ -99,9 +99,9 @@ function pulsar(ctx, p) {
       const x = lerp(x0, x1, k / pts);
       const c = (k / pts - 0.5) * 2; // -1..1
       const band = Math.min(63, Math.floor(Math.abs(c) * 40 + 4));
-      const win = Math.exp(-c * c * 5.5);
+      const win = Math.exp(-c * c * 4.2);
       const jitter = (hash(i * 97 + k * 13.1 + Math.floor(tt * 24)) - 0.5) * 0.12;
-      const amp = (sp[band] * 1.1 + jitter) * win * dy * (7 + beat * 3);
+      const amp = (sp[band] * 1.15 + jitter) * win * dy * (8 + beat * 4);
       const y = yb - Math.max(0, amp);
       xs.push([x, y]);
       k ? o.lineTo(x, y) : o.moveTo(x, y);
@@ -110,14 +110,14 @@ function pulsar(ctx, p) {
     o.lineTo(x1, yb + dy * 3); o.lineTo(x0, yb + dy * 3); o.closePath();
     o.fillStyle = '#000'; o.fill();
     o.beginPath(); xs.forEach(([x, y], k) => (k ? o.lineTo(x, y) : o.moveTo(x, y)));
-    o.strokeStyle = '#F4F1EA'; o.lineWidth = 2 * S; o.stroke();
+    o.strokeStyle = '#F4F1EA'; o.lineWidth = 2.3 * S; o.stroke();
   }
   // the blinking star above
   const blink = 0.35 + 0.65 * tim.pulse(t, 0.18);
   const gr = o.createRadialGradient(W / 2, top - 60 * S, 0, W / 2, top - 60 * S, 70 * S);
   gr.addColorStop(0, `rgba(255,255,255,${blink})`); gr.addColorStop(0.15, `rgba(180,210,255,${blink * 0.6})`); gr.addColorStop(1, 'rgba(0,0,0,0)');
   o.fillStyle = gr; o.fillRect(W / 2 - 80 * S, top - 140 * S, 160 * S, 160 * S);
-  label(o, 'CP 1919 · FIRST PULSAR · 1967', W * 0.67, H * 0.93, { px: 16, S, fill: '#8A93A8', align: 'right' });
+  label(o, 'CP 1919 · FIRST PULSAR · 1967', W * 0.75, H * 0.885, { px: 18, S, fill: '#8A93A8', align: 'right' });
   drawCues(ctx, p.cues);
   ctx.fx.bloom = 0.35;
 }
@@ -129,9 +129,9 @@ function transit(ctx, p) {
   const merge = p.merge ? ease.inOutCubic(clamp(u * 1.3)) : 0;
   // stars drawn in GL: two bodies
   e.space.stars(e.space.tmpA, { t, density: 0.3, bright: 0.5 });
-  const cyGL = H * 0.62;
+  const cyGL = H * 0.555;
   const L = [W * lerp(0.27, 0.5, merge), cyGL], R = [W * lerp(0.73, 0.5, merge), cyGL];
-  const rad = 150 * S * (1 - merge * 0.35);
+  const rad = 172 * S * (1 - merge * 0.35);
   e.space.body(e.space.tmpA, e.space.tmpB === ctx.out ? ctx.out : ctx.out, {
     center: L, radius: rad, kind: 'star', t, colA: '#7A0F2B', colB: '#FF5A2E', flare: 0.8, atmo: 0.6, atmoCol: '#FF5A2E', cell: 6, alpha: 1 - merge * 0.2,
   });
@@ -149,25 +149,25 @@ function transit(ctx, p) {
   const pl = drawPlanet(L, rad, phaseL, 16 * S), pr = drawPlanet(R, rad * 1.08, phaseR, 12 * S);
   // light curves
   const curve = (cx, ph, col, depth, yy) => {
-    const w = 420 * S, x0 = cx - w / 2;
+    const w = 470 * S, x0 = cx - w / 2;
     o.strokeStyle = col; o.lineWidth = 2.4 * S; o.beginPath();
     for (let k = 0; k <= 160; k++) {
       const f = k / 160; const pp = ph - (1 - f) * 0.9;
       const px = lerp(-1.6, 1.6, ((pp % 1) + 1) % 1);
       const inside = Math.abs(px) < 1 ? 1 : 0;
       const dip = inside * depth * (1 - px * px * 0.25);
-      const y = yy + dip * 60 * S + (hash(k * 3.1 + Math.floor(t * 12)) - 0.5) * 3 * S;
+      const y = yy + dip * 66 * S + (hash(k * 3.1 + Math.floor(t * 12)) - 0.5) * 3 * S;
       k ? o.lineTo(x0 + f * w, y) : o.moveTo(x0 + f * w, y);
     }
     o.stroke();
     o.strokeStyle = 'rgba(220,230,255,0.25)'; o.lineWidth = 1 * S; o.strokeRect(x0, yy - 20 * S, w, 110 * S);
   };
   const cyTop = H - cyGL;
-  curve(L[0], phaseL, '#FF6B4A', 1, cyTop + rad + 70 * S);
-  curve(R[0], phaseR, '#FFD27A', 0.6, cyTop + rad + 70 * S + merge * 0);
+  curve(L[0], phaseL, '#FF6B4A', 1, cyTop + rad + 62 * S);
+  curve(R[0], phaseR, '#FFD27A', 0.6, cyTop + rad + 62 * S);
   if (merge < 0.5) {
-    label(o, 'GJ 1002 · RED DWARF · 15.8 LY', L[0], cyTop - rad - 40 * S, { px: 18, S, fill: '#FF8A6B', align: 'center', alpha: 1 - merge * 2 });
-    label(o, 'THE SUN · AS SEEN FROM THERE', R[0], cyTop - rad - 40 * S, { px: 18, S, fill: '#FFD27A', align: 'center', alpha: 1 - merge * 2 });
+    label(o, 'GJ 1002 · RED DWARF · 15.8 LY', L[0], cyTop - rad - 36 * S, { px: 21, S, fill: '#FF8A6B', align: 'center', alpha: 1 - merge * 2 });
+    label(o, 'THE SUN · AS SEEN FROM THERE', R[0], cyTop - rad - 36 * S, { px: 21, S, fill: '#FFD27A', align: 'center', alpha: 1 - merge * 2 });
   }
   drawCues(ctx, p.cues);
   ctx.fx.bloom = 0.7; ctx.fx.thresh = 0.7;
@@ -178,7 +178,7 @@ function transit(ctx, p) {
 function brutal(ctx, p) {
   const { o, W, H, S, t, lt, tim } = ctx;
   clearScene(ctx);
-  const inv = tim.pulse(t, 0.08) > 0.6 && p.strobe;
+  const inv = tim.pulse(t, 0.08, 2) > 0.6 && p.strobe;   // every other beat: stays well under 3 flashes/s
   bg(o, W, H, inv ? '#F2EFE8' : '#0A0406');
   const red = '#FF2A1F', fg = inv ? '#0A0406' : '#F2EFE8';
   // ticker bands
@@ -205,7 +205,7 @@ function brutal(ctx, p) {
     o.fillText(`T-00:00:${left.toFixed(2).padStart(5, '0')}`, W - 90 * S, H - 80 * S);
   }
   drawCues(ctx, p.cues);
-  ctx.fx.bloom = 0.25; ctx.fx.aberr = 0.6 + tim.pulse(t, 0.1) * 2; ctx.fx.grain = 0.06;
+  ctx.fx.bloom = 0.25; ctx.fx.aberr = 0.6 + tim.pulse(t, 0.1) * 2; ctx.fx.grain = 0.04;
 }
 
 // ---------------------------------------------------------------------------
@@ -220,7 +220,7 @@ function hole(ctx, p) {
   setFont(o, { fam: 'mono', px: 18 * S, wght: 500 });
   if (Math.floor(t * 8) % 2 === 0) drawText(o, 'NO CARRIER', W / 2, H * 0.68, { fill: '#8C8C96', alpha: a, tracking: 6 * S });
   drawCues(ctx, p.cues);
-  ctx.fx.bloom = 0; ctx.fx.grain = 0.08; ctx.fx.vignette = 0.8;
+  ctx.fx.bloom = 0; ctx.fx.grain = 0.05; ctx.fx.vignette = 0.8;
 }
 
 // ---------------------------------------------------------------------------
@@ -267,7 +267,7 @@ function crowdfund(ctx, p) {
     o.fillText('ONLINE', 0, 4 * S); o.restore();
   }
   drawCues(ctx, p.cues);
-  ctx.fx.bloom = 0.1; ctx.fx.grain = 0.03; ctx.fx.vignette = 0.3;
+  ctx.fx.bloom = 0.1; ctx.fx.grain = 0.022; ctx.fx.vignette = 0.3;
 }
 function roundRect(o, x, y, w, h, r) {
   o.beginPath(); o.moveTo(x + r, y); o.arcTo(x + w, y, x + w, y + h, r); o.arcTo(x + w, y + h, x, y + h, r); o.arcTo(x, y + h, x, y, r); o.arcTo(x, y, x + w, y, r); o.closePath();
@@ -328,6 +328,8 @@ const NEIGHBOURS = [
   ['EPSILON ERIDANI', 10.5, 2.9], ['ROSS 128', 11.0, 1.2], ['TAU CETI', 11.9, 3.6], ["LUYTEN'S STAR", 12.2, 5.6],
   ["TEEGARDEN'S STAR", 12.5, 0.8], ['WOLF 1061', 14.0, 4.6], ['GLIESE 876', 15.2, 2.4], ['GJ 1002', 15.8, 5.95],
 ];
+// The broadcast's epoch: spring 2011 (the SETI event). 15.8 ly later it reaches GJ 1002 in 2027.
+const EPOCH = 2011.2;
 function bubble(ctx, p) {
   const { o, W, H, S, t, lt, u, e } = ctx;
   e.space.stars(ctx.out, { t, density: 0.35, bright: 0.45, zoom: 1.2 });
@@ -363,12 +365,20 @@ function bubble(ctx, p) {
     const col = isGJ ? '255,90,60' : '255,255,255';
     const pulse = reached ? Math.exp(-since * 3) : 0;
     o.fillStyle = `rgba(${col},${reached ? 1 : 0.45})`;
-    o.beginPath(); o.arc(x, y, (reached ? 4.5 : 3) * S + pulse * 14 * S, 0, 7); o.fill();
-    if (reached) label(o, `${name} · ${d} LY · ${Math.floor(2011 + d)}`, x + 10 * S, y, { px: isGJ ? 22 : 14, S, fill: isGJ ? '#FF8A6B' : '#DCE8FF', alpha: clamp(since * 4) * (isGJ ? 1 : 0.85) });
+    o.beginPath(); o.arc(x, y, (reached ? 5 : 3) * S + pulse * 14 * S, 0, 7); o.fill();
+    if (reached && since < 0.6) { // a ping ring as the wavefront passes the star
+      o.strokeStyle = `rgba(${col},${(1 - since / 0.6) * 0.8})`; o.lineWidth = 2 * S;
+      o.beginPath(); o.arc(x, y, (8 + since * 90) * S, 0, 7); o.stroke();
+    }
+    if (reached) label(o, `${name} · ${d} LY · ${Math.floor(EPOCH + d)}`, x + 12 * S, y, { px: isGJ ? 30 : 19, S, fill: isGJ ? '#FF8A6B' : '#DCE8FF', alpha: clamp(since * 4) * (isGJ ? 1 : 0.85), wght: isGJ ? 700 : 500 });
   }
   o.restore();
-  setFont(o, { fam: 'mono', px: 22 * S, wght: 600 }); o.fillStyle = '#9CC8FF'; o.textAlign = 'left';
-  o.fillText(`YEAR ${Math.floor(2011 + years)}   ·   RADIUS ${years.toFixed(1)} LY`, 90 * S, H - 70 * S);
+  // the year the wavefront has reached, big
+  const yr = Math.floor(EPOCH + years);
+  setFont(o, { fam: 'hero', px: 176 * S, wght: 900 });
+  drawText(o, String(yr), 88 * S, 250 * S, { fill: yr >= 2027 ? '#FF8A6B' : '#9CC8FF', align: 'left', alpha: 0.95 });
+  setFont(o, { fam: 'mono', px: 24 * S, wght: 600 }); o.fillStyle = '#9CC8FF'; o.textAlign = 'left';
+  o.fillText(`THE 2011 BROADCAST · RADIUS ${years.toFixed(1)} LY`, 92 * S, 300 * S);
   drawCues(ctx, p.cues);
   ctx.fx.bloom = 0.8;
 }
@@ -422,7 +432,7 @@ function reply(ctx, p) {
   o.globalAlpha = 1; o.fillStyle = 'rgba(47,230,211,0.35)';
   o.fillRect(x0 - 20 * S, y0 + rowsShown * cell, Wd * cell + 40 * S, 2 * S);
   o.restore();
-  label(o, 'INCOMING: GJ 1002 c  ·  1,457 BITS  ·  DECODING', W * 0.06, H * 0.08, { px: 18, S, fill: '#2FE6D3' });
+  label(o, 'INCOMING: GJ 1002 c  ·  1,457 BITS  ·  DECODING', W * 0.06, H * 0.08, { px: 24, S, fill: '#2FE6D3' });
   drawCues(ctx, p.cues);
   ctx.fx.bloom = 0.9; ctx.fx.thresh = 0.5;
 }
@@ -476,10 +486,10 @@ function endCard(ctx, p) {
   o.save(); o.globalAlpha = a;
   setFont(o, { fam: 'hero', px: 170 * S, wght: 900, stretch: 112 });
   drawText(o, 'RARE EARTH', W / 2, H * 0.5, { fill: '#FFFFFF' });
-  setFont(o, { fam: 'mono', px: 22 * S, wght: 600 });
-  drawText(o, 'RNA  —  ROBOT NINJA APOCALYPSE  —  2011', W / 2, H * 0.58, { fill: '#9CC8FF', tracking: 5 * S });
-  setFont(o, { fam: 'voice', px: 44 * S });
-  drawText(o, 'still here.', W / 2, H * 0.68, { fill: '#F4F1EA' });
+  setFont(o, { fam: 'mono', px: 32 * S, wght: 600 });
+  drawText(o, 'RNA  —  ROBOT NINJA APOCALYPSE  —  2011', W / 2, H * 0.6, { fill: '#9CC8FF', tracking: 4 * S });
+  setFont(o, { fam: 'voice', px: 70 * S });
+  drawText(o, 'still here.', W / 2, H * 0.73, { fill: '#F4F1EA' });
   o.restore();
   drawCues(ctx, p.cues);
   ctx.fx.bloom = 0.6;

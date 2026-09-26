@@ -3,7 +3,7 @@
 import { clamp, lerp, ease, hex, invlerp, smooth, hash, COLORS } from '../util.js';
 import { Space } from '../space.js';
 import { drawCues } from './common.js';
-import { setFont, drawText, label, typeOn, heroWord, fitPx } from '../type.js';
+import { setFont, drawText, label, typeOn, heroWord, fitPx, slamEnv } from '../type.js';
 
 let SP;
 const D2R = Math.PI / 180;
@@ -38,7 +38,7 @@ export const spaceScenes = {
       const gLon = (SF.lon * D2R) + lerp(0.55, 0.0, ease.outCubic(clamp(k * 1.3)));
       const gTilt = -SF.lat * D2R + lerp(0.25, 0, ease.outCubic(clamp(k * 1.3)));
       const endFade = smooth(3.3, 3.62, lt); // everything but one light fades
-      SP.paleDot(SP.tmpA, { t, dotR: lerp(2.6, 0.1, clamp(k * 5)) * (1 + 0.25 * Math.sin(t * 5)), dotP, bands: 1 - smooth(0.0, 0.35, k), grain: 0.05 });
+      SP.paleDot(SP.tmpA, { t, dotR: lerp(2.6, 0.1, clamp(k * 5)) * (1 + 0.25 * Math.sin(t * 5)), dotP, bands: 1 - smooth(0.0, 0.35, k), grain: 0.03 });
       if (k > 0) {
         SP.body(SP.tmpA, ctx.out, {
           center: [cx, cy], radius: Math.max(1.5 * S, radius), lon: gLon, tilt: gTilt, kind: 'earth',
@@ -51,8 +51,21 @@ export const spaceScenes = {
       if (a0 > 0) {
         o.save(); o.globalAlpha = a0;
         typeOn(o, 'PALE BLUE DOT — VOYAGER 1 — 14 FEB 1990 — 6 BILLION KM', 120 * S, H - 110 * S, t, 0.1, { px: 22 * S, cps: 60, fill: '#C9D8F2', cursor: false });
-        label(o, 'you are here', dotP[0] * W - 8 * S, (1 - dotP[1]) * H + 8 * S, { px: 20 * S, lead: 90 * S, leadAng: 2.4, align: 'right', fill: '#C9D8F2', S: 1, alpha: smooth(0.35, 0.55, lt) });
         o.restore();
+      }
+      // the hook: a hero-sized "YOU ARE HERE" pointing at the dot, gone as the zoom starts
+      const hk = slamEnv(t, 0.12, { dur: 0.2, from: 1.12 });
+      const hA = hk.a * (1 - smooth(1.05, 1.4, lt));
+      if (hA > 0) {
+        const dx = dotP[0] * W, dy = (1 - dotP[1]) * H;
+        const tx = dx - 120 * S, ty = dy + 118 * S;
+        const hpx = fitPx(o, 'YOU ARE HERE', tx - 26 * S - 96 * S, { fam: 'hero', wght: 900 }, 132 * S);
+        o.save(); o.globalAlpha = hA;
+        o.strokeStyle = '#C9D8F2'; o.lineWidth = 2.5 * S;
+        o.beginPath(); o.moveTo(dx - 12 * S, dy + 12 * S); o.lineTo(tx + 20 * S, ty - 58 * S); o.lineTo(tx - 12 * S, ty - 58 * S); o.stroke();
+        o.restore();
+        setFont(o, { fam: 'hero', px: hpx, wght: 900, stretch: 100 });
+        drawText(o, 'YOU ARE HERE', tx - 26 * S, ty, { scale: hk.s, alpha: hA, fill: '#F4F1EA', align: 'right' });
       }
       // final beat: one light (San Francisco) survives, turns red, and becomes the recorder's LED
       if (lt > 3.1) {
@@ -153,8 +166,9 @@ export const spaceScenes = {
       SP.stars(SP.tmpA, { t, zoom: 1 + lt * 0.3, density: 0.45, bright: 0.8, warp: 0.15, warpT: lt * 0.6 });
       if (i < stops.length) {
         const st = stops[i];
-        const x = lerp(W * 1.25, -W * 0.25, ease.inOutCubic(k));
-        const r = (st.kind === 'giant' ? 360 : 260) * S * lerp(0.7, 1.25, k);
+        // constant-speed pass that is on screen for its whole slot (each body gets ~0.75 s)
+        const r = (st.kind === 'giant' ? 400 : 290) * S * lerp(0.85, 1.2, k);
+        const x = lerp(W + r * (st.ring ? 1.5 : 1.0), -r * (st.ring ? 1.5 : 1.0), k);
         SP.body(SP.tmpA, ctx.out, { center: [x, H * 0.46], radius: r, kind: st.kind, lon: lt * 0.3, tilt: 0.25, sun: [0.9, 0.2, 0.35],
           colA: st.colA, colB: st.colB, atmo: 0.25, atmoCol: '#FFFFFF', cell: 7, t });
         if (st.ring) {
@@ -162,7 +176,7 @@ export const spaceScenes = {
           for (let q = 0; q < 6; q++) { o.lineWidth = (5 - q * 0.6) * S; o.beginPath(); o.ellipse(0, 0, r * (1.45 + q * 0.07), r * (0.28 + q * 0.014), 0, 0, 7); o.stroke(); }
           o.restore();
         }
-        label(o, `${st.name} · ${st.note}`, x, H - H * 0.46 - r - 40 * S, { px: 20, S, fill: '#DCE8FF', align: 'center', alpha: clamp(1 - Math.abs(k - 0.5) * 2.2) + 0.2 });
+        label(o, `${st.name} · ${st.note}`, clamp(x, W * 0.2, W * 0.8), H - H * 0.46 - r - 40 * S, { px: 24, S, fill: '#DCE8FF', align: 'center', alpha: clamp(1 - Math.abs(k - 0.5) * 1.6) });
       } else {
         SP.copy(SP.tmpA, ctx.out);
         // Voyager 1, drawn as a line figure
@@ -217,6 +231,20 @@ export const spaceScenes = {
       const city = (p.city ?? 1) * listen * (p.fadeLights ? lerp(1, 0.15, smooth(0.0, 0.4, u)) + smooth(0.45, 1.0, u) * listen : 1);
       SP.body(SP.tmpA, ctx.out, { center: [W * (p.cx ?? 0.5), H * 0.5], radius: r, kind: 'eyeball', lon: lt * 0.08 + (p.lon0 ?? 0.4), tilt: 0.35,
         sun: [0.95, 0.15, 0.15], colA: '#FF6A3D', colB: '#C23A2A', colC: '#2FE6D3', city, atmo: 0.9, atmoCol: '#FF7A5A', cell: 6, t });
+      if (p.incoming) { // Earth's signal arriving from the left: wavefronts sweep across the planet
+        const pc = [W * (p.cx ?? 0.5), H * 0.5], far = W * 2.2, period = p.incoming.period ?? 1.9;
+        o.save(); o.globalCompositeOperation = 'lighter';
+        for (let i = 0; i < 4; i++) {
+          const ph = ((lt / period) + i / 4) % 1;
+          const x = lerp(-W * 0.15, W * 1.15, ph);
+          const R = far + (x - pc[0]);
+          const hit = Math.exp(-Math.pow((x - pc[0]) / (r * 0.9), 2));
+          o.strokeStyle = `rgba(156,200,255,${(0.18 + 0.5 * hit) * (1 - ph * 0.5)})`;
+          o.lineWidth = (2 + 3 * hit) * S;
+          o.beginPath(); o.arc(pc[0] - far, pc[1], R, -0.45, 0.45); o.stroke();
+        }
+        o.restore();
+      }
       drawCues(ctx, p.cues);
       ctx.fx.bloom = 1.0; ctx.fx.thresh = 0.55;
     },
@@ -236,12 +264,13 @@ export const spaceScenes = {
       if (a2 > 0) {
         const a = [c[0], H - c[1]], b = [W * 0.8, H * 0.36];
         drawLinkedDots(o, a, b, S * 1.6, a2, t);
-        label(o, 'EARTH', a[0], a[1] + 40 * S, { px: 20, S, fill: '#9CC8FF', align: 'center', alpha: a2 });
-        label(o, 'GJ 1002', b[0], b[1] - 40 * S, { px: 20, S, fill: '#FF8A6B', align: 'center', alpha: a2 });
-        const lines = ['SIGNAL DEPARTED EARTH ········ 2011', 'ARRIVES GJ 1002 ··············· 2027', 'REPLY ETA ····················· 2043'];
-        lines.forEach((L, i) => typeOn(o, L, W * 0.36, H * (0.66 + i * 0.065), t, ctx.shot.t0 + 3.6 + i * 0.9, { px: 30 * S, cps: 45, fill: '#DCE8FF', cursor: i === lines.length - 1 && lt < 7.0 }));
+        label(o, 'EARTH', a[0], a[1] + 44 * S, { px: 26, S, fill: '#9CC8FF', align: 'center', alpha: a2 });
+        label(o, 'GJ 1002', b[0], b[1] - 44 * S, { px: 26, S, fill: '#FF8A6B', align: 'center', alpha: a2 });
+        // the ledger is the film's last line of plot: sized to read on a phone
+        const lines = ['DEPARTED EARTH ····· 2011', 'ARRIVES GJ 1002 ···· 2027', 'REPLY ETA ·········· 2043'];
+        lines.forEach((L, i) => typeOn(o, L, W * 0.4, H * (0.6 + i * 0.085), t, ctx.shot.t0 + 3.6 + i * 0.9, { px: 46 * S, cps: 34, fill: '#DCE8FF', cursor: i === lines.length - 1 && lt < 7.0 }));
         const kk = clamp((lt - 7.0) / 0.4);
-        if (kk > 0) { setFont(o, { fam: 'voice', px: 84 * S }); drawText(o, 'keep listening.', W * 0.36, H * 0.93, { fill: '#FFFFFF', alpha: kk, align: 'left' }); }
+        if (kk > 0) { setFont(o, { fam: 'voice', px: 96 * S }); drawText(o, 'keep listening.', W * 0.4, H * 0.93, { fill: '#FFFFFF', alpha: kk, align: 'left' }); }
       }
       drawCues(ctx, p.cues);
       ctx.fx.bloom = 0.9;

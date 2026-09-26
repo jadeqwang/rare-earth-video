@@ -52,7 +52,8 @@ void main(){
   col = mix(col, flashCol, flash);
   float v = smoothstep(0.95, 0.25, length(d * vec2(1.0, 0.85)));
   col *= mix(1.0, v, vignette);
-  float n = hash21(uv * res + frame * 17.13) - 0.5;
+  // film grain, refreshed on twos (per-frame noise costs the encoder more than it adds)
+  float n = hash21(uv * res + floor(frame / 2.0) * 17.13) - 0.5;
   col += n * grain;
   col *= (1.0 - fade);
   float lb = step(abs(d.y), 0.5 - letterbox);
@@ -154,7 +155,7 @@ class Engine {
     return {
       e: this, g: this.g, mat: this.mat, tim: this.tim, o: this.o2d, W, H, S: this.S,
       t, lt, dur, u: clamp(lt / dur), n, shot, p: shot.p || {}, out: target,
-      fx: { bloom: 0.55, flash: 0, flashCol: [1, 0.965, 0.91], invert: 0, aberr: 0, grain: 0.035, vignette: 0.35, overAdd: 0, fade: 0, letterbox: 0, thresh: 0.62, overMul: 1,
+      fx: { bloom: 0.55, flash: 0, flashCol: [1, 0.965, 0.91], invert: 0, aberr: 0, grain: 0.022, vignette: 0.35, overAdd: 0, fade: 0, letterbox: 0, thresh: 0.62, overMul: 1,
         bump: (shot.p?.bump ?? bumpAt(t)) * this.tim.kickPulse(t, 0.11) },
     };
   }

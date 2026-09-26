@@ -26,3 +26,4 @@ work/gen/*.log
 out/*_segments/
 work/*.mp4
 work/stills/
+renderer/assets/plates/*/cleanbg.jpg
