@@ -47,7 +47,7 @@ EDITS = {  # sid: (source image, extra refs, prompt)
 
 def edit(sid, k):
     src, refs, prompt = EDITS[sid]
-    out = os.path.join(FR, f"{sid}_v5_{k}.jpg")
+    out = os.path.join(FR, f"{sid}_v5_{k}.jpg" if k < 6 else f"{sid}_v6_{k-6}.jpg")
     if os.path.exists(out): return out, "exists"
     imgs = [gen.img_uri(os.path.join(FR, src), 1536)] + [gen.ref_uri(r, 1024) for r in refs]
     for size in ("2K", "1K"):

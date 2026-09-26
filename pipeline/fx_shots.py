@@ -410,7 +410,30 @@ def _zoom_world(src):
     return rects
 
 
+def zoomout_clips(src, t):
+    a = os.path.join(ROOT, "gen", "clips", "44a_v6.mp4"); b = os.path.join(ROOT, "gen", "clips", "44b_v6.mp4")
+    if not (os.path.exists(a) and os.path.exists(b)):
+        return None
+    if "A" not in src.cache:
+        import render
+        src.cache["A"] = render.ClipSource(a, src.shot); src.cache["B"] = render.ClipSource(b, src.shot)
+    dur = src.shot.dur
+    xfade0, xfade1 = dur * 0.42, dur * 0.58            # dissolve from clouds to orbit
+    A, B = src.cache["A"], src.cache["B"]
+    ta = min(t / xfade1 * 5.0, 4.95)                   # clip A plays over its full 5 s up to the end of the dissolve
+    tb = min(max(t - xfade0, 0) / (dur - xfade0 - 0.8) * 5.0, 4.95)   # clip B, then hold on the dot for the last 0.8 s
+    if t < xfade0:
+        return A.get(ta)
+    if t > xfade1:
+        return B.get(tb)
+    u = vfx.ease((t - xfade0) / (xfade1 - xfade0))
+    return A.get(ta) * (1 - u) + B.get(tb) * u
+
+
 def zoomout_plate(src, t):
+    r = zoomout_clips(src, t)
+    if r is not None:
+        return r
     """Powers-of-ten pull back through nested generated plates; fallback: the room shrinking into the dot."""
     dur = src.shot.dur
     gdir = os.path.join(ROOT, "gen", "frames")
@@ -1352,7 +1375,23 @@ def fx_35(ctx):
 def fx_36(ctx):
     # the cat's tail sweeps across the LED: the second transit, quieter than the first
     if is_clip(ctx):
-        return   # the clip's tail sweeps across the LED itself
+        # The LED shines while uncovered; when the tail passes over it the light goes out completely
+        # (no red bleeding through the fur). Coverage is measured from the clip: the LED patch darkens under the tail.
+        cx, cy = anchor(ctx, "led", (982, 690))
+        cov = float(np.interp(ctx.t, [0.0, 1.05, 1.6, 4.1, 4.5, 99], [0, 0, 1, 1, 0, 0]))
+        yy, xx = np.ogrid[0:H, 0:W]
+        rad = np.exp(-(((xx - cx) ** 2 + (yy - cy) ** 2) / (2 * 150.0 ** 2))).astype(np.float32)
+        p = ctx.plate
+        red_ex = np.clip(p[..., 0] - np.maximum(p[..., 1], p[..., 2]), 0, 1)
+        p[..., 0] -= red_ex * rad * cov
+        ctx.plate = p
+        lit = (1 - cov)
+        if lit > 0.01:
+            ctx.L.dot(cx, cy, 5, RED, lit)
+            ctx.L.dot(cx, cy, 16, np.array([255, 190, 170]), 0.5 * lit)
+            ctx.L.dot(cx, cy, 90, RED * 0.6, 0.45 * lit)
+        ctx.fin["glow_amt"] = 1.4
+        return
     d = transit_depth(ctx.t, 1.2, 2.9, 0.4, 0.8)
     led_macro(ctx, blink_every=2, dim=0.8, extra_dip=d)
     if not ctx.clip:
