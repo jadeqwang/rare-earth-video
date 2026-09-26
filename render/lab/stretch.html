@@ -1,0 +1,11 @@
+<!doctype html><html><body style="margin:0;background:#000"><canvas id=c width=1400 height=900></canvas><script>
+(async()=>{
+const f1=new FontFace('NSD','url(../assets/fonts/NotoSerifDisplay-VF.ttf)',{weight:'100 900',stretch:'62.5% 100%'}); await f1.load(); document.fonts.add(f1);
+const f2=new FontFace('NSDX','url(../assets/fonts/NotoSerifDisplay-VF.ttf)',{weight:'900',stretch:'62.5%'}); await f2.load(); document.fonts.add(f2);
+let f3; try { f3=new FontFace('NSDV','url(../assets/fonts/NotoSerifDisplay-VF.ttf)',{variationSettings:'"wdth" 62.5, "wght" 900'}); await f3.load(); document.fonts.add(f3);} catch(e){}
+const g=document.getElementById('c').getContext('2d'); g.fillStyle='#fff';
+const tests=[['900 120px NSD','normal'],['900 120px NSD','extra-condensed'],['normal 900 extra-condensed 120px NSD',null],['900 120px NSDX','extra-condensed'],['900 120px NSDX','normal'],['120px NSDV',null]];
+tests.forEach(([font,st],i)=>{ g.font=font; if(st) g.fontStretch=st; g.fillText('DO YOU CARE '+i,20,130+i*140); g.fontStretch='normal'; });
+document.title='done';
+})();
+</script></body></html>

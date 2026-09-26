@@ -1,0 +1,22 @@
+# large or reproducible working files
+work/
+render/work/
+render/node_modules/
+# traced plate frames are large; see render/assets/README.md for how they are packed / regenerated
+render/assets/plates/
+# lookdev-only fonts (not used by the renderer)
+render/assets/fonts/Anton-Regular.ttf
+render/assets/fonts/Archivo-VF.ttf
+render/assets/fonts/BigShouldersDisplay-VF.ttf
+render/assets/fonts/GeistMono-VF.ttf
+render/assets/fonts/IBMPlexMono-*.ttf
+render/assets/fonts/InstrumentSerif-*.ttf
+render/assets/fonts/NotoSansKR-VF.ttf
+render/assets/fonts/NotoSerifJP-VF.ttf
+render/assets/fonts/Oxanium-VF.ttf
+render/assets/fonts/SpaceGrotesk-VF.ttf
+render/assets/fonts/Tektur-VF.ttf
+render/assets/fonts/Unbounded-VF.ttf
+render/assets/fonts/ZenOldMincho-Black.ttf
+__pycache__/
+*.pyc

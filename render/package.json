@@ -1,0 +1,11 @@
+{
+  "name": "rare-earth-v3-render",
+  "private": true,
+  "type": "module",
+  "version": "0.1.0",
+  "description": "Deterministic frame renderer for the Rare Earth v3 music video",
+  "dependencies": {
+    "playwright": "^1.56.1",
+    "three": "^0.180.0"
+  }
+}

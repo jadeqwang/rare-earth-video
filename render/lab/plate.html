@@ -1,0 +1,14 @@
+<!doctype html><html><body style="margin:0;background:#222"><canvas id=c width=1920 height=1080></canvas>
+<script type="module">
+import { Plates, drawTraced, placeFor, GRADES } from '../src/scenes/plate.js';
+const q = new URLSearchParams(location.search);
+const pid = q.get('pid') || 'P05_guitar', pt = +(q.get('t') || 0), grade = q.get('grade') || 'none';
+const P = new Plates('../');
+const fr = await P.frame(pid, pt);
+const c = document.getElementById('c').getContext('2d');
+c.fillStyle = q.get('bg') || '#000'; c.fillRect(0, 0, 1920, 1080);
+const t0 = performance.now();
+drawTraced(c, fr, placeFor(fr.m, 'contain'), { grade: GRADES[grade] });
+console.log('frame', fr.fi, 'regions', fr.d.regions.length, 'ms', (performance.now() - t0).toFixed(0));
+window.DONE = true;
+</script></body></html>
