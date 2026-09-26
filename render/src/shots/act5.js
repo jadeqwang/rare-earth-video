@@ -26,7 +26,7 @@ const E1 = {
     layer2D(ctx, s.target, 'type', (g) => {
       const w = words(ctx, 16);
       const runs = T.layout(g, [[{ ...w[0], f: 'hero', size: 230, sx: 0.8, color: EMBER }, { ...w[1], f: 'hero', size: 230, sx: 0.8, color: EMBER }],
-        [{ ...w[2], f: 'ital', size: 200, text: 'still', color: '#ffe0c8' }], [{ ...w[3], f: 'hero', size: 300, sx: 0.8, color: EMBER }]], { x: 1820, y: 40, lead: 0.84, align: 'right' });
+        [{ ...w[2], f: 'ital', size: 200, text: 'still', color: '#ffe0c8' }], [{ ...w[3], f: 'hero', size: 300, sx: 0.8, color: EMBER }]], { x: 1820, y: 96, lead: 0.84, align: 'right' });
       T.drawBlock(g, runs, t, { anim: 'slam' });
       T.label(g, 'LGM-2  ·  1,200 LIGHT-YEARS  ·  THEIR SIDE', 110, 1010, { size: 16, color: EMBER });
     });

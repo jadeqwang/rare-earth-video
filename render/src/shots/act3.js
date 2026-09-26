@@ -179,7 +179,7 @@ const D1 = {
       cam: { s: push(k, 1.0, 1.1) } });
     layer2D(ctx, s.target, 'type', (g) => {
       const w = words(ctx, 10);
-      const runs = T.layout(g, [[{ ...w[0], f: 'hero', size: 170, sx: 0.8 }, { ...w[1], f: 'hero', size: 170, sx: 0.8 }], [{ ...w[2], f: 'six', size: 420 }]], { x: 110, y: 60, lead: 0.9 });
+      const runs = T.layout(g, [[{ ...w[0], f: 'hero', size: 170, sx: 0.8 }, { ...w[1], f: 'hero', size: 170, sx: 0.8 }], [{ ...w[2], f: 'six', size: 420 }]], { x: 110, y: 80, lead: 0.9 });
       T.drawBlock(g, runs, t, { anim: 'slam' });
     });
     return { bloom: 0.55, thresh: 0.85 };
@@ -296,7 +296,7 @@ const D5 = {
     layer2D(ctx, s.target, 'type', (g) => {
       const w = words(ctx, 12);
       const runs = T.layout(g, [[{ ...w[0], f: 'hero', size: 220, sx: 0.8, color: '#2a1a2e' }, { ...w[1], f: 'hero', size: 220, sx: 0.8, color: '#2a1a2e' }],
-        [{ ...w[2], f: 'ital', size: 240, text: 'looking', color: '#2a1a2e' }]], { x: 110, y: 60, lead: 0.86 });
+        [{ ...w[2], f: 'ital', size: 240, text: 'looking', color: '#2a1a2e' }]], { x: 110, y: 92, lead: 0.86 });
       T.drawBlock(g, runs, t, { anim: 'slam', hotCol: '#ffffff' });
     });
     return { bloom: 0.4, thresh: 0.93 };

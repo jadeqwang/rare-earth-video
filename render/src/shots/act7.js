@@ -72,7 +72,7 @@ const G2 = {
       }
     });
     layer2D(ctx, s.target, 'type', (g) => {
-      const runs = T.layout(g, [[{ ...w[0], f: 'hero', size: 200, sx: 0.8, color: PAPER }, { ...w[1], f: 'hero', size: 200, sx: 0.8, color: GOLD }]], { x: 104, y: 40 });
+      const runs = T.layout(g, [[{ ...w[0], f: 'hero', size: 200, sx: 0.8, color: PAPER }, { ...w[1], f: 'hero', size: 200, sx: 0.8, color: GOLD }]], { x: 104, y: 88 });
       T.drawBlock(g, runs, t, { anim: 'slam' });
       T.label(g, 'LGM-2  ·  NARROWBAND  ·  SAME RHYTHM AS 2011 DATA  ·  SNR 41', 1810, 1030, { size: 16, color: GOLD, align: 'right' });
     });
@@ -151,7 +151,7 @@ const G5 = {
       const w = words(ctx, 24);
       // the words are shadows on the star too
       const runs = T.layout(g, [[{ ...w[0], f: 'hero', size: 190, sx: 0.8, color: '#0a0608' }, { ...w[1], f: 'hero', size: 190, sx: 0.8, color: '#0a0608' }],
-        [{ ...w[2], f: 'hero', size: 300, sx: 0.8, color: '#0a0608' }]], { x: 104, y: 40, lead: 0.86 });
+        [{ ...w[2], f: 'hero', size: 300, sx: 0.8, color: '#0a0608' }]], { x: 104, y: 86, lead: 0.86 });
       T.drawBlock(g, runs, t, { anim: 'slam', hotCol: '#3a1a0a' });
       if (t > w[3].t0) T.text(g, 'is', 1790, 980, { f: 'ital', size: 120, color: '#0a0608', align: 'right', alpha: clamp((t - w[3].t0) / 0.15) });
       T.label(g, 'LGM-2 b  ·  TRANSIT  ·  DEPTH 0.13%', 110, 1030, { size: 16, color: '#2a1206' });
@@ -208,7 +208,7 @@ const G6 = {
       T.label(g, 'HABITABLE ZONE', 890, 545, { size: 16, color: 'rgba(120,220,170,1)', alpha: c });
     });
     layer2D(ctx, s.target, 'type', (g) => {
-      const runs = T.layout(g, [[{ ...w[4], f: 'hero', size: 170, sx: 0.8 }], [{ ...w[5], f: 'hero', size: 170, sx: 0.8 }], [{ ...w[6], f: 'hero', size: 280, sx: 0.8, color: GOLD }]], { x: 1810, y: 40, lead: 0.86, align: 'right' });
+      const runs = T.layout(g, [[{ ...w[4], f: 'hero', size: 170, sx: 0.8 }], [{ ...w[5], f: 'hero', size: 170, sx: 0.8 }], [{ ...w[6], f: 'hero', size: 280, sx: 0.8, color: GOLD }]], { x: 1810, y: 84, lead: 0.86, align: 'right' });
       T.drawBlock(g, runs, t, { anim: 'slam' });
       T.karaoke(g, [w[7], w[8], w[9]].map((x) => ({ ...x, text: x.text.toLowerCase() })), t, { x: 1810, y: 960, f: 'ital', size: 110, align: 'right', lit: PALE, dim: 0.2, glow: 8 });
     });
