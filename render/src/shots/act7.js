@@ -145,7 +145,7 @@ const G5 = {
     B.render(ctx.core, s.target, { t, camPos: [0, 0, lerp(1.55, 1.45, k)], look: [0, 0, 0], fov: 40, phase: 0, R: 9, shades: false, bright: 0.85 });
     layer2D(ctx, s.target, 'type', (g) => {
       const u = lerp(0.18, 0.78, easeInOutCubic(clamp((t - 136.8) / 2.5)));
-      const px = u * W, py = 640, pr = 190;
+      const px = u * W, py = 720, pr = 180;
       g.fillStyle = 'rgba(255,170,90,0.55)'; g.beginPath(); g.arc(px, py, pr + 5, 0, 7); g.fill();
       g.fillStyle = '#07050a'; g.beginPath(); g.arc(px, py, pr, 0, 7); g.fill();
       const w = words(ctx, 24);
