@@ -174,6 +174,9 @@ class Engine {
     const o = this.o2d;
     o.setTransform(1, 0, 0, 1, 0, 0);
     o.clearRect(0, 0, W, H);
+    // Chrome skips re-uploading a canvas that was only cleared since the last upload, which
+    // leaves the previous frame's type on screen. One invisible draw keeps it dirty.
+    o.fillStyle = 'rgba(0,0,0,0.004)'; o.fillRect(0, 0, 1, 1);
     const ctx = await this.drawShot(shot, t, n, this.sceneA);
     // global layers (lyrics captions, stamps) drawn after the scene
     if (SCENES.__global) await SCENES.__global.render(ctx, {});
