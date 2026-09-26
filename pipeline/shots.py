@@ -474,8 +474,8 @@ CAM = {
     "2": dict(zoom=(1.0, 1.06), focus=(0.55, 0.4)),
     "5": dict(zoom=(1.10, 1.01), pan=(0, 10), par=0.03),
     "6": dict(zoom=(1.0, 1.04), pan=(-30, 12)),
-    "8a": dict(zoom=(1.25, 1.29), offset=(0, -117), par=0.0),
-    "8b": dict(zoom=(1.25, 1.29), offset=(-12, 132), par=0.0),
+    "8a": dict(zoom=(1.5, 1.54), offset=(15, -237), par=0.0),   # LED lands where 8b's star is: the match cut
+    "8b": dict(zoom=(1.05, 1.08), offset=(0, 0), par=0.0),
     "11": dict(zoom=(1.02, 1.06), pan=(0, 0), par=0.02),
     "24": dict(zoom=(1.04, 1.05), pan=(0, 0), par=0.01),
     "29": dict(zoom=(1.0, 1.08), pan=(0, 0), par=0.0),
@@ -532,3 +532,6 @@ def to_old(t):
     if _MAP is None or t < 0:
         return t
     return float(np.interp(t, _MAP[0], _MAP[1], right=t - _MAP[0][-1] + _MAP[1][-1]))
+
+# shot 17: the journal clip, slowed so the pencil scribble lands on the aspirated "fff" (local 2.9 s)
+BY_ID["17"].speed = 0.72

@@ -921,7 +921,89 @@ def fx_16(ctx):
             ctx.L.dot(hx, hy, 60, np.array([230, 235, 255]), 0.4 * fl)
 
 
+STANZA_LEFT = ["Lived my life on a pale blue dot", "Your signal here I think I've caught", "The beating blinking of a star",
+               "A planet's transit is not that far", "from my own", "How could we be alone"]
+STANZA_RIGHT = ["Before they launch", "or self-destruct", "Weapons, wars,", "and now we're f"]
+
+
+def _journal_page(lines, size=40, lead=32, width=640):
+    f = ImageFont.truetype(os.path.join(FONTS, "Caveat[wght].ttf"), size)
+    im = Image.new("L", (width, lead * len(lines) + size), 0)
+    d = ImageDraw.Draw(im)
+    for i, ln in enumerate(lines):
+        d.text((6, i * lead), ln, font=f, fill=255)
+    return np.asarray(im).astype(np.float32) / 255
+
+
+def _ink_block(ctx, mask, anchor_xy, angle):
+    """Place a text mask with its top-left at anchor_xy, rotated by angle (deg), only on visible paper."""
+    h, w = mask.shape
+    M = cv2.getRotationMatrix2D((0, 0), angle, 1.0)
+    M[0, 2] += anchor_xy[0]; M[1, 2] += anchor_xy[1]
+    ink = cv2.warpAffine(mask, M, (W, H), flags=cv2.INTER_LINEAR)
+    p = ctx.plate
+    mx, mn = p.max(axis=2), p.min(axis=2)
+    paper = np.clip((mn - 0.45) * 6, 0, 1) * np.clip((0.22 - (mx - mn)) * 8, 0, 1)   # bright, unsaturated: paper, not skin/pen
+    pencil = np.clip((0.55 - mx) * 4, 0, 1) * np.clip((0.12 - (mx - mn)) * 10, 0, 1)  # grey scribble strokes on top of the ink
+    k = (ink * np.maximum(paper, pencil * 0.8) * 0.88)[..., None]
+    col = np.array([0.07, 0.10, 0.30], np.float32)
+    ctx.plate = p * (1 - k) + col * k * (0.45 + 0.55 * p)
+
+
+_JOURNAL_INK = None
+
+
+def _curve_text_mask(text, coeffs, dy, x_start, size, mask, jitter_seed=0):
+    """Write `text` glyph by glyph along the rule y = poly(x) + dy, each glyph rotated to the local slope."""
+    font = ImageFont.truetype(os.path.join(FONTS, "Caveat[wght].ttf"), size)
+    c = np.array(coeffs)
+    x = float(x_start)
+    for i, ch in enumerate(text):
+        adv = font.getlength(ch)
+        if ch != " ":
+            y = float(np.polyval(c, x)) + dy
+            slope = 2 * c[0] * x + c[1]
+            ang = math.degrees(math.atan(slope))
+            S = size * 3
+            gm = Image.new("L", (S, S), 0)
+            ImageDraw.Draw(gm).text((S / 2, S / 2), ch, font=font, fill=255, anchor="ls")
+            gm = gm.rotate(-ang + (hash01(i, jitter_seed) - 0.5) * 3, resample=Image.BICUBIC, center=(S / 2, S / 2))
+            g = np.asarray(gm).astype(np.float32) / 255
+            x0, y0 = int(round(x - S / 2)), int(round(y - S / 2 - 4))
+            X0, Y0, X1, Y1 = max(0, x0), max(0, y0), min(W, x0 + S), min(H, y0 + S)
+            if X1 > X0 and Y1 > Y0:
+                sub = g[Y0 - y0:Y1 - y0, X0 - x0:X1 - x0]
+                mask[Y0:Y1, X0:X1] = np.maximum(mask[Y0:Y1, X0:X1], sub)
+        x += adv * math.cos(math.atan(2 * c[0] * x + c[1]))
+
+
+def _journal_ink():
+    global _JOURNAL_INK
+    if _JOURNAL_INK is None:
+        R = json.load(open(os.path.join(HERE, "journal_rules.json")))
+        m = np.zeros((H, W), np.float32)
+        L = [l for l in R["L"]["lines"] if 330 <= l[0] <= 640]      # clean left-page rules
+        for k, ln in enumerate(STANZA_LEFT):
+            _curve_text_mask(ln, L[k][1], 0, 318, 34, m, k)
+        base = R["R"]["lines"][-1]                                   # right page: extend the last traced rule downward
+        for k, ln in enumerate(STANZA_RIGHT):
+            _curve_text_mask(ln, base[1], 29 * (3 + k), 928, 36, m, 10 + k)
+        _JOURNAL_INK = m
+    return _JOURNAL_INK
+
+
 def fx_17(ctx):
+    if is_clip(ctx):
+        # the stanza is already on the page; she scribbles out the last word as the breath "fff" sounds
+        ink = _journal_ink()
+        p = ctx.plate
+        mx, mn = p.max(axis=2), p.min(axis=2)
+        paper = np.clip((mn - 0.40) * 5, 0, 1) * np.clip((0.40 - (mx - mn)) * 6, 0, 1)      # cream paper (not skin/pen)
+        pencil = np.clip((0.62 - mx) * 4, 0, 1) * np.clip((0.14 - (mx - mn)) * 10, 0, 1)   # grey scribble over the ink
+        k = (ink * np.clip(np.maximum(paper, pencil * 0.8), 0, 1) * 0.92)[..., None]
+        ctx.plate = p * (1 - k) + np.array([0.07, 0.10, 0.30], np.float32) * k * (0.45 + 0.55 * p)
+        ctx.fin["halate"] = 0.0
+        return
     """Handwriting in sync with the vocal: 'Weapons, wars, and now we're f' -- scribble -- 'd'."""
     NEWREC = getattr(ctx, "Tn", None) is not None and ctx.Tn != ctx.T
     if NEWREC:
@@ -1405,17 +1487,21 @@ def pre_45(src, t):
         if not hasattr(src, "img"):
             return
         orig = src.img.copy()
-        x0, y0, x1, y1 = 790, 500, 1150, 690
+        x0, y0, x1, y1 = 780, 480, 1170, 720
         reg = orig[y0:y1, x0:x1]
         lum = reg.mean(axis=2)
-        ink = (lum < 0.33).astype(np.uint8) * 255
+        # the third line runs on a slant from (800, 655) to (1140, 560): only erase within that band
+        yy, xx = np.mgrid[y0:y1, x0:x1].astype(np.float32)
+        mid = 655 + (xx - 800) * (560 - 655) / (1140 - 800)
+        band = (np.abs(yy - mid) < 34)
+        ink = ((lum < 0.33) & band).astype(np.uint8) * 255
         ink = cv2.dilate(ink, np.ones((5, 5), np.uint8))
         clean = cv2.inpaint((reg * 255).astype(np.uint8), ink, 5, cv2.INPAINT_TELEA).astype(np.float32) / 255
         blank = orig.copy(); blank[y0:y1, x0:x1] = clean
         src._ink45 = (orig, blank, (x0, x1))
     orig, blank, (x0, x1) = src._ink45
     u = ease((t - 0.35) / 0.9)
-    edge = x0 + (x1 - x0) * u
+    edge = 790 + (1150 - 790) * u
     xs = np.arange(W, dtype=np.float32)
     m = np.clip((edge - xs) / 10, 0, 1)[None, :, None]
     src.img = blank * (1 - m) + orig * m
