@@ -80,7 +80,7 @@ const E4 = {
   async render(ctx, s) {
     const t = s.t, T = ctx.type, k = s.lt / s.dur;
     // what shows through her (keyed) window: the night sky with LGM-2 blinking
-    sky(ctx, s.target, { preset: 'night', yaw: -0.8, pitch: 0.35, fov: 45, beacon: beacon(ctx, t, 0.75) * 1.1, beaconSize: 1.1, beaconDir: [0.1, 0.45, -0.89] });
+    sky(ctx, s.target, { preset: 'night', yaw: -0.8, pitch: 0.35, fov: 45, beacon: beacon(ctx, t, 0.75) * 1.1, beaconSize: 1.1, beaconDir: [0.88, 0.34, -0.32] });
     await plateLayer(ctx, s.target, { pid: 'P18_jade26', pt: syncedPT('P18_jade26', t), place: 'cover', grade: 'night', cam: { s: push(k, 1.02, 1.07), x: -20 * k } });
     layer2D(ctx, s.target, 'type', (g) => {
       const w = words(ctx, 19);
@@ -136,7 +136,7 @@ const E6 = {
       if (fA > 0) T.text(g, 'friend', 960, 300, { f: 'ital', size: 170, align: 'center', color: '#ffcf5a', alpha: fA, glow: 12 });
       const a = smooth(93.3, 93.6, t);
       const yr = Math.floor(lerp(826, 2026, u));
-      T.label(g, 'THE LIGHT WE SEE TONIGHT LEFT LGM-2 IN', 960, 250, { size: 20, color: '#f4f1e8', align: 'center', alpha: a * (1 - smooth(96.9, 97.2, t)) });
+      T.label(g, 'THE LIGHT WE SEE TONIGHT LEFT LGM-2 IN 826 AD', 960, 250, { size: 20, color: '#f4f1e8', align: 'center', alpha: a });
       T.text(g, t > 97.1 ? '2026' : `${yr} AD`, 960, 520, { f: 'six', size: 300, align: 'center', color: t > 97.1 ? '#8ecbff' : '#ffcf5a', alpha: a });
       T.label(g, t > 97.1 ? 'ARRIVING NOW' : '1,200 LIGHT-YEARS', 960, 590, { size: 20, color: '#f4f1e8', align: 'center', alpha: a });
       T.label(g, 'ARE THEY STILL THERE?', 960, 900, { size: 22, color: EMBER, align: 'center', alpha: smooth(97.2, 97.5, t) });
@@ -193,7 +193,7 @@ const F1 = {
     A.pose((i, d) => ({ az: Math.PI + 0.25, el: 0.78, glow: 0.6 }), t);
     sky(ctx, s.target, { preset: 'night', yaw: -0.2, pitch: 0.3, fov: 60, beacon: 0, starAmt: 0, mwAmt: 0.35 });
     layer2D(ctx, s.target, 'trails', (g) => starTrails(g, t, { pole: [420, -120], len: 0.04 + 0.9 * easeInOutCubic(k), spin: 0.05, alpha: 0.95 }), { mode: 'add' });
-    A.render(ctx, s.target, { pos: [-2, 4.0, 36], look: [12, 16, -50], fov: 60, time: t, sky: false });
+    A.render(ctx, s.target, { pos: [lerp(-2, 2, k), lerp(4.0, 5.0, k), lerp(36, 28, k)], look: [12, 16, -50], fov: 60, time: t, sky: false });
     const bi = ctx.tl.beatIndex(t) - ctx.tl.beatIndex(97.8);
     const yi = clamp(Math.floor(bi / 2), 0, YEARS.length - 1);
     const y0 = ctx.tl.beat(ctx.tl.beatIndex(97.8) + yi * 2);
@@ -203,7 +203,7 @@ const F1 = {
       const [yr, cap, kind] = YEARS[yi];
       const A2 = T.slamAnim(t, y0, { from: 1.12 });
       T.text(g, String(yr), 960, 560, { f: 'six', size: 560, align: 'center', color: '#f4f1e8', alpha: (A2 ? A2.a : 1) * 0.95 });
-      icon(g, kind, 960, 720, 1.6, u);
+      icon(g, kind, 960, 760, 2.1, u);
       T.label(g, cap, 960, 900, { size: 22, color: '#ffcf5a', align: 'center' });
       // ticker of all years
       YEARS.forEach(([y2], i) => T.label(g, String(y2), 110 + i * 100, 1010, { size: 16, color: i === yi ? '#ffcf5a' : '#8ecbff', alpha: i <= yi ? 1 : 0.3 }));
@@ -239,8 +239,13 @@ const F2 = {
       for (let i = 0; i < 26; i++) { const x = R() * W, y = 740 + R() * 320; g.fillStyle = '#4a4751'; g.beginPath(); g.ellipse(x, y, 6 + R() * 22, 4 + R() * 10, 0, 0, 7); g.fill(); }
     });
     layer2D(ctx, s.target, 'type', (g) => {
-      T.text(g, '2026', 110, 290, { f: 'six', size: 260, color: '#f4f1e8' });
-      T.label(g, 'FAR SIDE OF THE MOON  ·  THE QUIETEST PLACE WE KNOW  ·  LISTENING ONLY', 118, 340, { size: 18, color: '#ffcf5a' });
+      // the present lands on the downbeat: 2026 slams in big like the other years, then parks in the corner
+      const A = T.slamAnim(t, 111.05, { from: 1.2 });
+      const m = easeInOutCubic(clamp((t - 111.6) / 0.55));
+      const wEnd = T.measure(g, 'six', 260, '2026').w;
+      const x = lerp(960, 110 + wEnd / 2, m), y = lerp(620, 290, m), size = lerp(620, 260, m);
+      if (A) T.text(g, '2026', x, y, { f: 'six', size, color: m < 0.5 ? '#ffcf5a' : '#f4f1e8', align: 'center', alpha: A.a, glow: 20 * A.hot });
+      T.label(g, 'FAR SIDE OF THE MOON  ·  THE QUIETEST PLACE WE KNOW  ·  LISTENING ONLY', 118, 340, { size: 18, color: '#ffcf5a', alpha: smooth(112.0, 112.4, t) });
     });
     return { bloom: 0.55, thresh: 0.86 };
   },
@@ -266,7 +271,7 @@ const F3 = {
         T.text(g, d, x + w - 30, yy + 6, { f: 'mono', size: 22, color: '#6f7fa8', align: 'right' });
       });
       if (t > 116.4) { const a = smooth(116.4, 116.8, t); g.fillStyle = `rgba(255,207,90,${a})`; g.fillRect(x + 260, y + 110 + 30, 780 * smooth(116.4, 118.4, t), 6); T.label(g, '▶ PLAYING  00:0' + Math.floor((t - 116.4) % 10), x + 260, y + 110 + 70, { size: 16, color: '#ffcf5a', alpha: a }); }
-    });
+    }, { s: lerp(1.0, 1.07, easeInOutCubic(k)) });
     layer2D(ctx, s.target, 'type', (g) => { T.label(g, 'FIFTEEN YEARS LATER', 960, 1010, { size: 18, color: '#8ecbff', align: 'center' }); });
     return { bloom: 0.4, thresh: 0.9 };
   },
@@ -275,7 +280,7 @@ const F3 = {
 const F4 = {
   id: 'F4_confirm', t0: 118.63, t1: 122.41,
   async render(ctx, s) {
-    const t = s.t, T = ctx.type;
+    const t = s.t, T = ctx.type, k = s.lt / s.dur;
     layer2D(ctx, s.target, 'bg', (g) => {
       g.fillStyle = '#04050b'; g.fillRect(0, 0, W, H);
       const inst = [['OPTICAL  ·  PHOTOMETRY', '#ffcf5a'], ['RADIO  ·  ARRAY', '#8ecbff'], ['FAR SIDE  ·  LUNAR DISH', '#cfe8ff'], ['ARCHIVE  ·  2011 DATA', '#ff9a6a']];
@@ -285,7 +290,7 @@ const F4 = {
         panelFrame(g, x, y, w, h, name, { col, alpha: on ? 1 : 0.3 });
         if (on) lightCurve(g, { x: x + 20, y: y + 40, w: w - 40, h: h - 80, t, t0: 118.63, span: 3.8, dips: beatsIn(ctx, 118.6, 122.5), depth: 0.3, width: 0.05, color: col, grid: false });
       });
-    });
+    }, { s: lerp(1.0, 1.07, easeInOutCubic(k)) });
     layer2D(ctx, s.target, 'type', (g) => {
       const a = smooth(121.2, 121.6, t);
       g.fillStyle = `rgba(4,5,11,${0.85 * a})`; g.fillRect(0, 478, W, 80);

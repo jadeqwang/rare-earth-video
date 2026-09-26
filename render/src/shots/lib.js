@@ -1,7 +1,7 @@
 // Shot-building toolkit: layers (sky, traced plates with rim light, 2D type/fx), cameras, plate timing.
 import * as THREE from 'three';
 import { W, H } from '../core.js';
-import { Plates, drawTraced, placeFor, GRADES, silhouette } from '../scenes/plate.js';
+import { Plates, drawTraced, placeFor, GRADES, silhouette, cutLabels } from '../scenes/plate.js';
 import { clamp, lerp, hash, rng, easeInOutCubic, easeOutCubic } from '../lib/util.js';
 
 export const plates = new Plates('');
@@ -12,7 +12,7 @@ export const TAKES = {
   P01_rim: { a0: null }, P02_care: { a0: 3.35, L: -0.021, take: 't3' }, P03_there: { a0: 11.3, L: -0.083, take: 't1' }, P04_eye: { a0: null },
   P05_guitar: { a0: 19.1, L: 0.271, take: 't2' }, P06_rehearsal: { a0: null }, P07_rooftop: { a0: null }, P08_notebook: { a0: null },
   P09_catch: { a0: 22.6, L: -0.229, take: 't5' }, P10_alone: { a0: 37.9, L: 0.458, take: 't1' }, P11_gig: { a0: null }, P12_charlie: { a0: null },
-  P13_ricky: { a0: null }, P14_pad: { a0: null }, P15_dawn: { a0: 65.1, L: 0.083, take: 't5' }, P16_launch: { a0: null }, P17_crowd: { a0: null },
+  P13_ricky: { a0: null }, P14_pad: { a0: null }, P15_dawn: { a0: 65.1, L: 0.2, take: 't5' }, P16_launch: { a0: null }, P17_crowd: { a0: null },
   P18_jade26: { a0: 87.2, L: -0.104, take: 't0' }, P20_room26: { a0: null }, P21_v5cu: { a0: 125.8, L: -0.458, take: 't1' }, P22_cheer: { a0: null },
   P23_rim26: { a0: 143.6, L: 0, take: 't4' }, P24_group: { a0: null }, P25_oh: { a0: 152.5, L: 0, take: 't5' },
 };
@@ -41,7 +41,7 @@ export async function plateLayer(ctx, target, o) {
   const c = ctx.core.canvas(o.layerName || 'plate');
   const place = typeof o.place === 'object' || o.place === 'cover' || o.place === 'contain' ? placeFor(fr.m, o.place || 'cover') : placeFor(fr.m, 'cover');
   if (o.pre) o.pre(c.ctx, fr, place);
-  drawTraced(c.ctx, fr, place, { grade: typeof o.grade === 'string' ? GRADES[o.grade] : (o.grade || GRADES.night), ink: o.ink, inkAlpha: o.inkAlpha, hide: o.hide, only: o.only });
+  drawTraced(c.ctx, fr, place, { grade: typeof o.grade === 'string' ? GRADES[o.grade] : (o.grade || GRADES.night), ink: o.ink, inkAlpha: o.inkAlpha, hide: o.hide, only: o.only, cut: o.cut });
   if (o.post) o.post(c.ctx, fr, place);
   const tex = ctx.core.upload(c);
   const cam = o.cam || {};
@@ -53,6 +53,7 @@ export async function plateLayer(ctx, target, o) {
     const sil = silhouette(fr, place);
     mc.ctx.fillStyle = '#fff';
     if ((fr.d.key || []).length) mc.ctx.fill(sil, 'evenodd'); else { mc.ctx.fillRect(0, 0, W, H); }
+    if (o.cut && o.cut.length) cutLabels(mc.ctx, fr, place, o.cut);
     const mtex = ctx.core.upload(mc);
     const tmp = ctx.core.rt('rimtmp', W, H);
     ctx.core.clear(tmp, 0, 0, 0, 0);

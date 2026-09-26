@@ -126,7 +126,16 @@ export function drawTraced(ctx, frame, place, o = {}) {
     ctx.fillStyle = o.ink || '#0d1026';
     ctx.fill(lp, 'evenodd');
   }
+  if (o.cut && o.cut.length) cutLabels(ctx, frame, place, o.cut);
   ctx.restore();
+}
+
+// erase regions of the given colour labels (e.g. an un-keyed sky band) so what is behind the plate shows through
+export function cutLabels(ctx, frame, place, labels) {
+  const cp = new Path2D();
+  for (const rg of frame.d.regions) if (labels.includes(rg[0])) for (let k = 1; k < rg.length; k++) ring(cp, rg[k], place.s, place.x, place.y);
+  ctx.save(); ctx.globalAlpha = 1; ctx.globalCompositeOperation = 'destination-out'; ctx.fill(cp, 'evenodd');
+  ctx.lineWidth = 5 * place.s; ctx.lineJoin = 'round'; ctx.stroke(cp); ctx.restore();   // take the edge ink with it
 }
 
 // Silhouette path of the keyed foreground (for masks, rim light, occlusion)

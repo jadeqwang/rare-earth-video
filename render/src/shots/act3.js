@@ -45,7 +45,17 @@ const C1 = {
       const az = Math.PI + 0.3 * Math.sin((bp.i + col * 0.5) * 1.3);
       return { az, el, glow: up ? 1 : 0.3 };
     }, t);
-    const foci = A.render(ctx, s.target, { pos: [lerp(-34, -20, k), lerp(10, 8, k), lerp(62, 52, k)], look: [8, 15, -60], fov: 56, time: t,
+    // K-pop formation coverage: a new camera angle every two beats, each drifting slightly
+    const bi = Math.max(0, bp.i - ctx.tl.beatIndex(42.63));
+    const ang = Math.floor(bi / 2) % 4, ak = clamp((bi % 2 + bp.ph) / 2);
+    const CAMS = [
+      { pos: [lerp(-34, -28, ak), 10, lerp(62, 58, ak)], look: [8, 15, -60], fov: 56 },
+      { pos: [-92, lerp(5, 7, ak), lerp(-30, -44, ak)], look: [0, 17, -60], fov: 48 },
+      { pos: [lerp(-24, -16, ak), 72, 34], look: [0, 0, -62], fov: 50 },
+      { pos: [lerp(-8, -5, ak), 3.2, 22], look: [10, 17, -50], fov: 60 },
+    ];
+    const cam = CAMS[ang];
+    const foci = A.render(ctx, s.target, { pos: cam.pos, look: cam.look, fov: cam.fov, time: t,
       sky: { preset: 'night', beacon: beacon(ctx, t, 0.7), beaconDir: BEACON_DIR } });
     layer2D(ctx, s.target, 'fx', (g) => drawFoci(g, foci, t, { rings: false }), { mode: 'add' });
     layer2D(ctx, s.target, 'type', (g) => {
@@ -234,8 +244,8 @@ const D3 = {
       g.fillStyle = '#ff2d3d'; g.beginPath(); g.arc(cx, cy, 14, 0, 7); g.fill();
     });
     layer2D(ctx, s.target, 'type', (g) => {
-      if (t > w[0].t0) T.text(g, 'WEAPONS', 100, 430, { f: 'six', size: 470, color: '#ff2d3d', alpha: t < w[1].t0 ? 1 : 0.25 });
-      if (t > w[1].t0) T.text(g, 'WARS', 100, 900, { f: 'six', size: 470, color: '#ff2d3d', alpha: t < w[2].t0 ? 1 : 0.25 });
+      if (t > w[0].t0) T.text(g, 'WEAPONS', 100, 470, { f: 'six', size: 450, color: '#ff2d3d', alpha: t < w[1].t0 ? 1 : 0.25 });
+      if (t > w[1].t0) T.text(g, 'WARS', 100, 940, { f: 'six', size: 450, color: '#ff2d3d', alpha: t < w[2].t0 ? 1 : 0.25 });
       if (t > w[2].t0) T.text(g, 'and now we’re', 110, 1000, { f: 'ital', size: 96, color: '#f4f1e8' });
     });
     return { bloom: 0.5, thresh: 0.85, flash: 0.08 * strobe, flashCol: [1, 0.2, 0.25] };

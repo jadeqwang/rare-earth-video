@@ -295,7 +295,7 @@ const H3 = {
       const last = OHS[n - 1];
       if (last) incoming(g, 1500, 300, t - last, { r0: 520, n: 1, period: 1.0, col: '255,214,140', w: 2.5, a: 0.8 * Math.exp(-(t - last) / 0.8) });
     }, { mode: 'add' });
-    await plateLayer(ctx, s.target, { pid: 'P25_oh', pt: syncedPT('P25_oh', t), place: 'cover', grade: 'dawn', cam: { s: push(k, 1.03, 1.1), x: -30 * k },
+    await plateLayer(ctx, s.target, { pid: 'P25_oh', pt: syncedPT('P25_oh', t), place: 'cover', grade: 'dawn', cam: { s: push(k, 1.03, 1.1), x: -30 * k }, cut: [0],
       rim: { dir: [0.9, -0.2], col: [1.0, 0.85, 0.6], w: 7, amt: 1.0 } });
     layer2D(ctx, s.target, 'type', (g) => {
       T.label(g, `BLINKING STARS FOUND  ${String(Math.max(1, Math.round(Math.pow(3.2, n)))).padStart(5, ' ')}`, 1810, 1010, { size: 18, color: GOLD, align: 'right' });

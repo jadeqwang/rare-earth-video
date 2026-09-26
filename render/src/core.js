@@ -74,7 +74,8 @@ export class Core {
 
   // --- 2D canvases (type, vector plates, UI) -----------------------------------------
   canvas(name, w = W, h = H) {
-    let c = this.canvases.get(name);
+    const key = `${name}:${w}x${h}`;           // same name at a different size is a different canvas
+    let c = this.canvases.get(key);
     if (!c) {
       const el = document.createElement('canvas');
       el.width = w; el.height = h;
@@ -84,7 +85,7 @@ export class Core {
       tex.minFilter = THREE.LinearFilter; tex.magFilter = THREE.LinearFilter; tex.generateMipmaps = false;
       tex.premultiplyAlpha = true;
       c = { el, ctx, tex };
-      this.canvases.set(name, c);
+      this.canvases.set(key, c);
     }
     c.ctx.setTransform(1, 0, 0, 1, 0, 0);
     c.ctx.globalAlpha = 1; c.ctx.globalCompositeOperation = 'source-over'; c.ctx.filter = 'none';

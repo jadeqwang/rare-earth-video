@@ -193,6 +193,7 @@ export class Planet {
         rimCol: { value: new THREE.Color(o.rim || '#7fb8ff') }, nightTint: { value: new THREE.Color(o.nightTint || '#16204a') }, termCol: { value: new THREE.Color(o.term || '#ff9a5a') },
         rimAmt: { value: o.rimAmt ?? 0.7 }, nightAmt: { value: 0.5 }, cloudShift: { value: 0 }, cloudAmt: { value: o.cloudAmt ?? 0.6 }, cel: { value: 1 },
         lightsAmt: { value: o.lightsAmt ?? 1.6 }, time: { value: 0 }, pulse: { value: 0 }, dayGain: { value: 1 }, termAmt: { value: o.termAmt ?? 0.5 } } });
+    this.def = { lights: o.lightsAmt ?? 1.6 };
     this.mesh = new THREE.Mesh(new THREE.SphereGeometry(1, 128, 96), this.mat);
     this.scene.add(this.mesh);
     this.atm = new THREE.Mesh(new THREE.SphereGeometry(1.035, 96, 64), new THREE.ShaderMaterial({ vertexShader: PL_VS, fragmentShader: ATM_FS, glslVersion: THREE.GLSL3,
@@ -205,8 +206,9 @@ export class Planet {
     const u = this.mat.uniforms;
     if (o.sun) u.sunDir.value.set(...o.sun).normalize();
     u.cloudShift.value = o.cloud ?? 0; u.pulse.value = o.pulse ?? 0;
-    if (o.lights !== undefined) u.lightsAmt.value = o.lights;
-    if (o.dayGain !== undefined) u.dayGain.value = o.dayGain;
+    // every per-frame option falls back to the constructor default, so no shot inherits another shot's settings
+    u.lightsAmt.value = o.lights ?? this.def.lights;
+    u.dayGain.value = o.dayGain ?? 1;
     this.mesh.rotation.set(o.tilt || 0.41, o.rotY || 0, 0);
     this.mesh.position.set(...(o.at || [0, 0, 0])); this.atm.position.copy(this.mesh.position);
     this.mesh.scale.setScalar(o.scale || 1); this.atm.scale.setScalar(o.scale || 1);
